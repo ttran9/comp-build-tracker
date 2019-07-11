@@ -1,0 +1,19 @@
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+# backend files
+comp-build-backend/target/
+
+### IntelliJ IDEA ###
+comp-build-backend/target/.idea
+comp-build-backend/target/*.iws
+comp-build-backend/target/*.iml
+comp-build-backend/target/*.ipr
+
+
+### VS Code ###
+.vscode/
+comp-build-backend/target/.vscode/
