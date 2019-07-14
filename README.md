@@ -42,4 +42,12 @@ of feature.
 
 
 # Progress (master branch)
-- Merging in user login, registration, password change, and account activation features.
+    - For the progress once I have crossed off the item that means it has been merged into the master branch.
+- <strike>Merged in user login, registration, password change, and account activation features.</strike>
+- Add support to be able to to create, delete/remove, and edit a ComputerBuild and write unit tests for this functionality.
+    - ComputerBuild will have to have a variety of objects inside of it such as ComputerParts, Directions, Overclocking Notes,
+    and other Notes (such as any recommendations or any issues that will be explained in more depth).
+- Add functionality to be able to add, delete, and update ComputerParts for a ComputerBuild.
+- Add functionality to be able to add, delete, and update Directions for a ComputerBuild. 
+- Add functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild. 
+- Add functionality to be able to add, delete, and update Other Notes for a ComputerBuild. 
