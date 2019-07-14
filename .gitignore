@@ -17,3 +17,7 @@ comp-build-backend/target/*.ipr
 ### VS Code ###
 .vscode/
 comp-build-backend/target/.vscode/
+
+# frontend content.
+comp-build-frontend/build/
+comp-build-frontend/node_modules/
