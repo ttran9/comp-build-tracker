@@ -39,3 +39,7 @@ to do this because the tokens expire after a certain amount of time.
     - If I was doing this at a production level and used by more users and security was a more important issue I would
 put a higher priority on this and perhaps look up solutions on how to write an automated test for this type
 of feature.
+
+
+# Progress (master branch)
+- Merging in user login, registration, password change, and account activation features.
