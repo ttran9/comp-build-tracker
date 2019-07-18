@@ -32,7 +32,7 @@ import static tran.compbuildbackend.constants.users.UserConstants.*;
 @Profile({"test"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApplicationUserControllerTest {
+public class ApplicationUserControllerIntegrationTest {
     @Autowired
     private TestRestTemplate restTemplate;
 

@@ -13,6 +13,15 @@ a production ready JavaScript file and moves it to the back-end resources direct
 the React content and serves this web application.
 
 
+# Tests
+- I have added tests using JUnit. While doing this I decided only to test the controllers and services because I do not believe
+testing individual domain projects is necessary as these are used by the controller and/or the services.
+- When running the tests, I have designed them to pass with an in-memory h2 database that creates the schema upon start-up
+and then drops the tables after the application is no longer running.
+    - One limitation that I have noticed is that I must be running the application in order to pass the tests. For example,
+    since I am not running Spring MVC I cannot run something similar to a Spring MVC test environment and have the tests
+    inside of the controller pass as these require the back-end API to be running and must be able to hit those endpoints.
+
 # Branches
 
 - For each "major" feature I release I will be making a branch for it and then I will merge the changes to the master branch
