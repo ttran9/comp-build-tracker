@@ -53,4 +53,12 @@ public interface ApplicationUserService {
      * @param user The user (with a username field) to be updated.
      */
     void enableUser(ApplicationUser user);
+
+    /**
+     * Returns the name of the user.
+     * @param userName The username of the user to be returned.
+     * @param exceptionType A value used to determine what type of exception is thrown when the user cannot be found.
+     * @return The user with the associated user name if found, if not a custom exception is thrown.
+     */
+    ApplicationUser getUserByUserName(String userName, int exceptionType);
 }

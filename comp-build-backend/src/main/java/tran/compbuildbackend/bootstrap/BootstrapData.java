@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import tran.compbuildbackend.domain.security.ChangePasswordToken;
+import tran.compbuildbackend.domain.security.EmailVerificationToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.exceptions.security.EmailVerificationTokenException;
 import tran.compbuildbackend.services.users.ApplicationUserService;
@@ -36,15 +39,24 @@ public class BootstrapData implements ApplicationListener<ContextRefreshedEvent>
         user.setFullName(FULL_NAME_ONE);
 
         // create a user with an account that is not enabled.
-        ApplicationUser userTwo = new ApplicationUser();
-        userTwo.setUsername(USER_NAME_TWO);
-        userTwo.setPassword(USER_PASSWORD);
-        userTwo.setFullName(FULL_NAME_TWO);
+        ApplicationUser secondUser = new ApplicationUser();
+        secondUser.setUsername(USER_NAME_TWO);
+        secondUser.setPassword(USER_PASSWORD);
+        secondUser.setFullName(FULL_NAME_TWO);
+
+        // create a user with an account that is not enabled.
+        ApplicationUser thirdUser = new ApplicationUser();
+        thirdUser.setUsername(USER_NAME_THREE);
+        thirdUser.setPassword(USER_PASSWORD);
+        thirdUser.setFullName(FULL_NAME_THREE);
+
 
         applicationUserService.persistUser(user, null);
         applicationUserService.enableUser(user);
 
-        applicationUserService.persistUser(userTwo, null);
+        applicationUserService.persistUser(secondUser, null);
+
+        applicationUserService.persistUser(thirdUser, null);
     }
 
 }

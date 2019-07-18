@@ -1,6 +1,5 @@
 package tran.compbuildbackend.services.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +10,8 @@ import tran.compbuildbackend.domain.security.EmailVerificationToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.event.OnPasswordResetRequestEvent;
 import tran.compbuildbackend.event.OnRegistrationSuccessEvent;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
+import tran.compbuildbackend.exceptions.request.UsernameRequestException;
 import tran.compbuildbackend.exceptions.security.*;
 import tran.compbuildbackend.repositories.security.ChangePasswordTokenRepository;
 import tran.compbuildbackend.repositories.security.EmailVerificationTokenRepository;
@@ -18,6 +19,7 @@ import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static tran.compbuildbackend.constants.exception.ExceptionConstants.*;
 import static tran.compbuildbackend.constants.fields.FieldValueConstants.*;
 
 @Service
@@ -31,17 +33,17 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     private ChangePasswordTokenRepository changePasswordTokenRepository;
 
-
-    @Autowired
     private ApplicationEventPublisher eventPublisher;
 
     public ApplicationUserServiceImpl(ApplicationUserRepository applicationUserRepository, BCryptPasswordEncoder bCryptPasswordEncoder,
                                       EmailVerificationTokenRepository emailVerificationTokenRepository,
-                                      ChangePasswordTokenRepository changePasswordTokenRepository) {
+                                      ChangePasswordTokenRepository changePasswordTokenRepository, ApplicationEventPublisher eventPublisher) {
         this.applicationUserRepository = applicationUserRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.emailVerificationTokenRepository = emailVerificationTokenRepository;
         this.changePasswordTokenRepository = changePasswordTokenRepository;
+
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -73,14 +75,18 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Override
     public void sendSuccessRegistrationEmail(ApplicationUser registeredUser, HttpServletRequest request) {
-        String appUrl = request.getScheme() + "://" + request.getServerName() +  ":" + request.getServerPort();
-        try {
-            eventPublisher.publishEvent(new OnRegistrationSuccessEvent(registeredUser, request.getLocale(), appUrl));
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            applicationUserRepository.delete(registeredUser);
-//            removeUser(registeredUser);
-            throw new UsernameCreationErrorException(USER_NAME_ERROR + registeredUser.getUsername() + GENERIC_USER_NAME_CREATION_ERROR);
+        if(request != null) {
+            String appUrl = request.getScheme() + "://" + request.getServerName() +  ":" + request.getServerPort();
+            try {
+                eventPublisher.publishEvent(new OnRegistrationSuccessEvent(registeredUser, request.getLocale(), appUrl));
+            }
+            catch (Exception ex) {
+                System.out.println(ex.getMessage());
+                applicationUserRepository.delete(registeredUser);
+                throw new UsernameCreationErrorException(USER_NAME_ERROR + registeredUser.getUsername() + GENERIC_USER_NAME_CREATION_ERROR);
+            }
+        } else {
+            throw new GenericRequestException(REQUEST_IS_NULL_ERROR);
         }
     }
 
@@ -112,6 +118,17 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         enableAndUpdateUser(user);
     }
 
+    @Override
+    public ApplicationUser getUserByUserName(String userName, int exceptionType) {
+        ApplicationUser user = applicationUserRepository.findByUsername(userName);
+        if(exceptionType == EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED && user == null) {
+            throw new RequestChangePasswordException(PASSWORD_CANNOT_BE_CHANGED_FOR_INVALID_USER);
+        } else if(exceptionType == EXCEPTION_USER_NAME_DOES_NOT_EXIST && user == null) {
+            throw new UsernameRequestException("cannot find user with '" + userName + "'.");
+        }
+        return user;
+    }
+
     private void enableAndUpdateUser(ApplicationUser user) {
         user.setEnabled(true);
         applicationUserRepository.save(user);
@@ -124,21 +141,23 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             user.setPassword(bCryptPasswordEncoder.encode(newPassword));
             applicationUserRepository.save(user);
             ChangePasswordToken token = changePasswordTokenRepository.findByUser(user);
+            if(token == null) {
+                System.out.println("token is null.....");
+                throw new ChangePasswordTokenException("cannot retrieve token");
+            }
             changePasswordTokenRepository.deleteByToken(token.getToken());
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             throw new ChangePasswordTokenException("unable to change password.");
         }
-
-
     }
 
     @Override
     public ApplicationUser sendPasswordChangeEmail(String userName, HttpServletRequest request) {
-        String appUrl = request.getScheme() + "://" + request.getServerName() +  ":" + request.getServerPort();
-        ApplicationUser user = applicationUserRepository.findByUsername(userName);
-        if(user == null) {
-            throw new RequestChangePasswordException(PASSWORD_CANNOT_BE_CHANGED_FOR_INVALID_USER);
+        if(request == null) {
+            throw new GenericRequestException(REQUEST_IS_NULL_ERROR);
         }
+        String appUrl = request.getScheme() + "://" + request.getServerName() +  ":" + request.getServerPort();
+        ApplicationUser user = getUserByUserName(userName, EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED);
         try {
             checkForOldToken(user);
             eventPublisher.publishEvent(new OnPasswordResetRequestEvent(user, request.getLocale(), appUrl));

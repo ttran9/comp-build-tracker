@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
+import tran.compbuildbackend.exceptions.request.GenericRequestExceptionResponse;
 import tran.compbuildbackend.exceptions.security.*;
 
 @ControllerAdvice
@@ -52,6 +54,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler
     public final ResponseEntity<Object> handleChangePasswordTokenException(ChangePasswordTokenException ex) {
         ChangePasswordTokenExceptionResponse response = new ChangePasswordTokenExceptionResponse();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleGenericRequestException(GenericRequestException ex) {
+        GenericRequestExceptionResponse response = new GenericRequestExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
