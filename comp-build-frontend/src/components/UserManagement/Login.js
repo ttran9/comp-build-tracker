@@ -68,7 +68,7 @@ class Login extends Component {
                     className={classnames("form-control form-control-lg", {
                       "is-invalid": errors.username
                     })}
-                    placeholder="Email Address"
+                    placeholder="Username (Not Email Address)!"
                     name="username"
                     value={this.state.username}
                     onChange={this.onChange}
