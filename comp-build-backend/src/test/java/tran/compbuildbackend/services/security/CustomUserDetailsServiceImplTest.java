@@ -30,7 +30,7 @@ public class CustomUserDetailsServiceImplTest {
         customUserDetailsService = new CustomUserDetailsServiceImpl(applicationUserRepository);
     }
 
-    /**
+    /*
      * This test checks if we can successfully grab a user that exists.
      */
     @Test
@@ -40,7 +40,7 @@ public class CustomUserDetailsServiceImplTest {
         checkFirstUser(user);
     }
 
-    /**
+    /*
      * This test checks if we can grab a user that does not exist, and if not then an exception is expected to be thrown.
      */
     @Test(expected = UsernameNotFoundException.class)
@@ -48,7 +48,7 @@ public class CustomUserDetailsServiceImplTest {
         customUserDetailsService.loadUserByUsername(USER_NAME_FAIL_LOOK_UP);
     }
 
-    /**
+    /*
      * This test will check if we can load the first user by the id.
      */
     @Test
@@ -59,7 +59,7 @@ public class CustomUserDetailsServiceImplTest {
         assertEquals(FIRST_ID, user.getId());
     }
 
-    /**
+    /*
      * This test will check if we can load a user with an invalid id (an id with a negative value) which will not match
      * any user in the database.
      */
