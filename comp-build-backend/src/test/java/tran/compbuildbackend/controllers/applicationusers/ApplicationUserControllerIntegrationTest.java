@@ -9,14 +9,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import tran.compbuildbackend.controllers.utility.WebUtility;
 import tran.compbuildbackend.domain.utility.ApplicationUserUtility;
 import tran.compbuildbackend.exceptions.security.RequestChangePasswordExceptionResponse;
-import tran.compbuildbackend.exceptions.security.UsernameDuplicateExceptionResponse;
-import tran.compbuildbackend.payload.JWTLoginSuccessResponse;
-import tran.compbuildbackend.payload.RequestSuccessfulResponse;
+import tran.compbuildbackend.payload.email.JWTLoginSuccessResponse;
+import tran.compbuildbackend.payload.email.RequestSuccessfulResponse;
 
 import java.net.URI;
 import java.util.LinkedHashMap;
@@ -41,7 +39,7 @@ public class ApplicationUserControllerIntegrationTest {
      */
     @Test
     public void testSuccessfulRegistration() throws Exception {
-        String content = ApplicationUserUtility.getUserAsJson(SUCCESSFUL_USER_NAME, FULL_NAME, USER_PASSWORD, USER_PASSWORD);
+        String content = ApplicationUserUtility.getUserAsJson(SUCCESSFUL_USER_NAME, SUCCESSFUL_USER_EMAIL, FULL_NAME, USER_PASSWORD, USER_PASSWORD);
 
         String registrationURL = BASE_URL + USERS_API + REGISTER_URL;
 
@@ -76,26 +74,29 @@ public class ApplicationUserControllerIntegrationTest {
     }
 
     /*
-     * testing to see what happens when we are trying to registration a user that is already in the database.
+     * This test checks to see what happens when we are trying to registration a user that is already in the database.
      */
     @Test
-    public void testUsernameExistsRegistration() throws Exception {
-        String content = ApplicationUserUtility.getUserAsJson(USER_NAME_ONE, FULL_NAME, USER_PASSWORD, USER_PASSWORD);
+    public void testUsernameAndEmailExistsRegistration() throws Exception {
+        String content = ApplicationUserUtility.getUserAsJson(USER_NAME_ONE, USER_ONE_EMAIL, FULL_NAME, USER_PASSWORD, USER_PASSWORD);
 
-        URI uri = new URI(BASE_URL + USERS_API + REGISTER_URL);
-        ResponseEntity<UsernameDuplicateExceptionResponse> result = restTemplate.postForEntity(uri, WebUtility.getEntity(content), UsernameDuplicateExceptionResponse.class);
-        UsernameDuplicateExceptionResponse contents = result.getBody();
+        String registrationURL = BASE_URL + USERS_API + REGISTER_URL;
+        LinkedHashMap contents = getLinkedHashMapContents(registrationURL, WebUtility.getEntity(content), HttpStatus.BAD_REQUEST.value());
 
         assertNotNull(contents);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getStatusCode().value());
-        assertNotNull(contents.getUsername());
-        assertEquals(USER_NAME_ERROR + USER_NAME_ONE + ALREADY_EXISTS_ERROR, contents.getUsername());
+
+        assertEquals(USER_NAME_ERROR + USER_NAME_ONE + ALREADY_EXISTS_ERROR, contents.get(USER_NAME_FIELD));
+        assertEquals(EMAIL_ERROR + USER_ONE_EMAIL + ALREADY_EXISTS_ERROR, contents.get(EMAIL_FIELD));
     }
 
+    /*
+     * This test checks if the user enters in passwords that don't match when attempting to register and it is expected
+     * there is an error indicating the passwords don't match.
+     */
     @Test
     public void testPasswordMismatch() throws Exception {
         // testing to see what happens if the password fields don't match.
-        String content = ApplicationUserUtility.getUserAsJson(SUCCESSFUL_USER_NAME_TWO, FULL_NAME, USER_PASSWORD, USER_PASSWORD_TWO);
+        String content = ApplicationUserUtility.getUserAsJson(SUCCESSFUL_USER_NAME_TWO, SUCCESSFUL_USER_EMAIL_TWO, FULL_NAME, USER_PASSWORD, USER_PASSWORD_TWO);
 
         String registrationURL = BASE_URL + USERS_API + REGISTER_URL;
         LinkedHashMap contents = getLinkedHashMapContents(registrationURL, WebUtility.getEntity(content), HttpStatus.BAD_REQUEST.value());
@@ -114,7 +115,7 @@ public class ApplicationUserControllerIntegrationTest {
     @Test
     public void testMultipleFieldErrors() throws Exception {
 
-        String content = ApplicationUserUtility.getUserAsJson(USER_NAME_ONE, SHORT_PASSWORD, USER_PASSWORD_TWO);
+        String content = ApplicationUserUtility.getUserAsJson(USER_NAME_ONE, USER_ONE_EMAIL, SHORT_PASSWORD, USER_PASSWORD_TWO);
 
         String registrationURL = BASE_URL + USERS_API + REGISTER_URL;
         LinkedHashMap contents = getLinkedHashMapContents(registrationURL, WebUtility.getEntity(content), HttpStatus.BAD_REQUEST.value());
@@ -134,7 +135,6 @@ public class ApplicationUserControllerIntegrationTest {
      */
     @Test
     public void testValidLogin() throws Exception {
-
         loginHelper(USER_NAME_ONE, USER_PASSWORD);
     }
 
@@ -189,7 +189,7 @@ public class ApplicationUserControllerIntegrationTest {
     @Test
     public void testChangePassword() throws Exception {
 
-        String content = ApplicationUserUtility.getInitialPasswordChangeRequestAsJson(USER_NAME_ONE);
+        String content = ApplicationUserUtility.getInitialPasswordChangeRequestAsJson(USER_ONE_EMAIL);
         String changePasswordURL = BASE_URL + USERS_API + CHANGE_PASSWORD_URL;
 
         // request for the password change.
@@ -234,7 +234,7 @@ public class ApplicationUserControllerIntegrationTest {
      */
     @Test
     public void testChangePasswordWithNonExistingUsername() throws Exception {
-        String content = ApplicationUserUtility.getInitialPasswordChangeRequestAsJson(USER_NAME_DOES_NOT_EXIST);
+        String content = ApplicationUserUtility.getInitialPasswordChangeRequestAsJson(USER_EMAIL_DOES_NOT_EXIST);
         String changePasswordURL = BASE_URL + USERS_API + CHANGE_PASSWORD_URL;
 
         URI uri = new URI(changePasswordURL);
