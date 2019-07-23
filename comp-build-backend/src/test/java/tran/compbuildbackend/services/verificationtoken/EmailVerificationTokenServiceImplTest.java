@@ -53,8 +53,8 @@ public class EmailVerificationTokenServiceImplTest {
         emailVerificationTokenRepository.deleteByToken(token);
     }
 
-    /**
-     * This test will test if the email verification token can be created and because there is no issue a
+    /*
+     * This test will check if the email verification token can be created and because there is no issue a
      * token (as a string) will be returned and tested for.
      */
     @Transactional
@@ -65,8 +65,8 @@ public class EmailVerificationTokenServiceImplTest {
         assertNotNull(createdToken);
     }
 
-    /**
-     * This test will test if we can create a token for a user that doesn't exist and in this case
+    /*
+     * This test will check if we can create a token for a user that doesn't exist and in this case
      * no token can be made and we expect the token returned to be null.
      */
     @Transactional
@@ -77,8 +77,8 @@ public class EmailVerificationTokenServiceImplTest {
         assertNull(createdToken);
     }
 
-    /**
-     * This tests will check if we can get the token for a user that exists. It is expected the token can be retrieved
+    /*
+     * This test will check if we can get the token for a user that exists. It is expected the token can be retrieved
      * because we have created a token before the tests for this class are run.
      */
     @Transactional
@@ -88,8 +88,8 @@ public class EmailVerificationTokenServiceImplTest {
         assertNotNull(emailVerificationToken);
     }
 
-    /**
-     * This tests will check if we can get the token for a user that exists. It is expected the token cannot be retrieved
+    /*
+     * This test will check if we can get the token for a user that exists. It is expected the token cannot be retrieved
      * because we are passing in a token that doesn't exist.
      */
     @Transactional
@@ -99,7 +99,7 @@ public class EmailVerificationTokenServiceImplTest {
         assertNull(emailVerificationToken);
     }
 
-    /**
+    /*
      * This test is checking if the token we are passing in is still valid, in other words it has not yet expired. It is
      * expected the token has not yet expired because it has not been 2700 seconds from when it was
      * created.
@@ -111,7 +111,7 @@ public class EmailVerificationTokenServiceImplTest {
         assertNotNull(user);
     }
 
-    /**
+    /*
      * This test is checking if the token we are passing in is still valid, in other words it has not yet expired. It is
      * expected that we get exception because we cannot retrieve the token.
      */
