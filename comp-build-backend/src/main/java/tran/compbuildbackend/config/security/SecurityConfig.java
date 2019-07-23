@@ -86,6 +86,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SecurityConstants.SIGN_UP_URLS).anonymous()
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(redirectToIndexFilter(), JwtAuthenticationFilter.class);// will change this to .authenticated()
+        http.addFilterAfter(redirectToIndexFilter(), JwtAuthenticationFilter.class);
     }
 }
