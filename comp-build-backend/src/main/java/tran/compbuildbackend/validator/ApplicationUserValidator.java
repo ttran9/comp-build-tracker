@@ -5,15 +5,18 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 
-import static tran.compbuildbackend.constants.fields.ErrorKeyConstants.LENGTH_KEY;
-import static tran.compbuildbackend.constants.fields.ErrorKeyConstants.MATCH_KEY;
-import static tran.compbuildbackend.constants.fields.FieldConstants.CONFIRM_PASSWORD_FIELD;
-import static tran.compbuildbackend.constants.fields.FieldConstants.PASSWORD_FIELD;
-import static tran.compbuildbackend.constants.fields.FieldValueConstants.PASSWORD_MISMATCH_ERROR;
-import static tran.compbuildbackend.constants.fields.FieldValueConstants.SHORT_PASSWORD_ERROR;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static tran.compbuildbackend.constants.fields.ErrorKeyConstants.*;
+import static tran.compbuildbackend.constants.fields.FieldConstants.*;
+import static tran.compbuildbackend.constants.fields.FieldValueConstants.*;
 
 @Component
 public class ApplicationUserValidator implements Validator {
+
+    private static final String USERNAME_PATTERN = "^[a-z0-9]{3,15}$";
+
     @Override
     public boolean supports(Class<?> aClass) {
         /*
@@ -35,5 +38,19 @@ public class ApplicationUserValidator implements Validator {
             errors.rejectValue(CONFIRM_PASSWORD_FIELD, MATCH_KEY, PASSWORD_MISMATCH_ERROR);
         }
 
+
+        if(!verifyUserName(applicationUser.getUsername())) {
+            errors.rejectValue(USER_NAME_FIELD, INVALID_KEY, USER_NAME_CREATION_ERROR);
+        }
+    }
+
+    private boolean verifyUserName(String userName) {
+        Pattern pattern;
+        Matcher matcher;
+
+        pattern = Pattern.compile(USERNAME_PATTERN);
+
+        matcher = pattern.matcher(userName);
+        return matcher.matches();
     }
 }
