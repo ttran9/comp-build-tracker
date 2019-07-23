@@ -30,32 +30,16 @@ once the functionality is working.
     using JUnit because although I have exposure to it, I still need to greatly improve my skill set.
 
 
-# Notes for the specific branch (user-login-and-registration)
+# Notes for the specific branch (computer-build-backend)
 
-- I will be using these two features together because if one registers a user it is expected that one can login following
-the registration.
-    - I will be testing individual components for the registration and login ability but I am not sure how to unit
-    test the sending email feature so I will not write a test for that.
-        - I will be taking code that I added to the personal project management tool that I followed from a Udemy course
-        and the email sending code seems to work (sends an email after registration and sends an email when the user
-        requests for a new password).
-        - An initial thought that I have here is to perhaps to some form of BDD to just ensure that certain methods are
-        called from the email sender bean/component.
-        
-- When testing the confirm registration email and change password, both of these require a token so I decided
-to refactor the ResponseEntity objects to return the token. I'm not sure if this is a secure practice but I decided
-to do this because the tokens expire after a certain amount of time.
-    - If I was doing this at a production level and used by more users and security was a more important issue I would
-put a higher priority on this and perhaps look up solutions on how to write an automated test for this type
-of feature.
+- I have added some tests for the ComputerBuild object to test some of the basic functions ranging from retrieving, 
+creating, deleting, and updating computer builds.
 
 
 # Progress (master branch)
     - For the progress once I have crossed off the item that means it has been merged into the master branch.
 - <strike>Merged in user login, registration, password change, and account activation features.</strike>
-- Add support to be able to to create, delete/remove, and edit a ComputerBuild and write unit tests for this functionality.
-    - ComputerBuild will have to have a variety of objects inside of it such as ComputerParts, Directions, Overclocking Notes,
-    and other Notes (such as any recommendations or any issues that will be explained in more depth).
+- Add support to be able to to create, delete/remove, and edit a ComputerBuild and write automated tests for this functionality.
 - Add functionality to be able to add, delete, and update ComputerParts for a ComputerBuild.
 - Add functionality to be able to add, delete, and update Directions for a ComputerBuild. 
 - Add functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild. 
