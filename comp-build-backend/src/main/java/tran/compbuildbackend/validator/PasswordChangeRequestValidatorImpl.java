@@ -2,7 +2,7 @@ package tran.compbuildbackend.validator;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import tran.compbuildbackend.payload.PasswordChangeRequest;
+import tran.compbuildbackend.payload.email.PasswordChangeRequest;
 
 import static tran.compbuildbackend.constants.fields.FieldConstants.CONFIRM_PASSWORD_FIELD;
 import static tran.compbuildbackend.constants.fields.FieldConstants.PASSWORD_FIELD;
