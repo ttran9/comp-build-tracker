@@ -4,7 +4,7 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     username: sa
-    password: password
+    password:
     hikari:
-      jdbc-url: jdbc:h2:mem:test
+      jdbc-url: jdbc:h2:mem:testdb
 
