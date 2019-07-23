@@ -3,16 +3,15 @@ package tran.compbuildbackend.domain.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.security.ChangePasswordToken;
 import tran.compbuildbackend.domain.security.EmailVerificationToken;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import java.util.*;
 
 import static tran.compbuildbackend.constants.fields.FieldValueConstants.FULL_NAME_MISSING_ERROR;
 
@@ -23,44 +22,60 @@ public class ApplicationUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email(message = "Username needs to be an email")
+    @Email
     @Column(unique = true)
-    @NotBlank(message = "username is required")
-    private String username;
+    @NotBlank(message = "email is required")
+    private String email;
     @NotBlank(message = FULL_NAME_MISSING_ERROR)
+    @Column(name="full_name")
     private String fullName;
     @NotBlank(message = "Password field is required")
     private String password;
     @Transient // don't want to store the confirmPW.
     private String confirmPassword;
+    @NotBlank(message = "username is required")
+    @Column(unique = true)
+    private String username;
+
+    @Column(name="created_at")
     private Date createdAt;
+    @Column(name="updated_at")
     private Date updatedAt;
     private boolean enabled;
 
-    // OneToMany with Project.
-//    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
-//    private List<Project> projects = new ArrayList<>();
-//
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "user", orphanRemoval = true)
     private EmailVerificationToken emailVerificationToken;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "user", orphanRemoval = true)
     private ChangePasswordToken changePasswordToken;
 
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "user")
+    private List<ComputerBuild> computerBuild = new LinkedList<>();
+
     public ApplicationUser() { }
 
-    public ApplicationUser(@Email(message = "Username needs to be an email") @NotBlank(message = "username is required")
-                                   String username, @NotBlank(message = "Password field is required") String password,
-                           String confirmPassword) {
+    public ApplicationUser(@NotBlank(message = "username is required") String username,
+                           @NotBlank(message = "Password field is required") String password, String confirmPassword) {
         this.username = username;
         this.password = password;
         this.confirmPassword = confirmPassword;
     }
 
-    public ApplicationUser(@Email(message = "Username needs to be an email") @NotBlank(message = "username is required")
-                                   String username, @NotBlank(message = FULL_NAME_MISSING_ERROR) String fullName,
+    public ApplicationUser(@NotBlank(message = "username is required") String username,
+                           @Email @NotBlank(message = "email is required") String email,
                            @NotBlank(message = "Password field is required") String password, String confirmPassword) {
         this.username = username;
+        this.email = email;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+    }
+
+    public ApplicationUser(@NotBlank(message = "username is required") String username,
+                           @Email @NotBlank(message = "email is required") String email,
+                           @NotBlank(message = FULL_NAME_MISSING_ERROR) String fullName,
+                           @NotBlank(message = "Password field is required") String password, String confirmPassword) {
+        this.username = username;
+        this.email = email;
         this.fullName = fullName;
         this.password = password;
         this.confirmPassword = confirmPassword;
@@ -120,6 +135,14 @@ public class ApplicationUser implements UserDetails {
         this.confirmPassword = confirmPassword;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -134,6 +157,14 @@ public class ApplicationUser implements UserDetails {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<ComputerBuild> getComputerBuild() {
+        return computerBuild;
+    }
+
+    public void setComputerBuild(List<ComputerBuild> computerBuild) {
+        this.computerBuild = computerBuild;
     }
 
     public EmailVerificationToken getEmailVerificationToken() {
