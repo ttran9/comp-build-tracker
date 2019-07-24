@@ -15,7 +15,8 @@ import tran.compbuildbackend.services.computerbuild.ComputerBuildService;
 import tran.compbuildbackend.services.security.ApplicationUserAuthenticationService;
 import tran.compbuildbackend.services.users.ApplicationUserService;
 
-import static tran.compbuildbackend.constants.tests.TestUtility.SAMPLE_COMPUTER_BUILD_NAME;
+import static tran.compbuildbackend.constants.tests.TestUtility.SAMPLE_BUDGET_COMPUTER_BUILD_NAME;
+import static tran.compbuildbackend.constants.tests.TestUtility.SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
 
 @Component
@@ -92,7 +93,8 @@ public class BootstrapData implements ApplicationListener<ContextRefreshedEvent>
 
     private void createSampleComputerBuild() {
         ComputerBuild computerBuild = new ComputerBuild();
-        computerBuild.setName(SAMPLE_COMPUTER_BUILD_NAME);
+        computerBuild.setName(SAMPLE_BUDGET_COMPUTER_BUILD_NAME);
+        computerBuild.setBuildDescription(SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         computerBuildService.createNewComputerBuild(computerBuild);
     }
