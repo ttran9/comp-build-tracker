@@ -15,7 +15,7 @@ public class EventUtil {
         ApplicationUser user = event.getUser();
         String token = tokenService.createVerificationToken(user);
 
-        String recipient = user.getUsername();
+        String recipient = user.getEmail();
 
         String url = event.getAppUrl() + urlPath + token;
         String emailContent = messageSource.getMessage(messsageContent, null, event.getLocale());
