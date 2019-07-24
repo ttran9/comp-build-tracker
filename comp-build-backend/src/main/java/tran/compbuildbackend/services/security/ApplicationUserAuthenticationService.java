@@ -2,7 +2,7 @@ package tran.compbuildbackend.services.security;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import tran.compbuildbackend.payload.LoginRequest;
+import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.security.JwtTokenProvider;
 
 public interface ApplicationUserAuthenticationService {

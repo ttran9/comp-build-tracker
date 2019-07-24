@@ -6,8 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import tran.compbuildbackend.payload.JWTLoginSuccessResponse;
-import tran.compbuildbackend.payload.LoginRequest;
+import tran.compbuildbackend.payload.email.JWTLoginSuccessResponse;
+import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.security.JwtTokenProvider;
 
 import static tran.compbuildbackend.constants.security.SecurityConstants.TOKEN_PREFIX;
