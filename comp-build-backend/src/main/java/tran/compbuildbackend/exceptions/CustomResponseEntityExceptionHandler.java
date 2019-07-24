@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import tran.compbuildbackend.exceptions.request.GenericRequestException;
-import tran.compbuildbackend.exceptions.request.GenericRequestExceptionResponse;
+import tran.compbuildbackend.exceptions.request.*;
 import tran.compbuildbackend.exceptions.security.*;
+
+import java.util.Map;
+
+import static tran.compbuildbackend.constants.fields.FieldConstants.EMAIL_FIELD;
+import static tran.compbuildbackend.constants.fields.FieldConstants.USER_NAME_FIELD;
 
 @ControllerAdvice
 @RestController
@@ -60,6 +64,29 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler
     public final ResponseEntity<Object> handleGenericRequestException(GenericRequestException ex) {
         GenericRequestExceptionResponse response = new GenericRequestExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleEmailRequestException(EmailRequestException ex) {
+        EmailRequestExceptionResponse response = new EmailRequestExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleMultipleFieldsException(MultipleFieldsException ex) {
+        Map<String, String> errors = ex.getMapError();
+
+        MultipleFieldsExceptionResponse response = new MultipleFieldsExceptionResponse();
+
+        if(errors.get(USER_NAME_FIELD) != null) {
+            response.setUsername(errors.get(USER_NAME_FIELD));
+        }
+
+        if(errors.get(EMAIL_FIELD) != null) {
+            response.setEmail(errors.get(EMAIL_FIELD));
+        }
+
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
