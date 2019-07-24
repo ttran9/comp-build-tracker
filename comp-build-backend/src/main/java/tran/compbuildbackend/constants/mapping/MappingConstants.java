@@ -12,4 +12,22 @@ public class MappingConstants {
     public static final String REGISTER_URL = "/register";
     public static final String LOGIN_URL = "/login";
     public static final String TOKEN_PARAM = "{token}";
+
+    // ComputerBuildController
+    public static final String COMPUTER_BUILD_API = "/api/computerbuild/";
+    public static final String BUILD_IDENTIFIER_PATH_VARIABLE = "{buildIdentifier}";
+    public static final String USER_NAME_REQUEST = "username/";
+    public static final String USER_NAME_PATH_VARIABLE = "{username}";
+
+    // ComputerPartController
+    public static final String COMPUTER_PART_API = "/api/computerpart";
+
+    // DirectionController
+    public static final String DIRECTION_API = "/api/direction";
+
+    // OverclockingNoteController
+    public static final String OVERCLOCKING_NOTE_API = "/api/overclockingnote";
+
+    // PurposeController
+    public static final String PURPOSE_API = "/api/purpose";
 }
