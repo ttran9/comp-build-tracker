@@ -55,10 +55,15 @@ public interface ApplicationUserService {
     void enableUser(ApplicationUser user);
 
     /**
-     * Returns the name of the user.
-     * @param userName The username of the user to be returned.
+     * @param email The email address of the user to be returned.
      * @param exceptionType A value used to determine what type of exception is thrown when the user cannot be found.
+     * @return The user with the associated email if found, if not a custom exception is thrown.
+     */
+    ApplicationUser getUserByEmail(String email, int exceptionType);
+
+    /**
+     * @param userName The user name of the user to be returned.
      * @return The user with the associated user name if found, if not a custom exception is thrown.
      */
-    ApplicationUser getUserByUserName(String userName, int exceptionType);
+    ApplicationUser getUserByUsername(String userName);
 }

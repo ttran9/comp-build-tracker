@@ -1,17 +1,19 @@
 package tran.compbuildbackend.services.users;
 
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.FieldError;
 import tran.compbuildbackend.domain.security.ChangePasswordToken;
 import tran.compbuildbackend.domain.security.EmailVerificationToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.event.OnPasswordResetRequestEvent;
 import tran.compbuildbackend.event.OnRegistrationSuccessEvent;
+import tran.compbuildbackend.exceptions.request.EmailRequestException;
 import tran.compbuildbackend.exceptions.request.GenericRequestException;
-import tran.compbuildbackend.exceptions.request.UsernameRequestException;
+import tran.compbuildbackend.exceptions.request.MultipleFieldsException;
 import tran.compbuildbackend.exceptions.security.*;
 import tran.compbuildbackend.repositories.security.ChangePasswordTokenRepository;
 import tran.compbuildbackend.repositories.security.EmailVerificationTokenRepository;
@@ -19,7 +21,12 @@ import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static tran.compbuildbackend.constants.exception.ExceptionConstants.*;
+import static tran.compbuildbackend.constants.fields.FieldConstants.EMAIL_FIELD;
+import static tran.compbuildbackend.constants.fields.FieldConstants.USER_NAME_FIELD;
 import static tran.compbuildbackend.constants.fields.FieldValueConstants.*;
 
 @Service
@@ -48,11 +55,10 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Override
     public ApplicationUser persistUser(ApplicationUser newApplicationUser, HttpServletRequest request) {
+        checkIfEmailAndUserNameExist(newApplicationUser);
+
         try {
             newApplicationUser.setPassword(bCryptPasswordEncoder.encode(newApplicationUser.getPassword()));
-            // username has to be unique (custom exception if this is violated)
-            newApplicationUser.setUsername(newApplicationUser.getUsername());
-
             // we don't persist or show the confirm password.
             newApplicationUser.setConfirmPassword("");
 
@@ -68,8 +74,8 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             if(token != null) createdUser.setEmailVerificationToken(token);
 
             return createdUser;
-        } catch(UsernameDuplicateException | DataIntegrityViolationException ex) {
-            throw new UsernameDuplicateException(USER_NAME_ERROR + newApplicationUser.getUsername() + ALREADY_EXISTS_ERROR);
+        } catch(Exception ex) {
+            throw new GenericRequestException("unhandled exception...");
         }
     }
 
@@ -119,12 +125,21 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     }
 
     @Override
-    public ApplicationUser getUserByUserName(String userName, int exceptionType) {
-        ApplicationUser user = applicationUserRepository.findByUsername(userName);
+    public ApplicationUser getUserByEmail(String email, int exceptionType) {
+        ApplicationUser user = applicationUserRepository.findByEmail(email);
         if(exceptionType == EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED && user == null) {
             throw new RequestChangePasswordException(PASSWORD_CANNOT_BE_CHANGED_FOR_INVALID_USER);
-        } else if(exceptionType == EXCEPTION_USER_NAME_DOES_NOT_EXIST && user == null) {
-            throw new UsernameRequestException("cannot find user with '" + userName + "'.");
+        } else if(exceptionType == EXCEPTION_EMAIL_NAME_DOES_NOT_EXIST && user == null) {
+            throw new EmailRequestException("cannot find user with email '" + email + "'.");
+        }
+        return user;
+    }
+
+    @Override
+    public ApplicationUser getUserByUsername(String userName) {
+        ApplicationUser user = applicationUserRepository.findByUsername(userName);
+        if(user == null) {
+            throw new UsernameNotFoundException("the user with '" + userName + "' cannot be found");
         }
         return user;
     }
@@ -157,7 +172,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             throw new GenericRequestException(REQUEST_IS_NULL_ERROR);
         }
         String appUrl = request.getScheme() + "://" + request.getServerName() +  ":" + request.getServerPort();
-        ApplicationUser user = getUserByUserName(userName, EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED);
+        ApplicationUser user = getUserByEmail(userName, EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED);
         try {
             checkForOldToken(user);
             eventPublisher.publishEvent(new OnPasswordResetRequestEvent(user, request.getLocale(), appUrl));
@@ -186,5 +201,42 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
              */
             changePasswordTokenRepository.deleteByToken(token.getToken());
         }
+    }
+
+    private void checkIfEmailAndUserNameExist(ApplicationUser newApplicationUser) {
+        /*
+         * check if the user name exists and check if the email exists.
+         * There are a few cases to consider..
+         * 1) The user name exists throw a UsernameDuplicationException.
+         * 2) The email exists throw an EmailExistsException.
+         * 3) If both exist then throw the MultipleFieldsException.
+         */
+        boolean userNameExists = checkForUserName(newApplicationUser.getUsername());
+        boolean emailExists = checkForEmail(newApplicationUser.getEmail());
+        String userNameExistsError = USER_NAME_ERROR + newApplicationUser.getUsername() + ALREADY_EXISTS_ERROR;
+        String emailExistsError = EMAIL_ERROR + newApplicationUser.getEmail() + ALREADY_EXISTS_ERROR;
+        Map<String, String> errors = new HashMap<>();
+
+        if(userNameExists && emailExists) {
+            errors.put(USER_NAME_FIELD, userNameExistsError);
+            errors.put(EMAIL_FIELD, emailExistsError);
+            throw new MultipleFieldsException(errors);
+        } else if(userNameExists) {
+            errors.put(USER_NAME_FIELD, userNameExistsError);
+            throw new MultipleFieldsException(errors);
+        } else if(emailExists) {
+            errors.put(EMAIL_FIELD, emailExistsError);
+            throw new MultipleFieldsException(errors);
+        }
+    }
+
+    private boolean checkForUserName(String userName) {
+        ApplicationUser user = applicationUserRepository.findByUsername(userName);
+        return user != null;
+    }
+
+    private boolean checkForEmail(String email) {
+        ApplicationUser user = applicationUserRepository.findByEmail(email);
+        return user != null;
     }
 }
