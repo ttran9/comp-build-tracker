@@ -1,4 +1,4 @@
-package tran.compbuildbackend.payload;
+package tran.compbuildbackend.payload.email;
 
 public class RequestSuccessfulResponse {
     private String message;

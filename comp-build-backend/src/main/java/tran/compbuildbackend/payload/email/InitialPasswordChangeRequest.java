@@ -1,4 +1,4 @@
-package tran.compbuildbackend.payload;
+package tran.compbuildbackend.payload.email;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

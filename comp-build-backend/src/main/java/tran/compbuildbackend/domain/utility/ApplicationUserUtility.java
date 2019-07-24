@@ -2,19 +2,19 @@ package tran.compbuildbackend.domain.utility;
 
 import com.google.gson.Gson;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.payload.InitialPasswordChangeRequest;
-import tran.compbuildbackend.payload.LoginRequest;
-import tran.compbuildbackend.payload.PasswordChangeRequest;
+import tran.compbuildbackend.payload.email.InitialPasswordChangeRequest;
+import tran.compbuildbackend.payload.email.LoginRequest;
+import tran.compbuildbackend.payload.email.PasswordChangeRequest;
 
 public class ApplicationUserUtility {
 
-    public static String getUserAsJson(String userName, String fullName, String password, String confirmPassword) {
-        ApplicationUser user = new ApplicationUser(userName, fullName, password, confirmPassword);
+    public static String getUserAsJson(String userName, String email, String fullName, String password, String confirmPassword) {
+        ApplicationUser user = new ApplicationUser(userName, email, fullName, password, confirmPassword);
         return new Gson().toJson(user);
     }
 
-    public static String getUserAsJson(String userName, String password, String confirmPassword) {
-        ApplicationUser user = new ApplicationUser(userName, password, confirmPassword);
+    public static String getUserAsJson(String userName, String email, String password, String confirmPassword) {
+        ApplicationUser user = new ApplicationUser(userName, email, password, confirmPassword);
         return new Gson().toJson(user);
     }
 
