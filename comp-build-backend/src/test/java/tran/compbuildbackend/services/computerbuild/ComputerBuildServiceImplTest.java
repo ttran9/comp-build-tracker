@@ -21,9 +21,9 @@ import tran.compbuildbackend.services.security.ApplicationUserAuthenticationServ
 import javax.transaction.Transactional;
 
 import static org.junit.Assert.*;
-import static tran.compbuildbackend.constants.tests.TestUtility.SAMPLE_COMPUTER_BUILD_NAME;
-import static tran.compbuildbackend.constants.tests.TestUtility.SAMPLE_GAMING_COMPUTER_BUILD_NAME;
+import static tran.compbuildbackend.constants.tests.TestUtility.*;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
+import static tran.compbuildbackend.domain.utility.ComputerBuildUtility.createComputerBuild;
 
 @Profile("test")
 @RunWith(SpringRunner.class)
@@ -47,6 +47,8 @@ public class ComputerBuildServiceImplTest {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    private int expectedNumberOfDirections = 0;
+
     @Before
     public void setUp() {
         computerBuildService = new ComputerBuildServiceImpl(computerBuildRepository,
@@ -58,16 +60,10 @@ public class ComputerBuildServiceImplTest {
      */
     @Test
     public void createNewComputerBuildSuccess() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
 
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        assertNotNull(newComputerBuild);
-        assertNotNull(newComputerBuild.getBuildIdentifier());
-        assertNotNull(newComputerBuild.getUser());
-        assertEquals(0, newComputerBuild.getNumberOfDirections());
+        loginAndCreateBuild(computerBuild, loginRequest, SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
     }
 
     /*
@@ -76,7 +72,7 @@ public class ComputerBuildServiceImplTest {
      */
     @Test(expected = UsernameNotFoundException.class)
     public void createNewComputerBuildFailure() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         computerBuildService.createNewComputerBuild(computerBuild);
     }
 
@@ -87,17 +83,11 @@ public class ComputerBuildServiceImplTest {
     @Transactional
     @Test
     public void createUpdateNumberOfDirections() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-        int expectedNumberOfDirections = 0;
 
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        assertNotNull(newComputerBuild);
-        assertNotNull(newComputerBuild.getBuildIdentifier());
-        assertNotNull(newComputerBuild.getUser());
-        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
+        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
+                SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         newComputerBuild.setNumberOfDirections(1);
 
@@ -114,7 +104,7 @@ public class ComputerBuildServiceImplTest {
      */
     @Test(expected = GenericRequestException.class)
     public void createUpdateNumberOfDirectionsFailure() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         computerBuild.setNumberOfDirections(1);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
 
@@ -130,17 +120,11 @@ public class ComputerBuildServiceImplTest {
     @Transactional
     @Test(expected = GenericRequestException.class)
     public void createUpdateNumberOfDirectionsAsNonOwner() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-        int expectedNumberOfDirections = 0;
 
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        assertNotNull(newComputerBuild);
-        assertNotNull(newComputerBuild.getBuildIdentifier());
-        assertNotNull(newComputerBuild.getUser());
-        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
+        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
+                SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         newComputerBuild.setNumberOfDirections(1);
 
@@ -158,17 +142,11 @@ public class ComputerBuildServiceImplTest {
     @Test
     @Transactional
     public void deleteComputerBuild() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-        int expectedNumberOfDirections = 0;
 
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        assertNotNull(newComputerBuild);
-        assertNotNull(newComputerBuild.getBuildIdentifier());
-        assertNotNull(newComputerBuild.getUser());
-        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
+        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
+                SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         /*
          * as long as there is no exception thrown the test can be considered to pass. in the controller test, a certain
@@ -184,17 +162,11 @@ public class ComputerBuildServiceImplTest {
     @Transactional
     @Test(expected = GenericRequestException.class)
     public void deleteComputerBuildAsNonOwner() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-        int expectedNumberOfDirections = 0;
 
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        assertNotNull(newComputerBuild);
-        assertNotNull(newComputerBuild.getBuildIdentifier());
-        assertNotNull(newComputerBuild.getUser());
-        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
+        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
+                SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         // log in as a different user, this is expected to cause the delete to fail.
         LoginRequest newLoginRequest = new LoginRequest(USER_NAME_ONE, USER_PASSWORD);
@@ -210,17 +182,11 @@ public class ComputerBuildServiceImplTest {
     @Transactional
     @Test(expected = GenericRequestException.class)
     public void deleteComputerBuildWithIncorrectIdentifier() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-        int expectedNumberOfDirections = 0;
 
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        assertNotNull(newComputerBuild);
-        assertNotNull(newComputerBuild.getBuildIdentifier());
-        assertNotNull(newComputerBuild.getUser());
-        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
+        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
+                SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         computerBuildService.deleteComputerBuild(newComputerBuild.getBuildIdentifier() + "1");
     }
@@ -230,17 +196,11 @@ public class ComputerBuildServiceImplTest {
      */
     @Test
     public void getComputerBuildByIdentifier() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-        int expectedNumberOfDirections = 0;
 
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        assertNotNull(newComputerBuild);
-        assertNotNull(newComputerBuild.getBuildIdentifier());
-        assertNotNull(newComputerBuild.getUser());
-        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
+        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
+                SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
 
         ComputerBuild foundBuild = computerBuildService.getComputerBuildByBuildIdentifier(newComputerBuild.getBuildIdentifier());
 
@@ -256,17 +216,11 @@ public class ComputerBuildServiceImplTest {
      */
     @Test(expected = GenericRequestException.class)
     public void getComputerBuildByInvalidIdentifier() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_COMPUTER_BUILD_NAME);
+        ComputerBuild computerBuild = createComputerBuild(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-        int expectedNumberOfDirections = 0;
 
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        assertNotNull(newComputerBuild);
-        assertNotNull(newComputerBuild.getBuildIdentifier());
-        assertNotNull(newComputerBuild.getUser());
-        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
+        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
+                SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
 
         // attempt to find the computer build created above with an invalid identifier.
         computerBuildService.getComputerBuildByBuildIdentifier(newComputerBuild.getBuildIdentifier() + "1");
@@ -305,11 +259,21 @@ public class ComputerBuildServiceImplTest {
         assertEquals(0, computerBuilds.spliterator().getExactSizeIfKnown());
     }
 
-    private ComputerBuild createComputerBuild(String computerBuildName) {
-        ComputerBuild computerBuild = new ComputerBuild();
-        computerBuild.setName(computerBuildName);
-        return computerBuild;
-    }
+    /*
+     * helper method to log in and create a computer build.
+     */
+    private ComputerBuild loginAndCreateBuild(ComputerBuild computerBuild, LoginRequest loginRequest, String expectedBuildName,
+                                              String expectedBuildDescription) {
+        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
 
+        ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
+        assertNotNull(newComputerBuild);
+        assertNotNull(newComputerBuild.getBuildIdentifier());
+        assertNotNull(newComputerBuild.getUser());
+        assertEquals(expectedBuildName, newComputerBuild.getName());
+        assertEquals(expectedBuildDescription, newComputerBuild.getBuildDescription());
+        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
+        return newComputerBuild;
+    }
 
 }

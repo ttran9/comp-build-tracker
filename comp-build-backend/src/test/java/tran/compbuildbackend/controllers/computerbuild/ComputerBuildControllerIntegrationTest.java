@@ -53,14 +53,11 @@ public class ComputerBuildControllerIntegrationTest {
      */
     @Test
     public void testCreateComputerBuildSuccess() throws Exception {
-        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_COMPUTER_BUILD_NAME);
+        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         String createComputerBuildURL = BASE_URL + COMPUTER_BUILD_API;
 
-        ComputerBuildResponse contents = getContents(createComputerBuildURL, WebUtility.getEntityWithToken(content, token), HttpStatus.CREATED.value());
-        assertNotNull(contents);
-        assertEquals(SAMPLE_COMPUTER_BUILD_NAME, contents.getName());
-        assertNotNull(contents.getBuildIdentifier());
+        createComputerBuild(content, createComputerBuildURL);
     }
 
     /*
@@ -69,7 +66,7 @@ public class ComputerBuildControllerIntegrationTest {
      */
     @Test
     public void testCreateComputerBuildFailure() throws Exception {
-        String content = ComputerBuildUtility.getComputerBuildAsJson(null);
+        String content = ComputerBuildUtility.getComputerBuildAsJson(null, null);
 
         String createComputerBuildURL = BASE_URL + COMPUTER_BUILD_API;
 
@@ -82,16 +79,12 @@ public class ComputerBuildControllerIntegrationTest {
      * testing if a computer build that was created with a build identifier can be retrieved.
      */
     @Test
-    public void testGetComputerByIdentifier() throws Exception {
-        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_COMPUTER_BUILD_NAME);
+    public void testGetComputerBuildByIdentifier() throws Exception {
+        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         String createComputerBuildURL = BASE_URL + COMPUTER_BUILD_API;
 
-        ComputerBuildResponse contents = getContents(createComputerBuildURL, WebUtility.getEntityWithToken(content, token), HttpStatus.CREATED.value());
-        assertNotNull(contents);
-        assertEquals(SAMPLE_COMPUTER_BUILD_NAME, contents.getName());
-        String buildIdentifier = contents.getBuildIdentifier();
-        assertNotNull(buildIdentifier);
+        String buildIdentifier = createComputerBuild(content, createComputerBuildURL);
 
         String getComputerBuildByIdentifierURL = BASE_URL + COMPUTER_BUILD_API + buildIdentifier;
 
@@ -107,16 +100,12 @@ public class ComputerBuildControllerIntegrationTest {
      * build identifier.
      */
     @Test
-    public void testGetComputerByIncorrectIdentifier() throws Exception {
-        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_COMPUTER_BUILD_NAME);
+    public void testGetComputerBuildByIncorrectIdentifier() throws Exception {
+        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         String createComputerBuildURL = BASE_URL + COMPUTER_BUILD_API;
 
-        ComputerBuildResponse contents = getContents(createComputerBuildURL, WebUtility.getEntityWithToken(content, token), HttpStatus.CREATED.value());
-        assertNotNull(contents);
-        assertEquals(SAMPLE_COMPUTER_BUILD_NAME, contents.getName());
-        String buildIdentifier = contents.getBuildIdentifier();
-        assertNotNull(buildIdentifier);
+        String buildIdentifier = createComputerBuild(content, createComputerBuildURL);
 
         String getComputerBuildByIdentifierURL = BASE_URL + COMPUTER_BUILD_API + buildIdentifier + INVALID_IDENTIFIER_SUFFIX;
 
@@ -132,15 +121,11 @@ public class ComputerBuildControllerIntegrationTest {
      */
     @Test
     public void testDeleteComputerBuild() throws Exception {
-        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_COMPUTER_BUILD_NAME);
+        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         String createComputerBuildURL = BASE_URL + COMPUTER_BUILD_API;
 
-        ComputerBuildResponse contents = getContents(createComputerBuildURL, WebUtility.getEntityWithToken(content, token), HttpStatus.CREATED.value());
-        assertNotNull(contents);
-        assertEquals(SAMPLE_COMPUTER_BUILD_NAME, contents.getName());
-        String buildIdentifier = contents.getBuildIdentifier();
-        assertNotNull(buildIdentifier);
+        String buildIdentifier = createComputerBuild(content, createComputerBuildURL);
 
         String deleteComputerBuildByIdentifierURL = BASE_URL + COMPUTER_BUILD_API + buildIdentifier;
 
@@ -153,15 +138,11 @@ public class ComputerBuildControllerIntegrationTest {
      */
     @Test
     public void testDeleteComputerBuildWithInvalidIdentifier() throws Exception {
-        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_COMPUTER_BUILD_NAME);
+        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         String createComputerBuildURL = BASE_URL + COMPUTER_BUILD_API;
 
-        ComputerBuildResponse contents = getContents(createComputerBuildURL, WebUtility.getEntityWithToken(content, token), HttpStatus.CREATED.value());
-        assertNotNull(contents);
-        assertEquals(SAMPLE_COMPUTER_BUILD_NAME, contents.getName());
-        String buildIdentifier = contents.getBuildIdentifier();
-        assertNotNull(buildIdentifier);
+        String buildIdentifier = createComputerBuild(content, createComputerBuildURL);
 
         String deleteComputerBuildByIdentifierURL = BASE_URL + COMPUTER_BUILD_API + buildIdentifier + INVALID_IDENTIFIER_SUFFIX;
 
@@ -174,15 +155,11 @@ public class ComputerBuildControllerIntegrationTest {
      */
     @Test
     public void testDeleteComputerBuildWithInvalidOwner() throws Exception {
-        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_COMPUTER_BUILD_NAME);
+        String content = ComputerBuildUtility.getComputerBuildAsJson(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
         String createComputerBuildURL = BASE_URL + COMPUTER_BUILD_API;
 
-        ComputerBuildResponse contents = getContents(createComputerBuildURL, WebUtility.getEntityWithToken(content, token), HttpStatus.CREATED.value());
-        assertNotNull(contents);
-        assertEquals(SAMPLE_COMPUTER_BUILD_NAME, contents.getName());
-        String buildIdentifier = contents.getBuildIdentifier();
-        assertNotNull(buildIdentifier);
+        String buildIdentifier = createComputerBuild(content, createComputerBuildURL);
 
         String deleteComputerBuildByIdentifierURL = BASE_URL + COMPUTER_BUILD_API + buildIdentifier;
 
@@ -257,6 +234,20 @@ public class ComputerBuildControllerIntegrationTest {
         assertNotNull(loginResponse.getToken());
         token = loginResponse.getToken().substring(7);
     }
+
+    /*
+     * helper method to create a computer build.
+     */
+    private String createComputerBuild(String content, String createComputerBuildURL) throws Exception {
+        ComputerBuildResponse contents = getContents(createComputerBuildURL, WebUtility.getEntityWithToken(content, token), HttpStatus.CREATED.value());
+        assertNotNull(contents);
+        assertEquals(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, contents.getName());
+        assertEquals(SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION, contents.getBuildDescription());
+        String buildIdentifier = contents.getBuildIdentifier();
+        assertNotNull(buildIdentifier);
+        return buildIdentifier;
+    }
+
 
     /*
      * helper method to put the results of posting to an end point that will have information such as a message (such as
