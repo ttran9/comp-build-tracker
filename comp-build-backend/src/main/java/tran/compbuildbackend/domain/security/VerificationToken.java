@@ -11,6 +11,7 @@ import java.util.Calendar;
 
 @MappedSuperclass
 public abstract class VerificationToken {
+    @Transient
     protected int EXPIRATION = 60 * 24;
 
     @Id
