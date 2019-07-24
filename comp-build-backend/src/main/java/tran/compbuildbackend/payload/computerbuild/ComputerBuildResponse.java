@@ -5,17 +5,9 @@ public class ComputerBuildResponse {
     private String name;
     private String message;
     private String buildIdentifier;
+    private String buildDescription;
 
     public ComputerBuildResponse() { }
-
-    public ComputerBuildResponse(String name) {
-        this.name = name;
-    }
-
-    public ComputerBuildResponse(String name, String message) {
-        this.name = name;
-        this.message = message;
-    }
 
     public String getName() {
         return name;
@@ -39,6 +31,14 @@ public class ComputerBuildResponse {
 
     public void setBuildIdentifier(String buildIdentifier) {
         this.buildIdentifier = buildIdentifier;
+    }
+
+    public String getBuildDescription() {
+        return buildDescription;
+    }
+
+    public void setBuildDescription(String buildDescription) {
+        this.buildDescription = buildDescription;
     }
 
     @Override

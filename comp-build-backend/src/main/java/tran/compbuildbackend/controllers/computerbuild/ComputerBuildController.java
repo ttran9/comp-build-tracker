@@ -33,8 +33,8 @@ public class ComputerBuildController {
         if(errorMap != null) return errorMap;
 
         ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
-        ComputerBuildResponse response = ComputerBuildToComputerBuildResponse.computerBuildToComputerBuildResponseNameAndBuildIdentifier
-                (newComputerBuild.getName(), newComputerBuild.getBuildIdentifier());
+        ComputerBuildResponse response = ComputerBuildToComputerBuildResponse.buildToBuildResponseWithFields
+                (newComputerBuild.getName(), newComputerBuild.getBuildIdentifier(), newComputerBuild.getBuildDescription());
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

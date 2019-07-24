@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -22,6 +23,10 @@ public class ComputerBuild {
     @Size(min=2, max=20)
     @Column(updatable = false)
     private String name;
+
+    @NotBlank
+    @Column(name="build_description")
+    private String buildDescription;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
@@ -167,5 +172,13 @@ public class ComputerBuild {
 
     public void setBuildIdentifier(String buildIdentifier) {
         this.buildIdentifier = buildIdentifier;
+    }
+
+    public String getBuildDescription() {
+        return buildDescription;
+    }
+
+    public void setBuildDescription(String buildDescription) {
+        this.buildDescription = buildDescription;
     }
 }
