@@ -16,6 +16,7 @@ import tran.compbuildbackend.controllers.utility.WebUtility;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.utility.ApplicationUserUtility;
 import tran.compbuildbackend.domain.utility.ComputerBuildUtility;
+import tran.compbuildbackend.dto.computerbuild.ComputerBuildDto;
 import tran.compbuildbackend.exceptions.request.GenericRequestExceptionResponse;
 import tran.compbuildbackend.payload.computerbuild.ComputerBuildResponse;
 import tran.compbuildbackend.payload.email.JWTLoginSuccessResponse;
@@ -88,8 +89,8 @@ public class ComputerBuildControllerIntegrationTest {
 
         String getComputerBuildByIdentifierURL = BASE_URL + COMPUTER_BUILD_API + buildIdentifier;
 
-        ComputerBuild buildContents = getComputerBuildContents(getComputerBuildByIdentifierURL, WebUtility.getEntity(null),
-                HttpStatus.FOUND.value());
+        ComputerBuildDto buildContents = getComputerBuildContents(getComputerBuildByIdentifierURL, WebUtility.getEntity(null),
+                HttpStatus.OK.value());
 
         assertNotNull(buildContents);
         assertEquals(buildIdentifier, buildContents.getBuildIdentifier());
@@ -180,8 +181,9 @@ public class ComputerBuildControllerIntegrationTest {
     @Test
     public void testGetAllComputerBuilds() throws Exception {
         String getAllComputerBuildsURL = BASE_URL + COMPUTER_BUILD_API;
-        Object builds = getAllComputerBuilds(getAllComputerBuildsURL);
-        List<ComputerBuild> computerBuilds = (List<ComputerBuild>) builds;
+        Object builds = getAllComputerBuilds(getAllComputerBuildsURL, WebUtility.getEntity(null));
+        List<ComputerBuildDto> computerBuilds = (List<ComputerBuildDto>) builds;
+//        List<ComputerBuildDto> computerBuilds = getAllComputerBuilds(getAllComputerBuildsURL, WebUtility.getEntity(null));
 
         // in the bootstrap class we created a computer build so we expect size that is not zero (is greater than zero).
         assertNotEquals(0, computerBuilds.size());
@@ -195,8 +197,9 @@ public class ComputerBuildControllerIntegrationTest {
     public void testGetAllComputerBuildsFromUser() throws Exception {
         String getAllComputerBuildsURL = BASE_URL + COMPUTER_BUILD_API;
         String getAllComputersWithUserURL = getAllComputerBuildsURL + USER_NAME_REQUEST + ANOTHER_USER_NAME_TO_CREATE_NEW_USER;
-        Object builds = getAllComputerBuilds(getAllComputersWithUserURL);
-        List<ComputerBuild> computerBuilds = (List<ComputerBuild>) builds;
+        Object builds = getAllComputerBuilds(getAllComputersWithUserURL, WebUtility.getEntity(null));
+        List<ComputerBuildDto> computerBuilds = (List<ComputerBuildDto>) builds;
+//        List<ComputerBuildDto> computerBuilds = getAllComputerBuilds(getAllComputerBuildsURL, WebUtility.getEntity(null));
 
         // in the bootstrap class we created a computer build so we expect size of one.
         assertNotEquals(0, computerBuilds.size());
@@ -210,8 +213,8 @@ public class ComputerBuildControllerIntegrationTest {
     public void testGetAllComputerBuildsFromUserWithNoBuilds() throws Exception {
         String getAllComputerBuildsURL = BASE_URL + COMPUTER_BUILD_API;
         String getAllComputersWithUserURL = getAllComputerBuildsURL + USER_NAME_REQUEST + SUCCESSFUL_USER_NAME;
-        Object builds = getAllComputerBuilds(getAllComputersWithUserURL);
-        List<ComputerBuild> computerBuilds = (List<ComputerBuild>) builds;
+        Object builds = getAllComputerBuilds(getAllComputersWithUserURL, WebUtility.getEntity(null));
+        List<ComputerBuildDto> computerBuilds = (List<ComputerBuildDto>) builds;
         int expectedSize = 0;
 
         // in the bootstrap class we created a computer build so we expect size of one.
@@ -262,9 +265,9 @@ public class ComputerBuildControllerIntegrationTest {
         return result.getBody();
     }
 
-    private ComputerBuild getComputerBuildContents(String url, HttpEntity<String> entity, int expectedHttpStatusCode) throws Exception{
+    private ComputerBuildDto getComputerBuildContents(String url, HttpEntity<String> entity, int expectedHttpStatusCode) throws Exception{
         URI uri = new URI(url);
-        ResponseEntity<ComputerBuild> result = restTemplate.exchange(uri, HttpMethod.GET, entity, ComputerBuild.class);
+        ResponseEntity<ComputerBuildDto> result = restTemplate.exchange(uri, HttpMethod.GET, entity, ComputerBuildDto.class);
         assertNotNull(result);
         assertEquals(expectedHttpStatusCode, result.getStatusCode().value());
         return result.getBody();
@@ -286,9 +289,9 @@ public class ComputerBuildControllerIntegrationTest {
         return result.getBody();
     }
 
-    private Object getAllComputerBuilds(String url) throws Exception {
+    private Object getAllComputerBuilds(String url, HttpEntity<String> entity) throws Exception {
         URI uri = new URI(url);
-        ResponseEntity<?> result = restTemplate.exchange(uri, HttpMethod.GET, null, Object.class);
+        ResponseEntity<Object> result = restTemplate.exchange(uri, HttpMethod.GET, entity, Object.class);
         assertNotNull(result);
         return result.getBody();
     }
