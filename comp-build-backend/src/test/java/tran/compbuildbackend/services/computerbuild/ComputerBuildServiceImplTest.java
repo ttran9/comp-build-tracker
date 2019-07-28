@@ -47,8 +47,6 @@ public class ComputerBuildServiceImplTest {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    private int expectedNumberOfDirections = 0;
-
     @Before
     public void setUp() {
         computerBuildService = new ComputerBuildServiceImpl(computerBuildRepository,
@@ -74,65 +72,6 @@ public class ComputerBuildServiceImplTest {
     public void createNewComputerBuildFailure() {
         ComputerBuild computerBuild = createComputerBuild(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         computerBuildService.createNewComputerBuild(computerBuild);
-    }
-
-    /*
-     * This test will check if a newly created computer build will have its number of directions field updated and the
-     * user and build identifier fields should be unchanged.
-     */
-    @Transactional
-    @Test
-    public void createUpdateNumberOfDirections() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
-        LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-
-        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
-                SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
-
-        newComputerBuild.setNumberOfDirections(1);
-
-        ComputerBuild updatedBuild = computerBuildService.updateNumberOfDirections(newComputerBuild, newComputerBuild.getBuildIdentifier());
-
-        assertNotEquals(expectedNumberOfDirections, updatedBuild.getNumberOfDirections());
-        assertEquals(newComputerBuild.getBuildIdentifier(), updatedBuild.getBuildIdentifier());
-        assertEquals(newComputerBuild.getUser(), updatedBuild.getUser());
-    }
-
-    /*
-     * This test checks the case where the user is logged in but is passing in a computerBuild object that is "invalid,"
-     * in this case there is no user associated with the computerBuild.
-     */
-    @Test(expected = GenericRequestException.class)
-    public void createUpdateNumberOfDirectionsFailure() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
-        computerBuild.setNumberOfDirections(1);
-        LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, loginRequest);
-
-        computerBuildService.updateNumberOfDirections(computerBuild, computerBuild.getBuildIdentifier());
-    }
-
-    /*
-     * This test will check if a newly created computer build will have its number of directions field updated when the
-     * user updating is not the original user that created the computer build.
-     */
-    @Transactional
-    @Test(expected = GenericRequestException.class)
-    public void createUpdateNumberOfDirectionsAsNonOwner() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
-        LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-
-        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
-                SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
-
-        newComputerBuild.setNumberOfDirections(1);
-
-        // log in as a different user, this is expected to cause the update to fail.
-        LoginRequest newLoginRequest = new LoginRequest(USER_NAME_ONE, USER_PASSWORD);
-        WebUtility.logUserIn(applicationUserAuthenticationService, authenticationManager, jwtTokenProvider, newLoginRequest);
-
-        computerBuildService.updateNumberOfDirections(newComputerBuild, newComputerBuild.getBuildIdentifier());
     }
 
     /*
@@ -207,7 +146,6 @@ public class ComputerBuildServiceImplTest {
         assertNotNull(foundBuild);
         assertEquals(newComputerBuild.getBuildIdentifier(), foundBuild.getBuildIdentifier());
         assertEquals(newComputerBuild.getUser().getUsername(), foundBuild.getUser().getUsername());
-        assertEquals(newComputerBuild.getNumberOfDirections(), foundBuild.getNumberOfDirections());
 
     }
 
@@ -272,7 +210,6 @@ public class ComputerBuildServiceImplTest {
         assertNotNull(newComputerBuild.getUser());
         assertEquals(expectedBuildName, newComputerBuild.getName());
         assertEquals(expectedBuildDescription, newComputerBuild.getBuildDescription());
-        assertEquals(expectedNumberOfDirections, newComputerBuild.getNumberOfDirections());
         return newComputerBuild;
     }
 
