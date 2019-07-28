@@ -10,8 +10,10 @@ import tran.compbuildbackend.domain.security.EmailVerificationToken;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import static tran.compbuildbackend.constants.fields.FieldValueConstants.FULL_NAME_MISSING_ERROR;
 
@@ -38,9 +40,9 @@ public class ApplicationUser implements UserDetails {
     private String username;
 
     @Column(name="created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
     @Column(name="updated_at")
-    private Date updatedAt;
+    private LocalDate updatedAt;
     private boolean enabled;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "user", orphanRemoval = true)
@@ -85,12 +87,12 @@ public class ApplicationUser implements UserDetails {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = new Date();
+        this.createdAt = LocalDate.now();
     }
 
     @PostPersist
     protected void onUpdate() {
-        this.updatedAt = new Date();
+        this.updatedAt = LocalDate.now();
     }
 
     public Long getId() {
@@ -143,19 +145,19 @@ public class ApplicationUser implements UserDetails {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 
