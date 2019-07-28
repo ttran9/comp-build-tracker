@@ -12,15 +12,6 @@ public interface ComputerBuildService {
     ComputerBuild createNewComputerBuild(ComputerBuild computerBuild);
 
     /**
-     * A method to persist the update the number of directions associated with the specified computer build.
-     * @param updatedComputerBuild The computer build object holding the new number of directions.
-     * @param buildIdentifier The unique identifier for the computer build used to verify the logged in user is
-     *                        updating their own ComputerBuild object.
-     * @return The computer build with a updated content, specifically the number of directions.
-     */
-    ComputerBuild updateNumberOfDirections(ComputerBuild updatedComputerBuild, String buildIdentifier);
-
-    /**
      * removes the computer build with the specified buildIdentifier.
      * @param buildIdentifier The unique identifier of the computer build to be deleted.
      */

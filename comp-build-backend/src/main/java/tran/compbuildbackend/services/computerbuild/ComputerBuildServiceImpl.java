@@ -42,16 +42,6 @@ public class ComputerBuildServiceImpl implements ComputerBuildService {
     }
 
     @Override
-    public ComputerBuild updateNumberOfDirections(ComputerBuild updatedComputerBuild, String buildIdentifier) {
-        ComputerBuild computerBuild = verifyOwnerOfComputerBuild(buildIdentifier);
-        if(computerBuild != null) {
-            return computerBuildRepository.save(updatedComputerBuild);
-        }
-
-        throw new GenericRequestException(COMPUTER_BUILD_CANNOT_BE_UPDATED);
-    }
-
-    @Override
     public void deleteComputerBuild(String buildIdentifier) {
         ComputerBuild computerBuild = verifyOwnerOfComputerBuild(buildIdentifier);
         if(computerBuild == null) {
