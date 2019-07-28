@@ -7,16 +7,23 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
+import tran.compbuildbackend.domain.computerbuild.*;
 import tran.compbuildbackend.domain.user.ApplicationUser;
+import tran.compbuildbackend.domain.utility.DateUtility;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.security.JwtTokenProvider;
-import tran.compbuildbackend.services.computerbuild.ComputerBuildService;
+import tran.compbuildbackend.services.computerbuild.*;
 import tran.compbuildbackend.services.security.ApplicationUserAuthenticationService;
 import tran.compbuildbackend.services.users.ApplicationUserService;
 
-import static tran.compbuildbackend.constants.tests.TestUtility.SAMPLE_BUDGET_COMPUTER_BUILD_NAME;
-import static tran.compbuildbackend.constants.tests.TestUtility.SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
+import static tran.compbuildbackend.constants.tests.TestUtility.*;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
 
 @Component
@@ -35,6 +42,21 @@ public class BootstrapData implements ApplicationListener<ContextRefreshedEvent>
     private ApplicationUserAuthenticationService authenticationService;
 
     @Autowired
+    private ComputerPartService computerPartService;
+
+    @Autowired
+    private DirectionService directionService;
+
+    @Autowired
+    private BuildNoteService buildNoteService;
+
+    @Autowired
+    private PurposeService purposeService;
+
+    @Autowired
+    private OverclockingNoteService overclockingNoteService;
+
+    @Autowired
     public BootstrapData(ApplicationUserService applicationUserService, ComputerBuildService computerBuildService) {
         this.applicationUserService = applicationUserService;
         this.computerBuildService = computerBuildService;
@@ -44,7 +66,7 @@ public class BootstrapData implements ApplicationListener<ContextRefreshedEvent>
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         createUsers();
         mockUserLogin();
-        createSampleComputerBuild();
+        createSampleComputerBuilds();
         mockUserLogout();
     }
 
@@ -91,12 +113,161 @@ public class BootstrapData implements ApplicationListener<ContextRefreshedEvent>
         return user;
     }
 
-    private void createSampleComputerBuild() {
+    private void createSampleComputerBuilds() {
+        List<Direction> budgetDirections = new LinkedList<>();
+        addDirections(budgetDirections, BUDGET_FIRST_DIRECTION_DESCRIPTION);
+        addDirections(budgetDirections, BUDGET_SECOND_DIRECTION_DESCRIPTION);
+        addDirections(budgetDirections, BUDGET_THIRD_DIRECTION_DESCRIPTION);
+
+        List<OverclockingNote> budgetOverclockingNotes = new LinkedList<>();
+        addOverclockingNotes(budgetOverclockingNotes, BUDGET_OVERCLOCKING_LIST_NOTE_ONE, DEFAULT_PRIORITY);
+        addOverclockingNotes(budgetOverclockingNotes, BUDGET_OVERCLOCKING_LIST_NOTE_TWO, DEFAULT_PRIORITY);
+        addOverclockingNotes(budgetOverclockingNotes, BUDGET_OVERCLOCKING_LIST_NOTE_THREE, DEFAULT_PRIORITY);
+
+        List<Purpose> budgetPurposeList = new LinkedList<>();
+        addPurpose(budgetPurposeList, BUDGET_PURPOSE_LIST_NOTE_ONE, DEFAULT_PRIORITY);
+        addPurpose(budgetPurposeList, BUDGET_PURPOSE_LIST_NOTE_TWO, DEFAULT_PRIORITY);
+        addPurpose(budgetPurposeList, BUDGET_PURPOSE_LIST_NOTE_THREE, DEFAULT_PRIORITY);
+
+        List<BuildNote> budgetBuildNotes = new LinkedList<>();
+        addBuildNotes(budgetBuildNotes, BUDGET_BUILD_NOTE_LIST_NOTE_ONE, DEFAULT_PRIORITY);
+        addBuildNotes(budgetBuildNotes, BUDGET_BUILD_NOTE_LIST_NOTE_TWO, DEFAULT_PRIORITY);
+        addBuildNotes(budgetBuildNotes, BUDGET_BUILD_NOTE_LIST_NOTE_THREE, DEFAULT_PRIORITY);
+
+        List<ComputerPart> budgetComputerParts = new LinkedList<>();
+        addComputerParts(budgetComputerParts, BUDGET_COMPUTER_PART_NAME_ONE, BUDGET_COMPUTER_PART_PRICE_ONE,
+                BUDGET_COMPUTER_PART_PURCHASE_LOCATION_ONE, BUDGET_COMPUTER_PART_OTHER_NOTES_ONE, BUDGET_COMPUTER_PART_PURCHASE_DATE_ONE);
+        addComputerParts(budgetComputerParts, BUDGET_COMPUTER_PART_NAME_TWO, BUDGET_COMPUTER_PART_PRICE_TWO,
+                BUDGET_COMPUTER_PART_PURCHASE_LOCATION_TWO, BUDGET_COMPUTER_PART_OTHER_NOTES_TWO, BUDGET_COMPUTER_PART_PURCHASE_DATE_TWO);
+        addComputerParts(budgetComputerParts, BUDGET_COMPUTER_PART_NAME_THREE, BUDGET_COMPUTER_PART_PRICE_THREE,
+                BUDGET_COMPUTER_PART_PURCHASE_LOCATION_THREE, BUDGET_COMPUTER_PART_OTHER_NOTES_THREE, BUDGET_COMPUTER_PART_PURCHASE_DATE_THREE);
+        createSampleComputerBuild(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION,
+                budgetDirections, budgetComputerParts, budgetOverclockingNotes, budgetPurposeList, budgetBuildNotes);
+
+        List<Direction> gamingDirections = new LinkedList<>();
+        addDirections(gamingDirections, GAMING_FIRST_DIRECTION_DESCRIPTION);
+        addDirections(gamingDirections, GAMING_SECOND_DIRECTION_DESCRIPTION);
+        addDirections(gamingDirections, GAMING_THIRD_DIRECTION_DESCRIPTION);
+        addDirections(gamingDirections, GAMING_FOURTH_DIRECTION_DESCRIPTION);
+
+        List<OverclockingNote> gamingOverclockingNotes = new LinkedList<>();
+        addOverclockingNotes(gamingOverclockingNotes, GAMING_OVERCLOCKING_LIST_NOTE_ONE, DEFAULT_PRIORITY);
+        addOverclockingNotes(gamingOverclockingNotes, GAMING_OVERCLOCKING_LIST_NOTE_TWO, DEFAULT_PRIORITY);
+        addOverclockingNotes(gamingOverclockingNotes, GAMING_OVERCLOCKING_LIST_NOTE_THREE, DEFAULT_PRIORITY);
+
+        List<Purpose> gamingPurposeList = new LinkedList<>();
+        addPurpose(gamingPurposeList, GAMING_PURPOSE_LIST_NOTE_ONE, DEFAULT_PRIORITY);
+        addPurpose(gamingPurposeList, GAMING_PURPOSE_LIST_NOTE_TWO, DEFAULT_PRIORITY);
+        addPurpose(gamingPurposeList, GAMING_PURPOSE_LIST_NOTE_THREE, DEFAULT_PRIORITY);
+
+        List<BuildNote> gamingBuildNotes = new LinkedList<>();
+        addBuildNotes(gamingBuildNotes, GAMING_BUILD_NOTE_LIST_NOTE_ONE, DEFAULT_PRIORITY);
+        addBuildNotes(gamingBuildNotes, GAMING_BUILD_NOTE_LIST_NOTE_TWO, DEFAULT_PRIORITY);
+        addBuildNotes(gamingBuildNotes, GAMING_BUILD_NOTE_LIST_NOTE_THREE, DEFAULT_PRIORITY);
+
+        List<ComputerPart> gamingComputerParts = new LinkedList<>();
+        addComputerParts(gamingComputerParts, GAMING_COMPUTER_PART_NAME_ONE, GAMING_COMPUTER_PART_PRICE_ONE,
+                GAMING_COMPUTER_PART_PURCHASE_LOCATION_ONE, GAMING_COMPUTER_PART_OTHER_NOTES_ONE, GAMING_COMPUTER_PART_PURCHASE_DATE_ONE);
+        addComputerParts(gamingComputerParts, GAMING_COMPUTER_PART_NAME_TWO, GAMING_COMPUTER_PART_PRICE_TWO,
+                GAMING_COMPUTER_PART_PURCHASE_LOCATION_TWO, GAMING_COMPUTER_PART_OTHER_NOTES_TWO, GAMING_COMPUTER_PART_PURCHASE_DATE_TWO);
+        addComputerParts(gamingComputerParts, GAMING_COMPUTER_PART_NAME_THREE, GAMING_COMPUTER_PART_PRICE_THREE,
+                GAMING_COMPUTER_PART_PURCHASE_LOCATION_THREE, GAMING_COMPUTER_PART_OTHER_NOTES_THREE, GAMING_COMPUTER_PART_PURCHASE_DATE_THREE);
+        createSampleComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION,
+                gamingDirections, gamingComputerParts, gamingOverclockingNotes, gamingPurposeList, gamingBuildNotes);
+    }
+
+    private void addOverclockingNotes(List<OverclockingNote> overclockingNotes, String description, int priority) {
+        OverclockingNote overclockingNote = new OverclockingNote();
+        overclockingNote.setDescription(description);
+        overclockingNote.setPriority(priority);
+        overclockingNotes.add(overclockingNote);
+    }
+
+    private void createOverclockingNote(ComputerBuild computerBuild, OverclockingNote overclockingNote) {
+        overclockingNoteService.create(computerBuild, overclockingNote);
+    }
+
+    private void addPurpose(List<Purpose> purposeList, String description, int priority) {
+        Purpose purpose = new Purpose();
+        purpose.setDescription(description);
+        purpose.setPriority(priority);
+        purposeList.add(purpose);
+    }
+
+    private void createPurpose(ComputerBuild computerBuild, Purpose purpose) {
+        purposeService.create(computerBuild, purpose);
+    }
+
+    private void addBuildNotes(List<BuildNote> buildNotes, String description, int priority) {
+        BuildNote buildNote = new BuildNote();
+        buildNote.setDescription(description);
+        buildNote.setPriority(priority);
+        buildNotes.add(buildNote);
+    }
+
+    private void createBuildNote(ComputerBuild computerBuild, BuildNote buildNote) {
+        buildNoteService.create(computerBuild, buildNote);
+    }
+
+
+
+    private void addComputerParts(List<ComputerPart> computerParts, String partName, double partPrice,
+                                                String partPurchaseLocation, String partOtherNotes, String purchaseDate) {
+        ComputerPart gamingComputerPart = new ComputerPart();
+        gamingComputerPart.setName(partName);
+        gamingComputerPart.setPrice(partPrice);
+        gamingComputerPart.setPlacePurchasedAt(partPurchaseLocation);
+        gamingComputerPart.setOtherNotes(partOtherNotes);
+        gamingComputerPart.setPurchaseDate(DateUtility.convertStringToDate(purchaseDate));
+        computerParts.add(gamingComputerPart);
+    }
+
+
+    private void createSampleComputerBuild(String computerBuildName, String computerBuildDescription, List<Direction> directions,
+                                           List<ComputerPart> computerParts, List<OverclockingNote> overclockingNotes,
+                                           List<Purpose> purposeList, List<BuildNote> buildNotes) {
         ComputerBuild computerBuild = new ComputerBuild();
-        computerBuild.setName(SAMPLE_BUDGET_COMPUTER_BUILD_NAME);
-        computerBuild.setBuildDescription(SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
+        computerBuild.setName(computerBuildName);
+        computerBuild.setBuildDescription(computerBuildDescription);
 
         computerBuildService.createNewComputerBuild(computerBuild);
+
+        for(Direction direction : directions) {
+            createDirections(computerBuild, direction);
+
+        }
+
+        for(ComputerPart computerPart : computerParts) {
+            createComputerParts(computerBuild, computerPart);
+        }
+
+        for(OverclockingNote overclockingNote : overclockingNotes) {
+            createOverclockingNote(computerBuild, overclockingNote);
+        }
+
+        for(Purpose purpose : purposeList) {
+            createPurpose(computerBuild, purpose);
+        }
+
+        for(BuildNote buildNote : buildNotes) {
+            createBuildNote(computerBuild, buildNote);
+        }
+
+
+    }
+
+    private void createDirections(ComputerBuild computerBuild, Direction direction) {
+        directionService.createDirection(computerBuild, direction);
+    }
+
+    private void addDirections(List<Direction> directions, String description) {
+        Direction direction = new Direction();
+        direction.setDescription(description);
+        directions.add(direction);
+    }
+
+    private void createComputerParts(ComputerBuild computerBuild, ComputerPart computerPart) {
+        computerPartService.createComputerPart(computerBuild, computerPart);
     }
 
     private void mockUserLogin() {
