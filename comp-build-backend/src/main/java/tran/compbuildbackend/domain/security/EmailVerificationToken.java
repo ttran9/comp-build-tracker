@@ -4,10 +4,13 @@ import tran.compbuildbackend.domain.user.ApplicationUser;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "email_verification_token")
 public class EmailVerificationToken extends VerificationToken {
+    @Transient
+    private int expirationInMinutes = 30;
 
     public EmailVerificationToken() {
         super();
@@ -15,6 +18,6 @@ public class EmailVerificationToken extends VerificationToken {
 
     public EmailVerificationToken(String token, ApplicationUser user) {
         super(token, user);
-        this.expirationDate = super.calculateExpirationDate(this.EXPIRATION);
+//        this.expirationDate = super.calculateExpirationDate(expirationInMinutes);
     }
 }
