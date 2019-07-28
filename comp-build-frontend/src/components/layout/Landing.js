@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import * as Constants from "../../Constants";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import ComputerBuild from "../ComputerBuild/ComputerBuild";
+import { getComputerBuilds } from "../../actions/computerBuildActions";
 
 class Landing extends Component {
   componentDidMount() {
-    if (this.props.security.validToken) {
-      this.props.history.push(`${Constants.HOME_URL}`);
-    }
+    this.props.getComputerBuilds();
   }
 
   render() {
@@ -42,17 +42,21 @@ class Landing extends Component {
       content = userIsNotAuthenticated;
     }
 
+    const computerBuilds = this.props.computerBuild.computerBuilds;
+
     return (
       <div className="light-overlay landing-inner text-dark">
         <div className="container">
           <div className="row">
             <div className="col-md-12 text-center">
               <h1 className="display-3 mb-4">Computer Build Tracker</h1>
-              <p className="lead">
-                Create your account to create a computer build and add notes,
-                directions, tips, or overclocking notes, or anything else.
-              </p>
-              {content}
+              <hr />
+              {computerBuilds.map(computerBuild => (
+                <ComputerBuild
+                  key={computerBuild.buildIdentifier}
+                  computerBuild={computerBuild}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -62,11 +66,17 @@ class Landing extends Component {
 }
 
 Landing.propTypes = {
-  security: PropTypes.object.isRequired
+  security: PropTypes.object.isRequired,
+  computerBuild: PropTypes.object.isRequired,
+  getComputerBuilds: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  security: state.security
+  security: state.security,
+  computerBuild: state.computerBuild
 });
 
-export default connect(mapStateToProps)(Landing);
+export default connect(
+  mapStateToProps,
+  { getComputerBuilds }
+)(Landing);
