@@ -1,10 +1,12 @@
 package tran.compbuildbackend.domain.computerbuild;
 
-import org.hibernate.annotations.Type;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.Date;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "computer_part")
@@ -16,6 +18,7 @@ public class ComputerPart {
 
     @ManyToOne
     @JoinColumn(name="computer_build_id", nullable = false, updatable = false)
+    @JsonIgnore
     private ComputerBuild computerBuild;
 
     @NotNull
@@ -27,12 +30,11 @@ public class ComputerPart {
     private double price;
 
     @NotNull
-    private Date purchaseDate;
+    private LocalDate purchaseDate;
 
     private String placePurchasedAt;
 
     @Column(name = "other_note")
-    @NotNull
     @Lob
     private String otherNotes;
 
@@ -70,11 +72,11 @@ public class ComputerPart {
         this.price = price;
     }
 
-    public Date getPurchaseDate() {
+    public LocalDate getPurchaseDate() {
         return purchaseDate;
     }
 
-    public void setPurchaseDate(Date purchaseDate) {
+    public void setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
 

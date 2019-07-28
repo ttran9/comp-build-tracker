@@ -1,12 +1,12 @@
 package tran.compbuildbackend.domain.computerbuild;
 
-import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
 @MappedSuperclass
 public abstract class AbstractNote {
@@ -17,7 +17,8 @@ public abstract class AbstractNote {
 
     @ManyToOne
     @JoinColumn(name = "computer_build_id", nullable = false, updatable = false)
-    private ComputerBuild computerBuild;
+    @JsonIgnore
+    protected ComputerBuild computerBuild;
 
     @Min(1)
     @Max(3)
@@ -28,25 +29,25 @@ public abstract class AbstractNote {
     protected String description;
 
     @Column(name = "created_at")
-    protected Date createdAt;
+    protected LocalDate createdAt;
 
     @Column(name = "updated_at")
-    protected Date updatedAt;
+    protected LocalDate updatedAt;
 
     @PrePersist
     public void onCreate() {
-        this.createdAt = new Date();
+        this.createdAt = LocalDate.now();
     }
 
     @PostPersist
     public void onUpdate() {
-        this.updatedAt = new Date();
+        this.updatedAt = LocalDate.now();
     }
 
     public AbstractNote() { }
 
-    public AbstractNote(@Min(1) @Max(3) int priority, @NotNull String description, Date createdAt,
-                        Date updatedAt, ComputerBuild computerBuild) {
+    public AbstractNote(@Min(1) @Max(3) int priority, @NotNull String description, LocalDate createdAt,
+                        LocalDate updatedAt, ComputerBuild computerBuild) {
         this.priority = priority;
         this.description = description;
         this.createdAt = createdAt;
@@ -77,19 +78,31 @@ public abstract class AbstractNote {
         this.description = description;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDate egetUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public ComputerBuild getComputerBuild() {
+        return computerBuild;
+    }
+
+    public void setComputerBuild(ComputerBuild computerBuild) {
+        this.computerBuild = computerBuild;
+    }
+
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
     }
 }

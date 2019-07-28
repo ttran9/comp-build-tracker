@@ -7,7 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,13 +33,10 @@ public class ComputerBuild {
     private ApplicationUser user;
 
     @Column(name="created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Column(name="updated_at")
-    private Date updatedAt;
-
-    @Column(name="directions_count")
-    private int numberOfDirections = 0;
+    private LocalDate updatedAt;
 
     // a list of directions to complete this build.
     @OneToMany(cascade = CascadeType.REFRESH, orphanRemoval = true, mappedBy = "computerBuild", fetch = FetchType.LAZY)
@@ -66,17 +63,15 @@ public class ComputerBuild {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = new Date();
+        this.createdAt = LocalDate.now();
     }
 
     @PostPersist
     protected void onUpdate() {
-        this.updatedAt = new Date();
+        this.updatedAt = LocalDate.now();
     }
 
     public ComputerBuild() { }
-
-
 
     public Long getId() {
         return id;
@@ -102,28 +97,20 @@ public class ComputerBuild {
         this.user = user;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public int getNumberOfDirections() {
-        return numberOfDirections;
-    }
-
-    public void setNumberOfDirections(int numberOfDirections) {
-        this.numberOfDirections = numberOfDirections;
     }
 
     public List<Direction> getDirections() {

@@ -1,5 +1,7 @@
 package tran.compbuildbackend.domain.computerbuild;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -13,14 +15,12 @@ public class Direction {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="computer_build_id", updatable = false, nullable = false)
+    @JsonIgnore
     private ComputerBuild computerBuild;
 
     @NotNull
     @Lob
     private String description;
-
-    @Column(name="direction_number")
-    private int directionNumber;
 
     public Direction() { }
 
@@ -47,13 +47,4 @@ public class Direction {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public int getDirectionNumber() {
-        return directionNumber;
-    }
-
-    public void setDirectionNumber(int directionNumber) {
-        this.directionNumber = directionNumber;
-    }
-
 }
