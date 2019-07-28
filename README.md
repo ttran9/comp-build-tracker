@@ -30,16 +30,21 @@ once the functionality is working.
     using JUnit because although I have exposure to it, I still need to greatly improve my skill set.
 
 
-# Notes for the specific branch (computer-build-backend)
+# Notes for the specific branch (computer-build-frontend)
 
 - I have added some tests for the ComputerBuild object to test some of the basic functions ranging from retrieving, 
 creating, deleting, and updating computer builds.
+- For this update I decided not to test some of the services such as BuildNoteService and OverclockingNote service because
+I will do that for the next branch.
+    - My reasoning was that this was mostly focused on getting the backend and frontend wired up for the ComputerBuild
+    and for it to display the ComputerBuild object and all the different list of items but not necessarily looking
+    for functionality on all the other objects as well.
 
 
 # Progress (master branch)
     - For the progress once I have crossed off the item that means it has been merged into the master branch.
-- <strike>Merged in user login, registration, password change, and account activation features.</strike>
-- Add support to be able to to create, delete/remove, and edit a ComputerBuild and write automated tests for this functionality.
+    - <strike>Merged in user login, registration, password change, and account activation features.</strike>
+- <strike>Add support to be able to to create, delete/remove, and edit a ComputerBuild and write automated tests for this functionality.</strike>
 - Add functionality to be able to add, delete, and update ComputerParts for a ComputerBuild.
 - Add functionality to be able to add, delete, and update Directions for a ComputerBuild. 
 - Add functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild. 
