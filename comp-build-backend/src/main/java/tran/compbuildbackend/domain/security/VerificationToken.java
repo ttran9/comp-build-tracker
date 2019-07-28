@@ -5,15 +5,10 @@ import tran.compbuildbackend.domain.user.ApplicationUser;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class VerificationToken {
-    @Transient
-    protected int EXPIRATION = 60 * 24;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
@@ -27,26 +22,17 @@ public abstract class VerificationToken {
     protected ApplicationUser user;
 
     @Column(name="created_date")
-    protected Date createdDate;
+    protected LocalDateTime createdDate;
 
     @Column(name="expiration_date")
-    protected Date expirationDate;
+    protected LocalDateTime expirationDate;
 
     VerificationToken() { }
 
     VerificationToken(String token, ApplicationUser user) {
-        Calendar calendar = Calendar.getInstance();
         this.token = token;
         this.user = user;
-        this.createdDate = new Date(calendar.getTime().getTime());
-    }
-
-    public int getEXPIRATION() {
-        return EXPIRATION;
-    }
-
-    public void setEXPIRATION(int EXPIRATION) {
-        this.EXPIRATION = EXPIRATION;
+        this.createdDate = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -73,27 +59,28 @@ public abstract class VerificationToken {
         this.user = user;
     }
 
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 
-    public Date calculateExpirationDate(int expirationTimeInMinutes) {
-        // set an expiration date
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        calendar.add(Calendar.MINUTE, expirationTimeInMinutes);
-        return new Date(calendar.getTime().getTime());
+    public LocalDateTime calculateExpirationDate(int expirationTimeInMinutes) {
+        /*
+         * set an expiration date (this will be used by the change password token and the email verification token)
+         * so a parameter is needed instead of setting a field and using that value because in that case both tokens
+         * would have the same expiration time.
+         */
+        return this.createdDate.plusMinutes(expirationTimeInMinutes);
     }
 }
