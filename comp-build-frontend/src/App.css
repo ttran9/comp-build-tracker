@@ -15,12 +15,7 @@ img {
   background-color: pink;
 }
 
-.list-group-item.update:hover {
-  cursor: -webkit-grab;
-  background-color: gainsboro;
-}
-
-.list-group-item.board:hover {
+.list-group-item.computer-build:hover {
   cursor: -webkit-grab;
   background-color: gainsboro;
 }
