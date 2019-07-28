@@ -3,6 +3,7 @@ import * as Constants from "../Constants";
 import { GET_ERRORS, SET_CURRENT_USER, REQUEST_SUCCESS } from "./types";
 import setJWTToken from "../securityUtils/setJWTToken";
 import jwt_decode from "jwt-decode";
+import { clearErrors } from "../errorUtils/clearErrors";
 
 export const createNewUser = (newUser, history) => async dispatch => {
   try {
@@ -159,12 +160,4 @@ export const changePassword = (
       payload: error.response.data
     });
   }
-};
-
-const clearErrors = dispatch => {
-  // helper function to clear errors after successful form submission.
-  dispatch({
-    type: GET_ERRORS,
-    payload: {}
-  });
 };
