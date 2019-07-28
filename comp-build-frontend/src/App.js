@@ -19,6 +19,7 @@ import { logout } from "./actions/securityActions";
 import SecuredRoutes from "./securityUtils/SecuredRoutes";
 import RequestPasswordChange from "./components/UserManagement/RequestPasswordChange";
 import ProcessPasswordChange from "./components/UserManagement/ProcessPasswordChange";
+import ComputerBuildDetail from "./components/ComputerBuild/ComputerBuildDetail";
 
 const jwtToken = localStorage.jwtToken;
 
@@ -59,7 +60,9 @@ class App extends Component {
               <Route exact path={`${Constants.LOGIN_URL}`} component={Login} />
               <Route
                 exact
-                path={`${Constants.CONFIRM_REGISTRATION_URL}/:token`}
+                path={`${Constants.CONFIRM_REGISTRATION_URL}/${
+                  Constants.TOKEN_PATH_VARIABLE
+                }`}
                 component={VerifyRegistrationToken}
               />
               <Route
@@ -72,6 +75,14 @@ class App extends Component {
                 path={`${Constants.ACCOUNT_ACTIVATED_URL}`}
                 component={AccountActivated}
               />
+              <Route
+                exact
+                path={`${Constants.COMPUTER_BUILD_URL}${
+                  Constants.BUILD_IDENTIFIER_VARIABLE
+                }`}
+                component={ComputerBuildDetail}
+              />
+
               {
                 // Private/Protected Routes below.
               }
@@ -82,7 +93,9 @@ class App extends Component {
               />
               <SecuredRoutes
                 exact
-                path={`${Constants.CHANGE_PASSWORD_URL}/:token`}
+                path={`${Constants.CHANGE_PASSWORD_URL}/${
+                  Constants.TOKEN_PATH_VARIABLE
+                }`}
                 component={ProcessPasswordChange}
               />
             </Switch>
