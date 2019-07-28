@@ -19,6 +19,9 @@ import tran.compbuildbackend.filters.RedirectToIndexFilter;
 import tran.compbuildbackend.security.JwtAuthenticationFilter;
 import tran.compbuildbackend.services.security.CustomUserDetailsService;
 
+import static tran.compbuildbackend.constants.mapping.MappingConstants.*;
+import static tran.compbuildbackend.constants.mapping.MappingConstants.USER_NAME_PATH_VARIABLE;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
