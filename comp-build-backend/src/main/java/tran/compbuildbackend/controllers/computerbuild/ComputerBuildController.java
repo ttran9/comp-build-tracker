@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
+import tran.compbuildbackend.dto.computerbuild.ComputerBuildDto;
 import tran.compbuildbackend.mapper.ComputerBuildToComputerBuildResponse;
 import tran.compbuildbackend.payload.computerbuild.ComputerBuildResponse;
+import tran.compbuildbackend.services.computerbuild.ComputerBuildDtoMapper;
 import tran.compbuildbackend.services.computerbuild.ComputerBuildService;
 import tran.compbuildbackend.validator.MapValidationErrorService;
 
@@ -22,9 +24,13 @@ public class ComputerBuildController {
 
     private ComputerBuildService computerBuildService;
 
-    public ComputerBuildController(MapValidationErrorService mapValidationErrorService, ComputerBuildService computerBuildService) {
+    private ComputerBuildDtoMapper computerBuildDtoMapper;
+
+    public ComputerBuildController(MapValidationErrorService mapValidationErrorService, ComputerBuildService computerBuildService,
+                                   ComputerBuildDtoMapper computerBuildDtoMapper) {
         this.mapValidationErrorService = mapValidationErrorService;
         this.computerBuildService = computerBuildService;
+        this.computerBuildDtoMapper = computerBuildDtoMapper;
     }
 
     @PostMapping
@@ -51,13 +57,6 @@ public class ComputerBuildController {
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 
-    @GetMapping(BUILD_IDENTIFIER_PATH_VARIABLE)
-    public ResponseEntity<?> getComputerBuildByIdentifier(@PathVariable String buildIdentifier) {
-        ComputerBuild computerBuild = computerBuildService.getComputerBuildByBuildIdentifier(buildIdentifier);
-
-        return new ResponseEntity<>(computerBuild, HttpStatus.FOUND);
-    }
-
     @DeleteMapping(BUILD_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> deleteComputerBuild(@PathVariable String buildIdentifier) {
         computerBuildService.deleteComputerBuild(buildIdentifier);
@@ -65,13 +64,23 @@ public class ComputerBuildController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping(BUILD_IDENTIFIER_PATH_VARIABLE)
+    public ResponseEntity<?> getComputerBuildByIdentifier(@PathVariable String buildIdentifier) {
+        ComputerBuild computerBuild = computerBuildService.getComputerBuildByBuildIdentifier(buildIdentifier);
+        ComputerBuildDto computerBuildDto = computerBuildDtoMapper.computerBuildToComputerBuildDto(computerBuild);
+        return new ResponseEntity<>(computerBuildDto, HttpStatus.OK);
+    }
+
     @GetMapping
-    public Iterable<ComputerBuild> getAllComputerBuilds() {
-        return computerBuildService.getAllComputerBuilds();
+    public Iterable<ComputerBuildDto> getAllComputerBuilds() {
+
+        Iterable<ComputerBuild> computerBuilds = computerBuildService.getAllComputerBuilds();
+        return computerBuildDtoMapper.computerBuildsToComputerBuildDtos(computerBuilds);
     }
 
     @GetMapping(USER_NAME_REQUEST + USER_NAME_PATH_VARIABLE)
-    public Iterable<ComputerBuild> getAllComputerBuildsByUser(@PathVariable String username) {
-        return computerBuildService.getAllComputerBuildsFromUser(username);
+    public Iterable<ComputerBuildDto> getAllComputerBuildsByUser(@PathVariable String username) {
+        Iterable<ComputerBuild> computerBuilds = computerBuildService.getAllComputerBuildsFromUser(username);
+        return computerBuildDtoMapper.computerBuildsToComputerBuildDtos(computerBuilds);
     }
 }
