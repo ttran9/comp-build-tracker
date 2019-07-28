@@ -10,4 +10,4 @@ cd ../../../../comp-build-frontend
 npm run build
 cp ./templates/index.html ../comp-build-backend/src/main/resources/static/
 cp ./static/main.js ../comp-build-backend/src/main/resources/static/static/js
-ls
+date
