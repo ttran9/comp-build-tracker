@@ -44,7 +44,10 @@ public class EmailVerificationTokenServiceImpl implements VerificationTokenServi
         if(emailVerificationToken == null) {
             throw new EmailVerificationTokenException("token is not present.");
         }
-        SecurityUtil.isTokenExpired(emailVerificationToken, EMAIL_VERIFICATION_TOKEN_TYPE);
+        /*
+         * for now the email verification token is used to help the user activate their account so don't check if it
+         */
+//        SecurityUtil.isTokenExpired(emailVerificationToken, EMAIL_VERIFICATION_TOKEN_TYPE);
         return emailVerificationToken.getUser();
     }
 }

@@ -8,7 +8,7 @@ import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.exceptions.security.ChangePasswordTokenException;
 import tran.compbuildbackend.exceptions.security.EmailVerificationTokenException;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 import static tran.compbuildbackend.constants.security.SecurityConstants.CHANGE_PASSWORD_TOKEN_TYPE;
 import static tran.compbuildbackend.constants.security.SecurityConstants.EMAIL_VERIFICATION_TOKEN_TYPE;
@@ -39,8 +39,8 @@ public class SecurityUtil {
      */
     public static void isTokenExpired(VerificationToken token, int tokenType) {
         // verify if the token is expired.
-        Calendar calendar = Calendar.getInstance();
-        if((token.getExpirationDate().getTime()-calendar.getTime().getTime())<=0) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        if(currentTime.isAfter(token.getExpirationDate())) {
             switch(tokenType) {
                 case CHANGE_PASSWORD_TOKEN_TYPE:
                     throw new ChangePasswordTokenException("token has expired, please request another token.");
