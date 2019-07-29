@@ -20,6 +20,7 @@ import SecuredRoutes from "./securityUtils/SecuredRoutes";
 import RequestPasswordChange from "./components/UserManagement/RequestPasswordChange";
 import ProcessPasswordChange from "./components/UserManagement/ProcessPasswordChange";
 import ComputerBuildDetail from "./components/ComputerBuild/ComputerBuildDetail";
+import AddComputerBuild from "./components/ComputerBuild/AddComputerBuild";
 
 const jwtToken = localStorage.jwtToken;
 
@@ -97,6 +98,11 @@ class App extends Component {
                   Constants.TOKEN_PATH_VARIABLE
                 }`}
                 component={ProcessPasswordChange}
+              />
+              <SecuredRoutes
+                exact
+                path={`${Constants.CREATE_COMPUTER_BUILD_URL}`}
+                component={AddComputerBuild}
               />
             </Switch>
             <Footer />

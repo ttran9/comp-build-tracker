@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ComputerBuild from "../ComputerBuild/ComputerBuild";
 import { getComputerBuilds } from "../../actions/computerBuildActions";
+import CreateComputerBuildButton from "../ComputerBuild/CreateComputerBuildButton";
 
 class Landing extends Component {
   componentDidMount() {
@@ -49,7 +50,8 @@ class Landing extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12 text-center">
-              <h1 className="display-3 mb-4">Computer Build Tracker</h1>
+              <h1 className="display-3 mb-4">Computer Build Tracker</h1> <br />
+              {validToken && <CreateComputerBuildButton />}
               <hr />
               {computerBuilds.map(computerBuild => (
                 <ComputerBuild

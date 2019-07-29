@@ -13,7 +13,7 @@ export const createComputerBuild = (
   history
 ) => async dispatch => {
   try {
-    await axios.post(`${COMPUTER_BUILD_API}`, computerBuild);
+    await axios.post(`${Constants.COMPUTER_BUILD_API}`, computerBuild);
     // go back home where the new created computer build will be displayed.
     history.push(Constants.HOME_URL);
     dispatch({

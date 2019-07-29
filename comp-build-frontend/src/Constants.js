@@ -23,6 +23,7 @@ export const TOKEN_PATH_VARIABLE = ":token";
 // computerbuild constants.
 export const COMPUTER_BUILD_URL = "/computerbuild/";
 export const COMPUTER_BUILD_API = `${API_URL}${COMPUTER_BUILD_URL}`;
+export const CREATE_COMPUTER_BUILD_URL = "/addComputerBuild";
 export const BUILD_IDENTIFIER_VARIABLE = ":buildIdentifier";
 export const USER_NAME_REQUEST = "username/";
 export const USER_NAME_PATH_VARIABLE = ":username";

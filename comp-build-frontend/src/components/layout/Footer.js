@@ -33,6 +33,7 @@ class Footer extends Component {
 
     return (
       <div class="container">
+        <hr />
         <footer class="footer">
           <p class="text-center">{footerContent}</p>
         </footer>
