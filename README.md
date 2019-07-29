@@ -32,14 +32,9 @@ once the functionality is working.
 
 # Notes for the specific branch (master)
 
-- The computer-build-backend/frontend branches have both been merged in. 
-- I have added some tests for the ComputerBuild object to test some of the basic functions ranging from retrieving, 
-creating, deleting, and updating computer builds.
-- For this update I decided not to test some of the services such as BuildNoteService and OverclockingNote service because
-I will do that for the next branch.
-    - My reasoning was that this was mostly focused on getting the backend and frontend wired up for the ComputerBuild
-    and for it to display the ComputerBuild object and all the different list of items but not necessarily looking
-    for functionality on all the other objects as well.
+- This branch will add frontend and backend functionality for the details of a computer build and support 
+CRUD (creating, reading/displaying, updating, and deleting) functionality for each of these details (directions,
+overclocking notes, computer parts, and other notes).
 
 
 # Progress (master branch)
