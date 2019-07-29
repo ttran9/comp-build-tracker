@@ -28,10 +28,11 @@ and then drops the tables after the application is no longer running.
 once the functionality is working.
     - I will also be writing unit tests for the back-end portion of the code I implement as I want to get more practice
     using JUnit because although I have exposure to it, I still need to greatly improve my skill set.
+   
 
+# Notes for the specific branch (master)
 
-# Notes for the specific branch (computer-build-frontend)
-
+- The computer-build-backend/frontend branches have both been merged in. 
 - I have added some tests for the ComputerBuild object to test some of the basic functions ranging from retrieving, 
 creating, deleting, and updating computer builds.
 - For this update I decided not to test some of the services such as BuildNoteService and OverclockingNote service because
