@@ -20,7 +20,7 @@ public class ComputerBuild {
     private Long id;
 
     @NotNull
-    @Size(min=2, max=20)
+    @Size(min=2, max=40)
     @Column(updatable = false)
     private String name;
 
