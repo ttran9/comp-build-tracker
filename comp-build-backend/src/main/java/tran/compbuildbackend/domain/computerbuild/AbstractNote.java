@@ -1,6 +1,10 @@
 package tran.compbuildbackend.domain.computerbuild;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -29,10 +33,17 @@ public abstract class AbstractNote {
     protected String description;
 
     @Column(name = "created_at")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     protected LocalDate createdAt;
 
     @Column(name = "updated_at")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     protected LocalDate updatedAt;
+
+    @Column(name = "unique_identifier", unique = true)
+    private String uniqueIdentifier;
 
     @PrePersist
     public void onCreate() {
@@ -104,5 +115,13 @@ public abstract class AbstractNote {
 
     public LocalDate getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 }

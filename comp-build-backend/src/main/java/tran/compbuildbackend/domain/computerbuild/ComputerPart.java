@@ -1,6 +1,10 @@
 package tran.compbuildbackend.domain.computerbuild;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -29,9 +33,15 @@ public class ComputerPart {
     @Max(999999)
     private double price;
 
+    @Column(name = "unique_identifier", unique = true)
+    private String uniqueIdentifier;
+
     @NotNull
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate purchaseDate;
 
+    @NotNull
     private String placePurchasedAt;
 
     @Column(name = "other_note")
@@ -39,6 +49,16 @@ public class ComputerPart {
     private String otherNotes;
 
     public ComputerPart() {}
+
+    public ComputerPart(@NotNull String name, @Min(0) @Max(999999) double price, String uniqueIdentifier,
+                        @NotNull LocalDate purchaseDate, @NotNull String placePurchasedAt, String otherNotes) {
+        this.name = name;
+        this.price = price;
+        this.uniqueIdentifier = uniqueIdentifier;
+        this.purchaseDate = purchaseDate;
+        this.placePurchasedAt = placePurchasedAt;
+        this.otherNotes = otherNotes;
+    }
 
     public Long getId() {
         return id;
@@ -94,5 +114,25 @@ public class ComputerPart {
 
     public void setOtherNotes(String otherNotes) {
         this.otherNotes = otherNotes;
+    }
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
+    }
+
+    @Override
+    public String toString() {
+        return "ComputerPart{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", uniqueIdentifier='" + uniqueIdentifier + '\'' +
+                ", placePurchasedAt='" + placePurchasedAt + '\'' +
+                ", otherNotes='" + otherNotes + '\'' +
+                '}';
     }
 }
