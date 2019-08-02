@@ -22,6 +22,9 @@ public class Direction {
     @Lob
     private String description;
 
+    @Column(name = "unique_identifier", unique = true)
+    private String uniqueIdentifier;
+
     public Direction() { }
 
     public Long getId() {
@@ -46,5 +49,13 @@ public class Direction {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 }
