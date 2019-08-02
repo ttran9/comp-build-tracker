@@ -13,25 +13,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import tran.compbuildbackend.controllers.utility.WebUtility;
-import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
-import tran.compbuildbackend.domain.utility.ApplicationUserUtility;
 import tran.compbuildbackend.domain.utility.ComputerBuildUtility;
 import tran.compbuildbackend.dto.computerbuild.ComputerBuildDto;
 import tran.compbuildbackend.exceptions.request.GenericRequestExceptionResponse;
 import tran.compbuildbackend.payload.computerbuild.ComputerBuildResponse;
-import tran.compbuildbackend.payload.email.JWTLoginSuccessResponse;
 
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_CANNOT_BE_DELETED;
+import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_CANNOT_BE_MODIFIED;
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_DOES_NOT_EXIST;
 import static tran.compbuildbackend.constants.fields.ErrorKeyConstants.MESSAGE_KEY;
-import static tran.compbuildbackend.constants.mapping.MappingConstants.*;
+import static tran.compbuildbackend.constants.mapping.MappingConstants.COMPUTER_BUILD_API;
+import static tran.compbuildbackend.constants.mapping.MappingConstants.USER_NAME_REQUEST;
 import static tran.compbuildbackend.constants.tests.TestUtility.*;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
+import static tran.compbuildbackend.controllers.utility.WebUtility.loginHelper;
 
 @Profile({"test"})
 @RunWith(SpringRunner.class)
@@ -40,13 +39,11 @@ public class ComputerBuildControllerIntegrationTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private String INVALID_IDENTIFIER_SUFFIX = "1asdfasdf";
-
     private String token;
 
     @Before
     public void setUp() throws Exception {
-        loginHelper(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
+        token = loginHelper(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD, restTemplate);
     }
 
     /*
@@ -73,7 +70,7 @@ public class ComputerBuildControllerIntegrationTest {
 
         ComputerBuildResponse contents = getContents(createComputerBuildURL, WebUtility.getEntityWithToken(content, token), HttpStatus.BAD_REQUEST.value());
         assertNotNull(contents);
-        assertEquals(COMPUTER_BUILD_NAME_REQUIRED_ERROR, contents.getName());
+        assertEquals(FIELD_CANNOT_BE_NULL, contents.getName());
     }
 
     /*
@@ -165,14 +162,14 @@ public class ComputerBuildControllerIntegrationTest {
         String deleteComputerBuildByIdentifierURL = BASE_URL + COMPUTER_BUILD_API + buildIdentifier;
 
         // login as a different user...
-        loginHelper(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
+        token = loginHelper(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD, restTemplate);
 
         Object response = deleteComputerBuild(deleteComputerBuildByIdentifierURL,
                 WebUtility.getEntityWithToken(null, token), HttpStatus.BAD_REQUEST.value());
 
         LinkedHashMap responseContent = (LinkedHashMap) response;
         assertNotNull(responseContent.get(MESSAGE_KEY));
-        assertEquals(COMPUTER_BUILD_CANNOT_BE_DELETED, responseContent.get(MESSAGE_KEY));
+        assertEquals(COMPUTER_BUILD_CANNOT_BE_MODIFIED, responseContent.get(MESSAGE_KEY));
     }
 
     /*
@@ -221,23 +218,6 @@ public class ComputerBuildControllerIntegrationTest {
         assertEquals(expectedSize, computerBuilds.size());
     }
 
-
-    /*
-     * helper method to post to the login endpoint and assign the token from successful login.
-     */
-    private void loginHelper(String userName, String password) throws Exception {
-        String loginContent = ApplicationUserUtility.getLoginRequestAsJson(userName, password);
-        String loginURL = BASE_URL + USERS_API + LOGIN_URL;
-        URI uri = new URI(loginURL);
-
-        ResponseEntity<JWTLoginSuccessResponse> result = restTemplate.postForEntity(uri, WebUtility.getEntity(loginContent), JWTLoginSuccessResponse.class);
-        JWTLoginSuccessResponse loginResponse = result.getBody();
-
-        assertNotNull(loginResponse);
-        assertNotNull(loginResponse.getToken());
-        token = loginResponse.getToken().substring(7);
-    }
-
     /*
      * helper method to create a computer build.
      */
@@ -250,7 +230,6 @@ public class ComputerBuildControllerIntegrationTest {
         assertNotNull(buildIdentifier);
         return buildIdentifier;
     }
-
 
     /*
      * helper method to put the results of posting to an end point that will have information such as a message (such as

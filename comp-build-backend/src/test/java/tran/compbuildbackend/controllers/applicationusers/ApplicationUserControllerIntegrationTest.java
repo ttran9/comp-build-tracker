@@ -226,7 +226,7 @@ public class ApplicationUserControllerIntegrationTest {
         assertEquals(HttpStatus.OK.value(), result.getStatusCode().value());
         assertNotNull(loginResponse);
         assertNotNull(loginResponse.getToken());
-        assertTrue(loginResponse.isSuccess());
+        assertTrue(loginResponse.getSuccess());
     }
 
     /*

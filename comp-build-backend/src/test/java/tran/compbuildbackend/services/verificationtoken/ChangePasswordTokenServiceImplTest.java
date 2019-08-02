@@ -17,6 +17,7 @@ import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static tran.compbuildbackend.constants.tests.TestUtility.INVALID_IDENTIFIER_SUFFIX;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
 
 @Profile({"test"})
@@ -43,7 +44,7 @@ public class ChangePasswordTokenServiceImplTest {
         secondUser = applicationUserRepository.findByUsername(USER_NAME_TWO);
         token = tokenService.createVerificationToken(secondUser);
 
-        invalidToken = token + "1";
+        invalidToken = token + INVALID_IDENTIFIER_SUFFIX;
     }
 
     @Transactional

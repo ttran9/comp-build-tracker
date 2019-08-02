@@ -16,6 +16,7 @@ import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.security.JwtTokenProvider;
 
 import static org.junit.Assert.*;
+import static tran.compbuildbackend.constants.tests.TestUtility.INVALID_IDENTIFIER_SUFFIX;
 import static tran.compbuildbackend.constants.users.UserConstants.USER_NAME_ONE;
 import static tran.compbuildbackend.constants.users.UserConstants.USER_PASSWORD;
 
@@ -48,7 +49,8 @@ public class ApplicationUserAuthenticationServiceImplTest {
         assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         JWTLoginSuccessResponse bodyContents = (JWTLoginSuccessResponse) responseEntity.getBody();
         assertNotNull(bodyContents.getToken());
-        assertTrue(bodyContents.isSuccess());
+//        assertTrue(bodyContents.isSuccess());
+        assertTrue(bodyContents.getSuccess());
     }
 
     /*
@@ -56,7 +58,7 @@ public class ApplicationUserAuthenticationServiceImplTest {
      */
     @Test(expected = BadCredentialsException.class)
     public void testAuthenticationFailure() {
-        LoginRequest loginRequest = new LoginRequest(USER_NAME_ONE, USER_PASSWORD + "1");
+        LoginRequest loginRequest = new LoginRequest(USER_NAME_ONE, USER_PASSWORD + INVALID_IDENTIFIER_SUFFIX);
         applicationUserAuthenticationService.applicationUserAuthentication(loginRequest, authenticationManager, jwtTokenProvider);
     }
 }
