@@ -30,18 +30,27 @@ once the functionality is working.
     using JUnit because although I have exposure to it, I still need to greatly improve my skill set.
    
 
-# Notes for the specific branch (master)
+# Notes for the specific branch (computer-build-details-backend)
 
-- This branch will add frontend and backend functionality for the details of a computer build and support 
-CRUD (creating, reading/displaying, updating, and deleting) functionality for each of these details (directions,
-overclocking notes, computer parts, and other notes).
-
-
+- Currently, the backend is done. It also has tests for the services and the controllers required for the user
+to use the api endpoints.
+    - However, after I complete the front-end portion I will go back and start to refactor more code as I noticed there
+    is some repetitive code that I believe I can compress.
+    - There is also an error checker used in all the controllers and currently marked "TODO" that I will implement once
+    the front-end is complete because I want to account for all the fields that could potentially require error checking.
+- The front end (react application) must now be updated to create some components (to display forms) to be able to
+add computer details(computer parts, directions, overclocking and other notes, and purposes) to be able to be added.
+   - There will also be buttons added that allow a user to delete individual details.
+    
 # Progress (master branch)
     - For the progress once I have crossed off the item that means it has been merged into the master branch.
     - <strike>Merged in user login, registration, password change, and account activation features.</strike>
 - <strike>Add support to be able to to create, delete/remove, and edit a ComputerBuild and write automated tests for this functionality.</strike>
-- Add functionality to be able to add, delete, and update ComputerParts for a ComputerBuild.
-- Add functionality to be able to add, delete, and update Directions for a ComputerBuild. 
-- Add functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild. 
-- Add functionality to be able to add, delete, and update Other Notes for a ComputerBuild. 
+- <strike>Add backend functionality to be able to add, delete, and update ComputerParts for a ComputerBuild.</strike>
+- <strike>Add backend functionality to be able to add, delete, and update Directions for a ComputerBuild.</strike> 
+- <strike>Add backend functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild.</strike> 
+- <strike>Add backend functionality to be able to add, delete, and update Other Notes for a ComputerBuild.</strike> 
+- Add frontend functionality to be able to add, delete, and update ComputerParts for a ComputerBuild.
+- Add frontend functionality to be able to add, delete, and update Directions for a ComputerBuild. 
+- Add frontend functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild. 
+- Add frontend functionality to be able to add, delete, and update Other Notes for a ComputerBuild. 
