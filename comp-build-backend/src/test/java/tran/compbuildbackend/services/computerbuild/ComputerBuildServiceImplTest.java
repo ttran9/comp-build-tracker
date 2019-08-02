@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 import tran.compbuildbackend.controllers.utility.WebUtility;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
+import tran.compbuildbackend.exceptions.computerbuild.ComputerBuildOwnerException;
 import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
@@ -99,7 +100,7 @@ public class ComputerBuildServiceImplTest {
      * build identifier but not as the owner.
      */
     @Transactional
-    @Test(expected = GenericRequestException.class)
+    @Test(expected = ComputerBuildOwnerException.class)
     public void deleteComputerBuildAsNonOwner() {
         ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
@@ -127,7 +128,7 @@ public class ComputerBuildServiceImplTest {
         ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
                 SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
 
-        computerBuildService.deleteComputerBuild(newComputerBuild.getBuildIdentifier() + "1");
+        computerBuildService.deleteComputerBuild(newComputerBuild.getBuildIdentifier() + INVALID_IDENTIFIER_SUFFIX);
     }
 
     /*
@@ -135,17 +136,15 @@ public class ComputerBuildServiceImplTest {
      */
     @Test
     public void getComputerBuildByIdentifier() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
-        LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
+        Iterable<ComputerBuild> computerBuilds = computerBuildService.getAllComputerBuildsFromUser(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS);
+        ComputerBuild retrievedBuild = computerBuilds.iterator().next();
+        assertNotNull(retrievedBuild);
 
-        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
-                SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
-
-        ComputerBuild foundBuild = computerBuildService.getComputerBuildByBuildIdentifier(newComputerBuild.getBuildIdentifier());
+        ComputerBuild foundBuild = computerBuildService.getComputerBuildByBuildIdentifier(retrievedBuild.getBuildIdentifier());
 
         assertNotNull(foundBuild);
-        assertEquals(newComputerBuild.getBuildIdentifier(), foundBuild.getBuildIdentifier());
-        assertEquals(newComputerBuild.getUser().getUsername(), foundBuild.getUser().getUsername());
+        assertEquals(retrievedBuild.getBuildIdentifier(), foundBuild.getBuildIdentifier());
+        assertEquals(retrievedBuild.getUser().getUsername(), foundBuild.getUser().getUsername());
 
     }
 
@@ -154,14 +153,12 @@ public class ComputerBuildServiceImplTest {
      */
     @Test(expected = GenericRequestException.class)
     public void getComputerBuildByInvalidIdentifier() {
-        ComputerBuild computerBuild = createComputerBuild(SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
-        LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);
-
-        ComputerBuild newComputerBuild = loginAndCreateBuild(computerBuild, loginRequest,
-                SAMPLE_BUDGET_COMPUTER_BUILD_NAME, SAMPLE_BUDGET_COMPUTER_BUILD_DESCRIPTION);
+        Iterable<ComputerBuild> computerBuilds = computerBuildService.getAllComputerBuildsFromUser(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS);
+        ComputerBuild retrievedBuild = computerBuilds.iterator().next();
+        assertNotNull(retrievedBuild);
 
         // attempt to find the computer build created above with an invalid identifier.
-        computerBuildService.getComputerBuildByBuildIdentifier(newComputerBuild.getBuildIdentifier() + "1");
+        computerBuildService.getComputerBuildByBuildIdentifier(retrievedBuild.getBuildIdentifier() + INVALID_IDENTIFIER_SUFFIX);
     }
 
     /*
