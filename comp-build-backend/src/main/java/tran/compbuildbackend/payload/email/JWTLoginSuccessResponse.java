@@ -5,12 +5,14 @@ public class JWTLoginSuccessResponse {
     private boolean success;
     private String token;
 
+    public JWTLoginSuccessResponse() { }
+
     public JWTLoginSuccessResponse(boolean success, String token) {
         this.success = success;
         this.token = token;
     }
 
-    public boolean isSuccess() {
+    public boolean getSuccess() {
         return success;
     }
 
