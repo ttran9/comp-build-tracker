@@ -8,7 +8,7 @@ import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.dto.computerbuild.ComputerBuildDto;
 import tran.compbuildbackend.mapper.ComputerBuildToComputerBuildResponse;
 import tran.compbuildbackend.payload.computerbuild.ComputerBuildResponse;
-import tran.compbuildbackend.services.computerbuild.ComputerBuildDtoMapper;
+import tran.compbuildbackend.services.computerbuild.mapper.ComputerBuildDtoMapper;
 import tran.compbuildbackend.services.computerbuild.ComputerBuildService;
 import tran.compbuildbackend.validator.MapValidationErrorService;
 
@@ -45,18 +45,6 @@ public class ComputerBuildController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-//    @PatchMapping(UPDATE_OBJECT + BUILD_IDENTIFIER_PATH_VARIABLE)
-//    public ResponseEntity<?> updateNumberOfDirectionsInBuild(@RequestBody @Valid ComputerBuild computerBuild,
-//                                                             @PathVariable String buildIdentifier,
-//                                                             BindingResult bindingResult) {
-//
-//        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-//        if(errorMap != null) return errorMap;
-//
-//        computerBuildService.updateNumberOfDirections(computerBuild, buildIdentifier);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
     @DeleteMapping(BUILD_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> deleteComputerBuild(@PathVariable String buildIdentifier) {
         computerBuildService.deleteComputerBuild(buildIdentifier);
@@ -73,7 +61,6 @@ public class ComputerBuildController {
 
     @GetMapping
     public Iterable<ComputerBuildDto> getAllComputerBuilds() {
-
         Iterable<ComputerBuild> computerBuilds = computerBuildService.getAllComputerBuilds();
         return computerBuildDtoMapper.computerBuildsToComputerBuildDtos(computerBuilds);
     }
