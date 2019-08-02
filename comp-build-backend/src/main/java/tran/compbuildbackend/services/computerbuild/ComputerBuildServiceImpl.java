@@ -4,12 +4,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.request.GenericRequestException;
+import tran.compbuildbackend.exceptions.computerbuild.ComputerBuildOwnerException;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 import tran.compbuildbackend.services.security.utility.SecurityUtil;
 
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
+import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_CANNOT_BE_MODIFIED;
+import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.IDENTIFIER_LENGTH;
 
 @Service
 public class ComputerBuildServiceImpl implements ComputerBuildService {
@@ -43,23 +44,18 @@ public class ComputerBuildServiceImpl implements ComputerBuildService {
 
     @Override
     public void deleteComputerBuild(String buildIdentifier) {
-        ComputerBuild computerBuild = verifyOwnerOfComputerBuild(buildIdentifier);
-        if(computerBuild == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_CANNOT_BE_DELETED);
+        // ensure the build identifier is valid before attempting to delete.
+        ComputerBuild retrievedComputerBuild = ComputerBuildServiceUtility.verifyOwnerOfComputerBuild(
+                computerBuildRepository, buildIdentifier);
+        if(retrievedComputerBuild == null) {
+            throw new ComputerBuildOwnerException(COMPUTER_BUILD_CANNOT_BE_MODIFIED);
         }
-        computerBuildRepository.delete(computerBuild);
+        computerBuildRepository.delete(retrievedComputerBuild);
     }
 
     @Override
     public ComputerBuild getComputerBuildByBuildIdentifier(String buildIdentifier) {
-        ComputerBuild computerBuild = computerBuildRepository.getComputerBuildByBuildIdentifier(buildIdentifier);
-        if(computerBuild == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
-        }
-        if(computerBuild.getId() == null || computerBuild.getUser() == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
-        }
-        return computerBuild;
+        return ComputerBuildServiceUtility.getComputerBuildByBuildId(computerBuildRepository, buildIdentifier);
     }
 
     @Override
@@ -75,7 +71,7 @@ public class ComputerBuildServiceImpl implements ComputerBuildService {
 
     /**
      * This method will attempt to find a computer build by an automatically generated identifier and when
-     * the computerbuild is null then that means it does not exist inside the database and the generated identifier
+     * the ComputerBuild is null then that means it does not exist inside the database and the generated identifier
      * is unique and can be returned.
      * @return A build identifier that has not yet been assigned.
      */
@@ -87,17 +83,6 @@ public class ComputerBuildServiceImpl implements ComputerBuildService {
             computerBuild = computerBuildRepository.getComputerBuildByBuildIdentifier(buildIdentifier);
         }
         return buildIdentifier;
-    }
-
-    private ComputerBuild verifyOwnerOfComputerBuild(String buildIdentifier) {
-        ApplicationUser user = SecurityUtil.getLoggedInUser();
-
-        ComputerBuild oldBuild = getComputerBuildByBuildIdentifier(buildIdentifier);
-
-        if(oldBuild.getUser().getUsername().equals(user.getUsername())) {
-            return oldBuild;
-        }
-        return null;
     }
 
 }
