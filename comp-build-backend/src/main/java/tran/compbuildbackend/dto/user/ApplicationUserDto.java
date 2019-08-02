@@ -1,6 +1,5 @@
 package tran.compbuildbackend.dto.user;
 
-import tran.compbuildbackend.domain.security.EmailVerificationToken;
 import tran.compbuildbackend.domain.security.VerificationToken;
 
 import javax.validation.constraints.NotBlank;

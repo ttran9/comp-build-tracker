@@ -1,7 +1,6 @@
 package tran.compbuildbackend.event;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
