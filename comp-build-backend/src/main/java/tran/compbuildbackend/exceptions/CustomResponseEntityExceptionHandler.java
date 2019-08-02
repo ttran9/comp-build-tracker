@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import tran.compbuildbackend.exceptions.computerbuild.*;
 import tran.compbuildbackend.exceptions.request.*;
 import tran.compbuildbackend.exceptions.security.*;
 
@@ -87,6 +88,30 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
             response.setEmail(errors.get(EMAIL_FIELD));
         }
 
+        /*
+         * TODO: add in other fields that could be incorrect on form submission from a variety of pages.
+         * some pages: registration (fullname, username, email, password, confirm password), login (username, password),
+         * create computer build (computer build name, computer build description), etc.
+         */
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleNoteException(NoteException ex) {
+        NoteExceptionResponse response = new NoteExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleComputerDetailIdentifierException(ComputerDetailIdentifierException ex) {
+        ComputerDetailIdentifierExceptionResponse response = new ComputerDetailIdentifierExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleComputerBuildOwnerException(ComputerBuildOwnerException ex) {
+        ComputerBuildOwnerExceptionResponse response = new ComputerBuildOwnerExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
