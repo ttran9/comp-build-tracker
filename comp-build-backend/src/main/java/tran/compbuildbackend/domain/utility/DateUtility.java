@@ -12,7 +12,7 @@ public class DateUtility {
     }
 
     public static String convertDateToString(LocalDate date) {
-        DateTimeFormatter secondFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
+        DateTimeFormatter secondFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return secondFormatter.format(date);
     }
 }
