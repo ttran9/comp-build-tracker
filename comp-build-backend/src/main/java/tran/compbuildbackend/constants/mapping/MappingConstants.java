@@ -5,6 +5,8 @@ public class MappingConstants {
     public static final String URLS_REGEX = "^\\/[a-zA-Z]+\\/{0,1}$";
     public static final String PB_UPT_REGEX = "\\/[a-zA-Z]+\\/[a-z0-9]{1,8}";
 
+    public static final String URL_SEPARATOR = "/";
+
     // ApplicationUserController
     public static final String CONFIRM_REGISTRATION_URL = "/confirmRegistration/";
     public static final String CHANGE_PASSWORD_URL = "/changePassword/";
@@ -20,14 +22,19 @@ public class MappingConstants {
     public static final String USER_NAME_PATH_VARIABLE = "{username}";
 
     // ComputerPartController
-    public static final String COMPUTER_PART_API = "/api/computerpart";
+    public static final String COMPUTER_PART_API = "/api/computerpart/";
+    public static final String UNIQUE_IDENTIFIER_PATH_VARIABLE = "{uniqueIdentifier}";
 
     // DirectionController
-    public static final String DIRECTION_API = "/api/direction";
+    public static final String DIRECTION_API = "/api/direction/";
 
     // OverclockingNoteController
-    public static final String OVERCLOCKING_NOTE_API = "/api/overclockingnote";
+    public static final String OVERCLOCKING_NOTE_API = "/api/overclockingnote/";
 
     // PurposeController
-    public static final String PURPOSE_API = "/api/purpose";
+    public static final String PURPOSE_API = "/api/purpose/";
+
+    // BuildNoteController
+    public static final String BUILD_NOTE_API = "/api/buildnote/";
+
 }

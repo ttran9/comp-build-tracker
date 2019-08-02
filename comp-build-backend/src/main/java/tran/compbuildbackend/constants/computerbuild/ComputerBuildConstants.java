@@ -2,10 +2,24 @@ package tran.compbuildbackend.constants.computerbuild;
 
 public class ComputerBuildConstants {
     public static final int IDENTIFIER_LENGTH = 8;
+    public static final String DETAIL_IDENTIFIER_SEPARATOR = "-";
 
+    public static final int LOWEST_PRIORITY = 1;
     public static final int DEFAULT_PRIORITY = 2;
+    public static final int HIGHEST_PRIORITY = 3;
+
+    // note types.
+    public static final String OVERCLOCKING_NOTE_TYPE = "ocnt";
+    public static final String PURPOSE_TYPE = "purt";
+    public static final String BUILD_NOTE_TYPE = "bnt";
+
 
     // computer direction constants.
+    public static final String DIRECTION_ABBREVIATION = "dir";
+    public static final String COMPUTER_PART_ABBREVIATION = "cp";
+    public static final String PURPOSE_ABBREVIATION = "pur";
+    public static final String OVERCLOCKING_NOTE_ABBREVIATION = "ocn";
+    public static final String BUILD_NOTE_ABBREVIATION = "bn";
     public static final String BUDGET_FIRST_DIRECTION_DESCRIPTION = "Set the components on to a surface, table, or ideally a surface that is anti-static.";
     public static final String BUDGET_SECOND_DIRECTION_DESCRIPTION = "Open both side panels on your computer case.";
     public static final String BUDGET_THIRD_DIRECTION_DESCRIPTION = "Take out any contents included in your computer case such as screws.";
@@ -41,7 +55,6 @@ public class ComputerBuildConstants {
     public static final String GAMING_BUILD_NOTE_LIST_NOTE_ONE = "The first thing to note is that I will have to make sure to find a stable BIOs to avoid BSOD issues.";
     public static final String GAMING_BUILD_NOTE_LIST_NOTE_TWO = "Another important note is that I must also make sure to monitor the temperatures for this build.";
     public static final String GAMING_BUILD_NOTE_LIST_NOTE_THREE = "The third is that I definitely want to watch how the voltage fluctuates under certain work loads.";
-
 
     // computer part constants.
     public static final String GAMING_COMPUTER_PART_NAME_ONE = "Gigabyte x570 Master Motherboard";
@@ -80,8 +93,47 @@ public class ComputerBuildConstants {
     public static final String BUDGET_COMPUTER_PART_OTHER_NOTES_THREE = "This RAM is expected to work pretty well as it has been tested and can reach 3200mhz and it is a samsung e-die which is good on x570 motherboards.";
     public static final String BUDGET_COMPUTER_PART_PURCHASE_DATE_THREE = "2019-08-02";
 
-    // errors.
+    // computer build errors.
     public static final String COMPUTER_BUILD_DOES_NOT_EXIST = "the computer build doesn't exist.";
-    public static final String COMPUTER_BUILD_CANNOT_BE_DELETED = "you are not the owner of this computer build and cannot delete it.";
-    public static final String COMPUTER_BUILD_CANNOT_BE_UPDATED = "you are not the owner of this computer build and cannot update it.";
+    public static final String COMPUTER_BUILD_CANNOT_BE_MODIFIED = "you are not the owner of this computer build cannot modify it.";
+
+    // build note errors.
+    public static final String INVALID_BUILD_NOTE = "the note identifier does not exist.";
+    public static final String BUILD_NOTE_CANNOT_BE_DELETED = "this build note cannot be deleted.";
+    public static final String BUILD_NOTE_CANNOT_BE_UPDATED = "this build note cannot be updated.";
+
+    // direction errors.
+    public static final String INVALID_DIRECTION = "the direction identifier does not exist.";
+    public static final String DIRECTION_CANNOT_BE_DELETED = "this direction cannot be deleted.";
+    public static final String DIRECTION_CANNOT_BE_UPDATED = "this direction cannot be updated.";
+
+    // overclocking note errors.
+    public static final String INVALID_OVERCLOCKING_NOTE = "the overclocking note does not exist.";
+    public static final String OVERCLOCKING_NOTE_CANNOT_BE_DELETED = "this overclocking note cannot be deleted.";
+    public static final String OVERCLOCKING_NOTE_CANNOT_BE_UPDATED = "this overclocking note cannot be updated.";
+
+    // purpose errors.
+    public static final String INVALID_PURPOSE = "the purpose does not exist.";
+    public static final String PURPOSE_CANNOT_BE_DELETED = "this purpose cannot be deleted.";
+    public static final String PURPOSE_CANNOT_BE_UPDATED = "this purpose cannot be updated.";
+
+    // computer part errors.
+    public static final String INVALID_COMPUTER_PART = "the computer part identifier does not exist.";
+    public static final String COMPUTER_PART_CANNOT_BE_DELETED = "this computer part cannot be deleted.";
+    public static final String COMPUTER_PART_CANNOT_BE_UPDATED = "this computer part cannot be updated.";
+
+    // build note success messages.
+    public static final String BUILD_NOTE_DELETE_MESSAGE = "Build note was deleted successfully.";
+
+    // direction success messages.
+    public static final String DIRECTION_DELETE_MESSAGE = "Direction was deleted successfully.";
+
+    // overclocking note success messages.
+    public static final String OVERCLOCKING_NOTE_DELETE_MESSAGE = "Direction was deleted successfully.";
+
+    // purpose success messages.
+    public static final String PURPOSE_DELETE_MESSAGE = "Purpose was deleted successfully.";
+
+    // computer part success messages.
+    public static final String COMPUTER_PART_DELETE_MESSAGE = "Computer part was deleted successfully.";
 }
