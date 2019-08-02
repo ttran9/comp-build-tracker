@@ -23,6 +23,8 @@ public class MapValidationErrorServiceImpl implements MapValidationErrorService 
             }
 
             return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+            // TODO: uncomment the below once the MultipleFieldsException can detect more fields.
+//            throw new MultipleFieldsException(errorMap);
         }
         return null; // no errors so return nothing.
     }
