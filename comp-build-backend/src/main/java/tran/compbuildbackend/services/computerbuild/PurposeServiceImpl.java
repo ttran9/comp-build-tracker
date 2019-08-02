@@ -1,16 +1,14 @@
 package tran.compbuildbackend.services.computerbuild;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.Purpose;
-import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.request.GenericRequestException;
+import tran.compbuildbackend.exceptions.computerbuild.NoteException;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.PurposeRepository;
-import tran.compbuildbackend.services.security.utility.SecurityUtil;
 
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_DOES_NOT_EXIST;
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.DEFAULT_PRIORITY;
+import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
 
 @Service
 public class PurposeServiceImpl implements PurposeService {
@@ -24,38 +22,52 @@ public class PurposeServiceImpl implements PurposeService {
         this.computerBuildRepository = computerBuildRepository;
     }
 
+    @Transactional
     @Override
-    public Purpose create(ComputerBuild computerBuild, Purpose purpose) {
-        verifyOwnerOfComputerBuild(computerBuild.getBuildIdentifier());
+    public Purpose create(String buildIdentifier, Purpose purpose) {
+        // ensure one is the owner of the computer build that the purpose is being added to.
+        ComputerBuild retrievedComputerBuild = ComputerBuildServiceUtility.verifyOwnerOfComputerBuild(
+                computerBuildRepository, buildIdentifier);
 
-        if(purpose.getPriority() < 1 || purpose.getPriority() > 3) {
-            purpose.setPriority(DEFAULT_PRIORITY);
-        }
-
-        purpose.setComputerBuild(computerBuild);
+        ComputerBuildServiceUtility.setAbstractNote(retrievedComputerBuild, purpose, PURPOSE_ABBREVIATION);
 
         return purposeRepository.save(purpose);
     }
 
-    private ComputerBuild verifyOwnerOfComputerBuild(String buildIdentifier) {
-        ApplicationUser user = SecurityUtil.getLoggedInUser();
+    @Override
+    public Purpose update(Purpose newPurpose, String uniqueIdentifier) {
+        // verify that the owner is modifying the direction note and that it is a properly formatted unique identifier
+        ComputerBuildServiceUtility.verifyComputerDetailOwner(uniqueIdentifier, computerBuildRepository);
 
-        ComputerBuild oldBuild = getComputerBuildByBuildIdentifier(buildIdentifier);
+        // check the formatting of the unique identifier.
+        getPurpose(uniqueIdentifier, PURPOSE_CANNOT_BE_UPDATED);
 
-        if(oldBuild.getUser().getUsername().equals(user.getUsername())) {
-            return oldBuild;
-        }
-        return null;
+        return purposeRepository.save(newPurpose);
     }
 
-    public ComputerBuild getComputerBuildByBuildIdentifier(String buildIdentifier) {
-        ComputerBuild computerBuild = computerBuildRepository.getComputerBuildByBuildIdentifier(buildIdentifier);
-        if(computerBuild == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
+    @Override
+    public void delete(String uniqueIdentifier) {
+        // verify that the user owns/created the direction before deleting and that it is a properly formatted unique identifier.
+        ComputerBuildServiceUtility.verifyComputerDetailOwner(uniqueIdentifier, computerBuildRepository);
+
+        // verify if the unique identifier points to the object to be updated.
+        Purpose purpose = getPurpose(uniqueIdentifier, PURPOSE_CANNOT_BE_DELETED);
+
+        purposeRepository.delete(purpose);
+    }
+
+    @Override
+    public Purpose getFromUniqueIdentifier(String uniqueIdentifier) {
+        return getPurpose(uniqueIdentifier, INVALID_PURPOSE);
+    }
+
+    private Purpose getPurpose(String uniqueIdentifier, String exceptionMessage) {
+        Purpose purpose = purposeRepository.getPurposeByUniqueIdentifier(uniqueIdentifier);
+
+        // make sure you are passing in a valid unique identifier.
+        if(purpose == null) {
+            throw new NoteException(exceptionMessage);
         }
-        if(computerBuild.getId() == null || computerBuild.getUser() == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
-        }
-        return computerBuild;
+        return purpose;
     }
 }

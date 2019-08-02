@@ -1,15 +1,14 @@
 package tran.compbuildbackend.services.computerbuild;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.ComputerPart;
-import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.request.GenericRequestException;
+import tran.compbuildbackend.exceptions.computerbuild.NoteException;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.ComputerPartRepository;
-import tran.compbuildbackend.services.security.utility.SecurityUtil;
 
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_DOES_NOT_EXIST;
+import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
 
 @Service
 public class ComputerPartServiceImpl implements ComputerPartService {
@@ -23,35 +22,53 @@ public class ComputerPartServiceImpl implements ComputerPartService {
         this.computerBuildRepository = computerBuildRepository;
     }
 
+    @Transactional
     @Override
-    public ComputerPart createComputerPart(ComputerBuild computerBuild, ComputerPart computerPart) {
+    public ComputerPart create(String buildIdentifier, ComputerPart computerPart) {
+        ComputerBuild retrievedComputerBuild = ComputerBuildServiceUtility.verifyOwnerOfComputerBuild(
+                computerBuildRepository, buildIdentifier);
 
-        verifyOwnerOfComputerBuild(computerBuild.getBuildIdentifier());
-
-        computerPart.setComputerBuild(computerBuild);
+        computerPart.setUniqueIdentifier(ComputerBuildServiceUtility.generateComputerBuildDetail(
+                COMPUTER_PART_ABBREVIATION, retrievedComputerBuild));
+        computerPart.setComputerBuild(retrievedComputerBuild);
 
         return computerPartRepository.save(computerPart);
     }
 
-    private ComputerBuild verifyOwnerOfComputerBuild(String buildIdentifier) {
-        ApplicationUser user = SecurityUtil.getLoggedInUser();
 
-        ComputerBuild oldBuild = getComputerBuildByBuildIdentifier(buildIdentifier);
+    @Override
+    public ComputerPart update(ComputerPart newComputerPart, String uniqueIdentifier) {
+        // verify that the owner is modifying the computer part and that it is a properly formatted unique identifier.
+        ComputerBuildServiceUtility.verifyComputerDetailOwner(uniqueIdentifier, computerBuildRepository);
 
-        if(oldBuild.getUser().getUsername().equals(user.getUsername())) {
-            return oldBuild;
-        }
-        return null;
+        getComputerPart(uniqueIdentifier, COMPUTER_PART_CANNOT_BE_UPDATED);
+
+        return computerPartRepository.save(newComputerPart);
     }
 
-    public ComputerBuild getComputerBuildByBuildIdentifier(String buildIdentifier) {
-        ComputerBuild computerBuild = computerBuildRepository.getComputerBuildByBuildIdentifier(buildIdentifier);
-        if(computerBuild == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
+    @Override
+    public void delete(String uniqueIdentifier) {
+        // verify that the user owns/created the computer part before deleting and that it is a properly formatted unique identifier.
+        ComputerBuildServiceUtility.verifyComputerDetailOwner(uniqueIdentifier, computerBuildRepository);
+
+        // verify if the unique identifier points to the object to be updated.
+        ComputerPart computerPart = getComputerPart(uniqueIdentifier, COMPUTER_PART_CANNOT_BE_DELETED);
+
+        computerPartRepository.delete(computerPart);
+    }
+
+    @Override
+    public ComputerPart getFromUniqueIdentifier(String uniqueIdentifier) {
+        return getComputerPart(uniqueIdentifier, INVALID_COMPUTER_PART);
+    }
+
+    private ComputerPart getComputerPart(String uniqueIdentifier, String exceptionMessage) {
+        ComputerPart computerPart = computerPartRepository.getComputerPartByUniqueIdentifier(uniqueIdentifier);
+
+        // make sure you are passing in a valid unique identifier.
+        if(computerPart == null) {
+            throw new NoteException(exceptionMessage);
         }
-        if(computerBuild.getId() == null || computerBuild.getUser() == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
-        }
-        return computerBuild;
+        return computerPart;
     }
 }

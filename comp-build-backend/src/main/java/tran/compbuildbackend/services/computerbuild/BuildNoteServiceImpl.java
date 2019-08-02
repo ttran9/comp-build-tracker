@@ -1,16 +1,14 @@
 package tran.compbuildbackend.services.computerbuild;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.BuildNote;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
-import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.request.GenericRequestException;
+import tran.compbuildbackend.exceptions.computerbuild.NoteException;
 import tran.compbuildbackend.repositories.computerbuild.BuildNoteRepository;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
-import tran.compbuildbackend.services.security.utility.SecurityUtil;
 
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_DOES_NOT_EXIST;
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.DEFAULT_PRIORITY;
+import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
 
 @Service
 public class BuildNoteServiceImpl implements BuildNoteService {
@@ -24,39 +22,52 @@ public class BuildNoteServiceImpl implements BuildNoteService {
         this.computerBuildRepository = computerBuildRepository;
     }
 
+    @Transactional
     @Override
-    public BuildNote create(ComputerBuild computerBuild, BuildNote buildNote) {
-        verifyOwnerOfComputerBuild(computerBuild.getBuildIdentifier());
+    public BuildNote create(String buildIdentifier, BuildNote buildNote) {
+        // ensure one is the owner of the computer build that the build note is being added to.
+        ComputerBuild retrievedComputerBuild = ComputerBuildServiceUtility.verifyOwnerOfComputerBuild(
+                computerBuildRepository, buildIdentifier);
 
-        if(buildNote.getPriority() < 1 || buildNote.getPriority() > 3) {
-            buildNote.setPriority(DEFAULT_PRIORITY);
-        }
-
-        buildNote.setComputerBuild(computerBuild);
+        ComputerBuildServiceUtility.setAbstractNote(retrievedComputerBuild, buildNote, BUILD_NOTE_ABBREVIATION);
 
         return buildNoteRepository.save(buildNote);
     }
 
-    private ComputerBuild verifyOwnerOfComputerBuild(String buildIdentifier) {
-        ApplicationUser user = SecurityUtil.getLoggedInUser();
+    @Override
+    public BuildNote update(BuildNote newBuildNote, String noteUniqueIdentifier) {
 
-        ComputerBuild oldBuild = getComputerBuildByBuildIdentifier(buildIdentifier);
+        // verify that the owner is modifying the build note and that it is a properly formatted unique identifier.
+        ComputerBuildServiceUtility.verifyComputerDetailOwner(noteUniqueIdentifier, computerBuildRepository);
 
-        if(oldBuild.getUser().getUsername().equals(user.getUsername())) {
-            return oldBuild;
-        }
-        return null;
+        getBuildNote(noteUniqueIdentifier, BUILD_NOTE_CANNOT_BE_UPDATED);
+
+        return buildNoteRepository.save(newBuildNote);
     }
 
-    public ComputerBuild getComputerBuildByBuildIdentifier(String buildIdentifier) {
-        ComputerBuild computerBuild = computerBuildRepository.getComputerBuildByBuildIdentifier(buildIdentifier);
-        if(computerBuild == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
-        }
-        if(computerBuild.getId() == null || computerBuild.getUser() == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
-        }
-        return computerBuild;
+    @Override
+    public void delete(String noteUniqueIdentifier) {
+        // verify that the user owns/created the build note before deleting and that it is a properly formatted unique identifier.
+        ComputerBuildServiceUtility.verifyComputerDetailOwner(noteUniqueIdentifier, computerBuildRepository);
+
+        // verify if the unique identifier points to the object to be updated.
+        BuildNote buildNote = getBuildNote(noteUniqueIdentifier, BUILD_NOTE_CANNOT_BE_DELETED);
+
+        buildNoteRepository.delete(buildNote);
     }
 
+    @Override
+    public BuildNote getFromUniqueIdentifier(String noteUniqueIdentifier) {
+        return getBuildNote(noteUniqueIdentifier, INVALID_BUILD_NOTE);
+    }
+
+    private BuildNote getBuildNote(String noteUniqueIdentifier, String exceptionMessage) {
+        BuildNote buildNote = buildNoteRepository.getBuildNoteByUniqueIdentifier(noteUniqueIdentifier);
+
+        // make sure you are passing in a valid unique identifier.
+        if(buildNote == null) {
+            throw new NoteException(exceptionMessage);
+        }
+        return buildNote;
+    }
 }

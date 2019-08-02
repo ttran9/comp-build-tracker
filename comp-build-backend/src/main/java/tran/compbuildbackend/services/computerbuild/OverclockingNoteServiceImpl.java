@@ -1,17 +1,14 @@
 package tran.compbuildbackend.services.computerbuild;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.OverclockingNote;
-import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.request.GenericRequestException;
-import tran.compbuildbackend.repositories.computerbuild.BuildNoteRepository;
+import tran.compbuildbackend.exceptions.computerbuild.NoteException;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.OverclockingNoteRepository;
-import tran.compbuildbackend.services.security.utility.SecurityUtil;
 
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_DOES_NOT_EXIST;
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.DEFAULT_PRIORITY;
+import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
 
 @Service
 public class OverclockingNoteServiceImpl implements OverclockingNoteService {
@@ -25,38 +22,51 @@ public class OverclockingNoteServiceImpl implements OverclockingNoteService {
         this.computerBuildRepository = computerBuildRepository;
     }
 
+    @Transactional
     @Override
-    public OverclockingNote create(ComputerBuild computerBuild, OverclockingNote overclockingNote) {
-        verifyOwnerOfComputerBuild(computerBuild.getBuildIdentifier());
+    public OverclockingNote create(String buildIdentifier, OverclockingNote overclockingNote) {
+        // ensure one is the owner of the computer build that the overclocking note is being added to.
+        ComputerBuild retrievedComputerBuild = ComputerBuildServiceUtility.verifyOwnerOfComputerBuild(
+                computerBuildRepository, buildIdentifier);
 
-        if(overclockingNote.getPriority() < 1 || overclockingNote.getPriority() > 3) {
-            overclockingNote.setPriority(DEFAULT_PRIORITY);
-        }
-
-        overclockingNote.setComputerBuild(computerBuild);
+        ComputerBuildServiceUtility.setAbstractNote(retrievedComputerBuild, overclockingNote, OVERCLOCKING_NOTE_ABBREVIATION);
 
         return overclockingNoteRepository.save(overclockingNote);
     }
 
-    private ComputerBuild verifyOwnerOfComputerBuild(String buildIdentifier) {
-        ApplicationUser user = SecurityUtil.getLoggedInUser();
+    @Override
+    public OverclockingNote update(OverclockingNote newOverclockingNote, String uniqueIdentifier) {
+        // verify that the owner is modifying the overclocking note and that it is a properly formatted unique identifier.
+        ComputerBuildServiceUtility.verifyComputerDetailOwner(uniqueIdentifier, computerBuildRepository);
 
-        ComputerBuild oldBuild = getComputerBuildByBuildIdentifier(buildIdentifier);
+        getOverclockingNote(uniqueIdentifier, OVERCLOCKING_NOTE_CANNOT_BE_UPDATED);
 
-        if(oldBuild.getUser().getUsername().equals(user.getUsername())) {
-            return oldBuild;
-        }
-        return null;
+        return overclockingNoteRepository.save(newOverclockingNote);
     }
 
-    public ComputerBuild getComputerBuildByBuildIdentifier(String buildIdentifier) {
-        ComputerBuild computerBuild = computerBuildRepository.getComputerBuildByBuildIdentifier(buildIdentifier);
-        if(computerBuild == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
+    @Override
+    public void delete(String uniqueIdentifier) {
+        // verify that the user owns/created the overclocking note before deleting and that it is a properly formatted unique identifier.
+        ComputerBuildServiceUtility.verifyComputerDetailOwner(uniqueIdentifier, computerBuildRepository);
+
+        // verify if the unique identifier points to the object to be updated.
+        OverclockingNote overclockingNote = getOverclockingNote(uniqueIdentifier, OVERCLOCKING_NOTE_CANNOT_BE_DELETED);
+
+        overclockingNoteRepository.delete(overclockingNote);
+    }
+
+    @Override
+    public OverclockingNote getFromUniqueIdentifier(String uniqueIdentifier) {
+        return getOverclockingNote(uniqueIdentifier, INVALID_OVERCLOCKING_NOTE);
+    }
+
+    private OverclockingNote getOverclockingNote(String uniqueIdentifier, String exceptionMessage) {
+        OverclockingNote overclockingNote = overclockingNoteRepository.getOverclockingNoteByUniqueIdentifier(uniqueIdentifier);
+
+        // make sure you are passing in a valid unique identifier.
+        if(overclockingNote == null) {
+            throw new NoteException(exceptionMessage);
         }
-        if(computerBuild.getId() == null || computerBuild.getUser() == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
-        }
-        return computerBuild;
+        return overclockingNote;
     }
 }
