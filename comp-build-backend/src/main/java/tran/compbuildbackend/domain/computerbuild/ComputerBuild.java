@@ -168,4 +168,16 @@ public class ComputerBuild {
     public void setBuildDescription(String buildDescription) {
         this.buildDescription = buildDescription;
     }
+
+    @Override
+    public String toString() {
+        return "ComputerBuild{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", buildDescription='" + buildDescription + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", buildIdentifier='" + buildIdentifier + '\'' +
+                '}';
+    }
 }
