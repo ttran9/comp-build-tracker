@@ -6,4 +6,5 @@ import tran.compbuildbackend.domain.computerbuild.OverclockingNote;
 
 @Repository
 public interface OverclockingNoteRepository extends CrudRepository<OverclockingNote, Long> {
+    OverclockingNote getOverclockingNoteByUniqueIdentifier(String uniqueIdentifier);
 }

@@ -6,4 +6,5 @@ import tran.compbuildbackend.domain.computerbuild.BuildNote;
 
 @Repository
 public interface BuildNoteRepository extends CrudRepository<BuildNote, Long> {
+    BuildNote getBuildNoteByUniqueIdentifier(String uniqueIdentifier);
 }

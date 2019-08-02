@@ -6,4 +6,5 @@ import tran.compbuildbackend.domain.computerbuild.Purpose;
 
 @Repository
 public interface PurposeRepository extends CrudRepository<Purpose, Long> {
+    Purpose getPurposeByUniqueIdentifier(String uniqueIdentifier);
 }
