@@ -8,6 +8,7 @@ import tran.compbuildbackend.domain.computerbuild.ComputerPart;
 import tran.compbuildbackend.payload.computerbuild.ComputerBuildDetailResponse;
 import tran.compbuildbackend.services.computerbuild.ComputerPartService;
 import tran.compbuildbackend.validator.MapValidationErrorService;
+import tran.compbuildbackend.validator.PriceValidator;
 
 import javax.validation.Valid;
 
@@ -22,14 +23,20 @@ public class ComputerPartController {
 
     private MapValidationErrorService mapValidationErrorService;
 
-    public ComputerPartController(ComputerPartService computerPartService, MapValidationErrorService mapValidationErrorService) {
+    private PriceValidator priceValidator;
+
+    public ComputerPartController(ComputerPartService computerPartService, MapValidationErrorService mapValidationErrorService,
+                                  PriceValidator priceValidator) {
         this.computerPartService = computerPartService;
         this.mapValidationErrorService = mapValidationErrorService;
+        this.priceValidator = priceValidator;
     }
 
     @PostMapping(BUILD_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> createComputerPart(@Valid @RequestBody ComputerPart computerPart, BindingResult bindingResult,
                                                 @PathVariable String buildIdentifier) {
+        priceValidator.validate(computerPart, bindingResult);
+
         ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
 
         if(errorMap != null) return errorMap;
@@ -43,6 +50,8 @@ public class ComputerPartController {
     @PatchMapping(BUILD_IDENTIFIER_PATH_VARIABLE + URL_SEPARATOR + UNIQUE_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> updateComputerPart(@Valid @RequestBody ComputerPart newComputerPart, BindingResult bindingResult,
                                                     @PathVariable String uniqueIdentifier, @PathVariable String buildIdentifier) {
+        priceValidator.validate(newComputerPart, bindingResult);
+
         ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
 
         if(errorMap != null) return errorMap;
