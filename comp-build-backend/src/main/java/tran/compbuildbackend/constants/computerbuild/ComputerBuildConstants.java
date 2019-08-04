@@ -48,7 +48,7 @@ public class ComputerBuildConstants {
     public static final String GAMING_PURPOSE_LIST_NOTE_THREE = "This build will also be able to use a lot of virtual machines because of the many cores on the processor.";
 
     // build note constants.
-    public static final String BUDGET_BUILD_NOTE_LIST_NOTE_ONE = "Like for the highest priced build make sure I find a stable BIOs version to avoid instability.";
+    public static final String BUDGET_BUILD_NOTE_LIST_NOTE_ONE = "Similar to the highest priced build make sure I find a stable BIOs version to avoid instability.";
     public static final String BUDGET_BUILD_NOTE_LIST_NOTE_TWO = "Make sure to monitor temperatures and voltages under the many workloads I will be using.";
     public static final String BUDGET_BUILD_NOTE_LIST_NOTE_THREE = "It is expected to get some minor hiccups but once the build is stable continue monitoring (voltages and temps) through the first month of the build.";
 
