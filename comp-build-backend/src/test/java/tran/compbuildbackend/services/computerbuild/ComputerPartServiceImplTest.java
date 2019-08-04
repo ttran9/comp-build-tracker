@@ -187,7 +187,7 @@ public class ComputerPartServiceImplTest {
         assertEquals(computerPart.getPurchaseDate(), retrievedComputerPart.getPurchaseDate());
         assertEquals(computerPart.getPlacePurchasedAt(), retrievedComputerPart.getPlacePurchasedAt());
         assertEquals(computerPart.getPrice(), retrievedComputerPart.getPrice(), 0); // the prices should match exactly so delta of 0.
-        assertEquals(computerPart.getOtherNotes(), retrievedComputerPart.getOtherNotes());
+        assertEquals(computerPart.getOtherNote(), retrievedComputerPart.getOtherNote());
         assertEquals(computerPart.getUniqueIdentifier(), retrievedComputerPart.getUniqueIdentifier());
         assertNotNull(computerPart.getComputerBuild());
     }
@@ -223,7 +223,7 @@ public class ComputerPartServiceImplTest {
         assertNotNull(createdComputerPart.getComputerBuild());
         assertNotNull(createdComputerPart.getName());
         assertNotNull(createdComputerPart.getPlacePurchasedAt());
-        assertNotNull(createdComputerPart.getOtherNotes());
+        assertNotNull(createdComputerPart.getOtherNote());
         assertNotNull(createdComputerPart.getId());
         return createdComputerPart;
     }
