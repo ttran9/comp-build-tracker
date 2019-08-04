@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import tran.compbuildbackend.payload.email.PasswordChangeRequest;
 
+import static tran.compbuildbackend.constants.fields.ErrorKeyConstants.LENGTH_KEY;
+import static tran.compbuildbackend.constants.fields.ErrorKeyConstants.MATCH_KEY;
 import static tran.compbuildbackend.constants.fields.FieldConstants.CONFIRM_PASSWORD_FIELD;
 import static tran.compbuildbackend.constants.fields.FieldConstants.PASSWORD_FIELD;
 import static tran.compbuildbackend.constants.fields.FieldValueConstants.PASSWORD_MISMATCH_ERROR;
@@ -25,11 +27,11 @@ public class PasswordChangeRequestValidatorImpl implements PasswordChangeRequest
         PasswordChangeRequest passwordChangeRequest = (PasswordChangeRequest) object;
 
         if(passwordChangeRequest.getPassword().length() < 6) {
-            errors.rejectValue(PASSWORD_FIELD, "Length", SHORT_PASSWORD_ERROR);
+            errors.rejectValue(PASSWORD_FIELD, LENGTH_KEY, SHORT_PASSWORD_ERROR);
         }
 
         if(!passwordChangeRequest.getPassword().equals(passwordChangeRequest.getConfirmPassword())) {
-            errors.rejectValue(CONFIRM_PASSWORD_FIELD, "Match", PASSWORD_MISMATCH_ERROR);
+            errors.rejectValue(CONFIRM_PASSWORD_FIELD, MATCH_KEY, PASSWORD_MISMATCH_ERROR);
         }
     }
 }
