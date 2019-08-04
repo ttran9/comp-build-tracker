@@ -42,7 +42,7 @@ public class ComputerPartUtility {
         computerPart.setName(name);
         computerPart.setPlacePurchasedAt(placePurchasedAt);
         computerPart.setPrice(price);
-        computerPart.setOtherNotes(otherNotes);
+        computerPart.setOtherNote(otherNotes);
         return computerPart;
     }
 
@@ -53,7 +53,7 @@ public class ComputerPartUtility {
         computerPart.setPurchaseDate(localDate);
         computerPart.setPlacePurchasedAt(placePurchaesdAt);
         computerPart.setPrice(price);
-        computerPart.setOtherNotes(otherNotes);
+        computerPart.setOtherNote(otherNotes);
         return computerPart;
     }
 }
