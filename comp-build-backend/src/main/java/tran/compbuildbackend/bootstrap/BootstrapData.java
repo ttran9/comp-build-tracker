@@ -236,7 +236,7 @@ public class BootstrapData implements ApplicationListener<ContextRefreshedEvent>
         gamingComputerPart.setName(partName);
         gamingComputerPart.setPrice(partPrice);
         gamingComputerPart.setPlacePurchasedAt(partPurchaseLocation);
-        gamingComputerPart.setOtherNotes(partOtherNotes);
+        gamingComputerPart.setOtherNote(partOtherNotes);
         gamingComputerPart.setPurchaseDate(DateUtility.convertStringToDate(purchaseDate));
         computerParts.add(gamingComputerPart);
     }
