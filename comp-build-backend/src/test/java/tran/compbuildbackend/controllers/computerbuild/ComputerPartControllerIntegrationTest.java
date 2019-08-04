@@ -24,6 +24,8 @@ import static org.junit.Assert.*;
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
 import static tran.compbuildbackend.constants.fields.ErrorKeyConstants.MESSAGE_KEY;
 import static tran.compbuildbackend.constants.fields.FieldConstants.ID_FIELD;
+import static tran.compbuildbackend.constants.fields.FieldValueConstants.PRICE_INCORRECT_FORMAT;
+import static tran.compbuildbackend.constants.fields.FieldValueConstants.PRICE_INCORRECT_RANGE;
 import static tran.compbuildbackend.constants.mapping.MappingConstants.COMPUTER_PART_API;
 import static tran.compbuildbackend.constants.mapping.MappingConstants.URL_SEPARATOR;
 import static tran.compbuildbackend.constants.tests.TestUtility.*;
@@ -64,7 +66,8 @@ public class ComputerPartControllerIntegrationTest {
      */
     @Test
     public void testCreateComputerPartNotAsOwner() throws Exception {
-        LinkedHashMap contents = generateComputerDetailFailure(TEST_COMPUTER_PART_PLACE_PURCHASED_AT,true);
+        LinkedHashMap contents = generateComputerDetailFailure(TEST_COMPUTER_PART_PLACE_PURCHASED_AT,true,
+                TEST_COMPUTER_PART_PRICE);
         assertNotNull(contents.get(MESSAGE_KEY));
         assertEquals(COMPUTER_BUILD_CANNOT_BE_MODIFIED, contents.get(MESSAGE_KEY));
     }
@@ -75,10 +78,34 @@ public class ComputerPartControllerIntegrationTest {
      */
     @Test
     public void testCreateComputerPartFailure() throws Exception {
-        LinkedHashMap contents = generateComputerDetailFailure(null,false);
+        LinkedHashMap contents = generateComputerDetailFailure(null,false, TEST_COMPUTER_PART_PRICE);
         assertNotNull(contents.get(PLACE_PURCHASED_AT_KEY));
-        assertEquals(FIELD_CANNOT_BE_NULL, contents.get(PLACE_PURCHASED_AT_KEY));
+        assertEquals(FIELD_CANNOT_BE_EMPTY, contents.get(PLACE_PURCHASED_AT_KEY));
     }
+
+    /*
+     * testing a computer part creation where the user is the owner but the price field is invalid because it is nut
+     * of the accepted range.
+     */
+    @Test
+    public void testCreateComputerPartFailurePriceTooHigh() throws Exception {
+        LinkedHashMap contents = generateComputerDetailFailure(TEST_COMPUTER_PART_PLACE_PURCHASED_AT,false,
+                TEST_COMPUTER_PART_PRICE_TOO_HIGH);
+        assertNotNull(contents.get(PRICE_KEY));
+        assertEquals(PRICE_INCORRECT_RANGE, contents.get(PRICE_KEY));
+    }
+
+    /*
+     * testing a computer part creation where the user is the owner but the price field is invalid because it is nut
+     * properly formatted
+     */
+    @Test
+    public void testCreateComputerPartFailureImproperFormat() throws Exception {
+        LinkedHashMap contents = generateComputerDetailFailure(TEST_COMPUTER_PART_PLACE_PURCHASED_AT,false,
+                TEST_COMPUTER_PART_PRICE_IMPROPER_FORMAT);
+        assertNotNull(contents.get(PRICE_KEY));
+        assertEquals(PRICE_INCORRECT_FORMAT, contents.get(PRICE_KEY));
+}
 
     /*
      * testing a successful computer part upgrade.
@@ -110,7 +137,7 @@ public class ComputerPartControllerIntegrationTest {
         LinkedHashMap responseContent = (LinkedHashMap) updateComputerPart(false, false, null);
         assertNotNull(responseContent);
         assertNotNull(responseContent.get(PLACE_PURCHASED_AT_KEY));
-        assertEquals(FIELD_CANNOT_BE_NULL, responseContent.get(PLACE_PURCHASED_AT_KEY));
+        assertEquals(FIELD_CANNOT_BE_EMPTY, responseContent.get(PLACE_PURCHASED_AT_KEY));
     }
 
     /*
@@ -224,7 +251,7 @@ public class ComputerPartControllerIntegrationTest {
         assertEquals(TEST_COMPUTER_PART_NAME, computerPart.getName());
         assertEquals(TEST_COMPUTER_PART_PURCHASE_DATE, convertDateToString(computerPart.getPurchaseDate()));
         assertEquals(TEST_COMPUTER_PART_PLACE_PURCHASED_AT, computerPart.getPlacePurchasedAt());
-        assertEquals(TEST_COMPUTER_PART_OTHER_NOTES, computerPart.getOtherNotes());
+        assertEquals(TEST_COMPUTER_PART_OTHER_NOTES, computerPart.getOtherNote());
         assertEquals(TEST_COMPUTER_PART_PRICE, computerPart.getPrice(), 0);
         assertNotNull(computerPart.getId());
         assertNotNull(computerPart.getUniqueIdentifier());
@@ -246,9 +273,10 @@ public class ComputerPartControllerIntegrationTest {
      * one example would be where the user is not the owner.
      * another example would be where the user is the owner but passes in invalid data.
      */
-    private LinkedHashMap generateComputerDetailFailure(String placePurchasedAt, boolean logInSecondTime) throws Exception {
+    private LinkedHashMap generateComputerDetailFailure(String placePurchasedAt, boolean logInSecondTime,
+                                                        double computerPartPrice) throws Exception {
         String content = ComputerPartUtility.getComputerPartAsJson(TEST_COMPUTER_PART_NAME, TEST_COMPUTER_PART_PURCHASE_DATE,
-                placePurchasedAt, TEST_COMPUTER_PART_OTHER_NOTES, TEST_COMPUTER_PART_PRICE);
+                placePurchasedAt, TEST_COMPUTER_PART_OTHER_NOTES, computerPartPrice);
         String createComputerPartBuildURL = BASE_URL + COMPUTER_PART_API + computerBuildIdentifier;
         if(logInSecondTime) {
             // log in as someone else..
