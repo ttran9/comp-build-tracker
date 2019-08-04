@@ -10,8 +10,8 @@ public class TestUtility {
     public static final String PRICE_KEY = "price";
     public static final String UNIQUE_IDENTIFIER_KEY = "uniqueIdentifier";
     public static final String PLACE_PURCHASED_AT_KEY = "placePurchasedAt";
-    public static final String OTHER_NOTES_KEY = "otherNotes";
-    public static final String COMPUTER_BUILD_ID_KEY = "computer_build_id";
+    public static final String OTHER_NOTES_KEY = "otherNote";
+    public static final String COMPUTER_BUILD_ID_KEY = "computerBuildId";
     public static final String DESCRIPTION_KEY = "description";
     public static final String PRIORITY_KEY = "priority";
 
@@ -27,6 +27,7 @@ public class TestUtility {
     public static final String SECOND_TEST_BUILD_DESCRIPTION = "This is the second build that I am creating for the automated tests (for controllers).";
 
     public static final String FIELD_CANNOT_BE_NULL = "must not be null";
+    public static final String FIELD_CANNOT_BE_EMPTY = "must not be empty";
 
     // constants used in multiple tests.
     public static final String INVALID_IDENTIFIER_SUFFIX = "1";
@@ -40,8 +41,10 @@ public class TestUtility {
     public static final String TEST_COMPUTER_PART_PURCHASE_DATE = "2019-08-16";
     public static final String TEST_COMPUTER_PART_PLACE_PURCHASED_AT = "Mountain View Bestbuy";
     public static final String TEST_COMPUTER_PART_PLACE_PURCHASED_AT_TWO = "Livermore Bestbuy";
-    public static final double TEST_COMPUTER_PART_PRICE = 330.00;
     public static final String TEST_COMPUTER_PART_OTHER_NOTES = "This is a really good processor for high performance (not the top tier) gaming. This is also very good for hobbyists using productivity or light video editing/content production.";
+    public static final double TEST_COMPUTER_PART_PRICE = 330.00;
+    public static final double TEST_COMPUTER_PART_PRICE_TOO_HIGH = 10000000.00;
+    public static final double TEST_COMPUTER_PART_PRICE_IMPROPER_FORMAT = 500.0001;
 
     // direction constants for testing.
     public static final String TEST_DIRECTION_DESCRIPTION = "This is the first direction step.";
