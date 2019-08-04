@@ -9,11 +9,12 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "computer_part")
+@Table(name = "ComputerPart")
 public class ComputerPart {
 
     @Id
@@ -21,19 +22,17 @@ public class ComputerPart {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="computer_build_id", nullable = false, updatable = false)
+    @JoinColumn(name = "computerBuildId", nullable = false, updatable = false)
     @JsonIgnore
     private ComputerBuild computerBuild;
 
-    @NotNull
+    @NotEmpty
     private String name;
 
-    @Column(columnDefinition = "DECIMAL(8,2)")
-    @Min(0)
-    @Max(999999)
+    @NotNull
     private double price;
 
-    @Column(name = "unique_identifier", unique = true)
+    @Column(unique = true)
     private String uniqueIdentifier;
 
     @NotNull
@@ -41,23 +40,22 @@ public class ComputerPart {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate purchaseDate;
 
-    @NotNull
+    @NotEmpty
     private String placePurchasedAt;
 
-    @Column(name = "other_note")
     @Lob
-    private String otherNotes;
+    private String otherNote;
 
     public ComputerPart() {}
 
     public ComputerPart(@NotNull String name, @Min(0) @Max(999999) double price, String uniqueIdentifier,
-                        @NotNull LocalDate purchaseDate, @NotNull String placePurchasedAt, String otherNotes) {
+                        @NotNull LocalDate purchaseDate, @NotNull String placePurchasedAt, String otherNote) {
         this.name = name;
         this.price = price;
         this.uniqueIdentifier = uniqueIdentifier;
         this.purchaseDate = purchaseDate;
         this.placePurchasedAt = placePurchasedAt;
-        this.otherNotes = otherNotes;
+        this.otherNote = otherNote;
     }
 
     public Long getId() {
@@ -108,12 +106,12 @@ public class ComputerPart {
         this.placePurchasedAt = placePurchasedAt;
     }
 
-    public String getOtherNotes() {
-        return otherNotes;
+    public String getOtherNote() {
+        return otherNote;
     }
 
-    public void setOtherNotes(String otherNotes) {
-        this.otherNotes = otherNotes;
+    public void setOtherNote(String otherNote) {
+        this.otherNote = otherNote;
     }
 
     public String getUniqueIdentifier() {
@@ -132,7 +130,7 @@ public class ComputerPart {
                 ", price=" + price +
                 ", uniqueIdentifier='" + uniqueIdentifier + '\'' +
                 ", placePurchasedAt='" + placePurchasedAt + '\'' +
-                ", otherNotes='" + otherNotes + '\'' +
+                ", otherNote='" + otherNote + '\'' +
                 '}';
     }
 }

@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name="computer_build")
+@Table(name="ComputerBuild")
 public class ComputerBuild {
 
     @Id

@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "email_verification_token")
+@Table(name = "EmailVerificationToken")
 public class EmailVerificationToken extends VerificationToken {
     @Transient
     private int expirationInMinutes = 30;

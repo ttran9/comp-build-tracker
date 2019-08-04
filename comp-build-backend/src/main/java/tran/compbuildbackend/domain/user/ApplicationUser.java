@@ -18,7 +18,7 @@ import java.util.List;
 import static tran.compbuildbackend.constants.fields.FieldValueConstants.FULL_NAME_MISSING_ERROR;
 
 @Entity
-@Table(name = "user")
+@Table(name = "User")
 public class ApplicationUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,6 @@ public class ApplicationUser implements UserDetails {
     @NotBlank(message = "email is required")
     private String email;
     @NotBlank(message = FULL_NAME_MISSING_ERROR)
-    @Column(name="full_name")
     private String fullName;
     @NotBlank(message = "Password field is required")
     private String password;
@@ -39,9 +38,7 @@ public class ApplicationUser implements UserDetails {
     @Column(unique = true)
     private String username;
 
-    @Column(name="created_at")
     private LocalDate createdAt;
-    @Column(name="updated_at")
     private LocalDate updatedAt;
     private boolean enabled;
 

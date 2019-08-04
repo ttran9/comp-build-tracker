@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "purpose")
+@Table(name = "Purpose")
 public class Purpose extends AbstractNote {
 
     public Purpose() {

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="direction")
+@Table(name="Direction")
 public class Direction {
 
     @Id
@@ -14,7 +14,7 @@ public class Direction {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="computer_build_id", updatable = false, nullable = false)
+    @JoinColumn(name = "computerBuildId", updatable = false, nullable = false)
     @JsonIgnore
     private ComputerBuild computerBuild;
 

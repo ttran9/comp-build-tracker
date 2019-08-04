@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "overclocking_note")
+@Table(name = "OverclockingNote")
 public class OverclockingNote extends AbstractNote {
 
     public OverclockingNote() {

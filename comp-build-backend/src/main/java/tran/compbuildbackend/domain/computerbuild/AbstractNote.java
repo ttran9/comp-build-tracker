@@ -20,7 +20,7 @@ public abstract class AbstractNote {
     protected Long id;
 
     @ManyToOne
-    @JoinColumn(name = "computer_build_id", nullable = false, updatable = false)
+    @JoinColumn(name = "computerBuildId", nullable = false, updatable = false)
     @JsonIgnore
     protected ComputerBuild computerBuild;
 

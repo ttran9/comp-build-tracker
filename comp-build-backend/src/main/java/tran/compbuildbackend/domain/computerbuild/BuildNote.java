@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "build_note")
+@Table(name = "BuildNote")
 public class BuildNote extends AbstractNote {
 
     public BuildNote() {
