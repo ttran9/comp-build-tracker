@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static tran.compbuildbackend.constants.mapping.MappingConstants.PB_UPT_REGEX;
-import static tran.compbuildbackend.constants.mapping.MappingConstants.URLS_REGEX;
+import static tran.compbuildbackend.constants.mapping.MappingConstants.*;
 
 public class RedirectToIndexFilter implements Filter {
     @Override
@@ -21,7 +20,7 @@ public class RedirectToIndexFilter implements Filter {
         if (matchRegexToRequest(URLS_REGEX, requestURI)) {
             request.getRequestDispatcher("/").forward(request, response);
         }
-        else if(matchRegexToRequest(PB_UPT_REGEX, requestURI)) {
+        else if(matchRegexToRequest(PB_UPT_REGEX, requestURI) || matchRegexToRequest(COMPUTER_BUILD_DETAIL_REGEX, requestURI)) {
             request.getRequestDispatcher(requestURI).forward(request, response);
         }
         else {
