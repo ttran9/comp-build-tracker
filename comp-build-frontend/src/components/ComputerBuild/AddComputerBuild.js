@@ -44,7 +44,7 @@ class AddComputerBuild extends Component {
     const { errors } = this.state;
     return (
       <div>
-        <div className="project">
+        <div className="computer-build">
           <div className="container">
             <div className="row">
               <div className="col-md-8 m-auto">
@@ -110,7 +110,6 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-// first parameter is how we map the state to our props.
 export default connect(
   mapStateToProps,
   { createComputerBuild }
