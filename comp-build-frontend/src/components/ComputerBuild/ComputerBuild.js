@@ -4,45 +4,26 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { deleteComputerBuildByIdentifier } from "../../actions/computerBuildActions";
 import * as Constants from "../../Constants";
+import checkOwner from "../../securityUtils/checkOwner";
 
 class ComputerBuild extends Component {
   onDelete = buildIdentifier => {
     this.props.deleteComputerBuildByIdentifier(buildIdentifier);
   };
 
-  constructor() {
-    super();
-    this.state = {
-      isOwner: false
-    };
-  }
-
-  componentDidMount() {
-    const user = this.props.security.user;
-    if (user !== undefined) {
-      const { computerBuild } = this.props;
-      if (user.username !== undefined) {
-        if (user.username === computerBuild.username) {
-          this.setState({
-            isOwner: true
-          });
-        }
-      }
-    }
-  }
-
   render() {
     const { computerBuild } = this.props;
 
+    const isOwner = checkOwner(this.props);
     let deleteButton = <Fragment />;
 
-    if (this.state.isOwner) {
+    if (isOwner) {
       deleteButton = (
         <li
           className="list-group-item delete"
           onClick={this.onDelete.bind(this, computerBuild.buildIdentifier)}
         >
-          <i className="fa fa-minus-circle pr-1"> Delete</i>
+          <i className="fas fa-trash pr-1"> Delete</i>
         </li>
       );
     }
