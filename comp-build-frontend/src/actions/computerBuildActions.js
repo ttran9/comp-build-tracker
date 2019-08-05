@@ -41,26 +41,7 @@ export const deleteComputerBuildByIdentifier = buildIdentifier => async dispatch
   // there is no need to send the user back home as the user will already be at the home page while performing this operation.
 };
 
-export const getComputerBuildByBuildIdentifier = (
-  buildIdentifier,
-  history
-) => async dispatch => {
-  // try {
-  //   const response = await axios.get(
-  //     `${Constants.COMPUTER_BUILD_API}${buildIdentifier}`
-  //   );
-  //   dispatch({
-  //     type: GET_COMPUTERBUILD,
-  //     payload: response.data
-  //   });
-  // } catch (error) {
-  //   /*
-  //    * even if our computer build is not found via the identifier this is not expected to occur.
-  //    * this would occur if there is another exception that is not handled by the back-end api.
-  //    * in that case just redirect the user back to the home page.
-  //    */
-  //   history.push(Constants.HOME_URL);
-  // }
+export const getComputerBuildByBuildIdentifier = buildIdentifier => async dispatch => {
   const response = await axios.get(
     `${Constants.COMPUTER_BUILD_API}${buildIdentifier}`
   );
