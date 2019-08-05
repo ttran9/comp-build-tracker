@@ -49,34 +49,39 @@ public class ComputerBuildServiceUtility {
         uniqueIdentifier.append(DETAIL_IDENTIFIER_SEPARATOR);
         switch(prefix) {
             case DIRECTION_ABBREVIATION:
-                List<Direction> directions = computerBuild.getDirections();
+                int newDirectionsCount = computerBuild.getDirectionsCount() + 1;
                 uniqueIdentifier.append(DIRECTION_ABBREVIATION);
                 uniqueIdentifier.append(DETAIL_IDENTIFIER_SEPARATOR);
-                uniqueIdentifier.append(directions.size() + 1);
+                uniqueIdentifier.append(newDirectionsCount);
+                computerBuild.setDirectionsCount(newDirectionsCount);
                 break;
             case COMPUTER_PART_ABBREVIATION:
-                List<ComputerPart> computerParts = computerBuild.getComputerParts();
+                int newComputerPartsCount = computerBuild.getComputerPartsCount() + 1;
                 uniqueIdentifier.append(COMPUTER_PART_ABBREVIATION);
                 uniqueIdentifier.append(DETAIL_IDENTIFIER_SEPARATOR);
-                uniqueIdentifier.append(computerParts.size() + 1);
+                uniqueIdentifier.append(newComputerPartsCount);
+                computerBuild.setComputerPartsCount(newComputerPartsCount);
                 break;
             case PURPOSE_ABBREVIATION:
-                List<Purpose> purposeList = computerBuild.getPurposeList();
+                int newPurposeCount = computerBuild.getPurposeCount() + 1;
                 uniqueIdentifier.append(PURPOSE_ABBREVIATION);
                 uniqueIdentifier.append(DETAIL_IDENTIFIER_SEPARATOR);
-                uniqueIdentifier.append(purposeList.size() + 1);
+                uniqueIdentifier.append(newPurposeCount);
+                computerBuild.setPurposeCount(newPurposeCount);
                 break;
             case OVERCLOCKING_NOTE_ABBREVIATION:
-                List<OverclockingNote> overclockingNotes = computerBuild.getOverclockingNotes();
+                int newOverclockingNotesCount = computerBuild.getOverclockingNotesCount() + 1;
                 uniqueIdentifier.append(OVERCLOCKING_NOTE_ABBREVIATION);
                 uniqueIdentifier.append(DETAIL_IDENTIFIER_SEPARATOR);
-                uniqueIdentifier.append(overclockingNotes.size() + 1);
+                uniqueIdentifier.append(newOverclockingNotesCount);
+                computerBuild.setOverclockingNotesCount(newOverclockingNotesCount);
                 break;
             case BUILD_NOTE_ABBREVIATION:
-                List<BuildNote> buildNotes = computerBuild.getBuildNotes();
+                int newBuildNotesCount = computerBuild.getBuildNotesCount() + 1;
                 uniqueIdentifier.append(BUILD_NOTE_ABBREVIATION);
                 uniqueIdentifier.append(DETAIL_IDENTIFIER_SEPARATOR);
-                uniqueIdentifier.append(buildNotes.size() + 1);
+                uniqueIdentifier.append(newBuildNotesCount);
+                computerBuild.setBuildNotesCount(newBuildNotesCount);
                 break;
             default:
                 break;
