@@ -22,14 +22,6 @@ and then drops the tables after the application is no longer running.
     since I am not running Spring MVC I cannot run something similar to a Spring MVC test environment and have the tests
     inside of the controller pass as these require the back-end API to be running and must be able to hit those endpoints.
 
-# Branches
-
-- For each "major" feature I release I will be making a branch for it and then I will merge the changes to the master branch
-once the functionality is working.
-    - I will also be writing unit tests for the back-end portion of the code I implement as I want to get more practice
-    using JUnit because although I have exposure to it, I still need to greatly improve my skill set.
-   
-
 # Notes for the specific branch (computer-build-details-frontend)
 
 - Both the frontend and backend are done as of this branch. The basic functionality is done, such as being able to
