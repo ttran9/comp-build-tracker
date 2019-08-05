@@ -19,7 +19,7 @@ class Footer extends Component {
           Change Password!
         </Link>
         <br />
-        <span>Copyright, Todd Tran.</span>
+        <span>Created by Todd Tran.</span>
       </Fragment>
     );
 
@@ -32,10 +32,10 @@ class Footer extends Component {
     }
 
     return (
-      <div class="container">
+      <div className="container">
         <hr />
-        <footer class="footer">
-          <p class="text-center">{footerContent}</p>
+        <footer className="footer">
+          <p className="text-center">{footerContent}</p>
         </footer>
       </div>
     );
