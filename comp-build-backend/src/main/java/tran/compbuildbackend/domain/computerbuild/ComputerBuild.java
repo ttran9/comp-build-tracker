@@ -25,40 +25,47 @@ public class ComputerBuild {
     private String name;
 
     @NotBlank
-    @Column(name="build_description")
     private String buildDescription;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     private ApplicationUser user;
 
-    @Column(name="created_at")
     private LocalDate createdAt;
 
-    @Column(name="updated_at")
     private LocalDate updatedAt;
 
     // a list of directions to complete this build.
     @OneToMany(cascade = CascadeType.REFRESH, orphanRemoval = true, mappedBy = "computerBuild", fetch = FetchType.LAZY)
     private List<Direction> directions = new LinkedList<>();
 
+    private Integer directionsCount = 0;
+
     // a list of notes for when the computer was being built.
     @OneToMany(cascade = CascadeType.REFRESH, orphanRemoval = true, mappedBy = "computerBuild", fetch = FetchType.LAZY)
     private List<BuildNote> buildNotes = new LinkedList<>();
+
+    private Integer buildNotesCount = 0;
 
     // a list of notes when attempting to overclock this computer build.
     @OneToMany(cascade = CascadeType.REFRESH, orphanRemoval = true, mappedBy = "computerBuild", fetch = FetchType.LAZY)
     private List<OverclockingNote> overclockingNotes = new LinkedList<>();
 
+    private Integer overclockingNotesCount = 0;
+
     // a list of computer parts.
     @OneToMany(cascade = CascadeType.REFRESH, orphanRemoval = true, mappedBy = "computerBuild", fetch = FetchType.LAZY)
     private List<ComputerPart> computerParts = new LinkedList<>();
+
+    private Integer computerPartsCount = 0;
 
     // a list of items that discusses the purpose of this build.
     @OneToMany(cascade = CascadeType.REFRESH, orphanRemoval = true, mappedBy = "computerBuild", fetch = FetchType.LAZY)
     private List<Purpose> purposeList = new LinkedList<>();
 
-    @Column(name="build_identifier", unique = true)
+    private Integer purposeCount = 0;
+
+    @Column(unique = true)
     private String buildIdentifier;
 
     @PrePersist
@@ -121,12 +128,28 @@ public class ComputerBuild {
         this.directions = directions;
     }
 
+    public Integer getDirectionsCount() {
+        return directionsCount;
+    }
+
+    public void setDirectionsCount(Integer directionsCount) {
+        this.directionsCount = directionsCount;
+    }
+
     public List<BuildNote> getBuildNotes() {
         return buildNotes;
     }
 
     public void setBuildNotes(List<BuildNote> buildNotes) {
         this.buildNotes = buildNotes;
+    }
+
+    public Integer getBuildNotesCount() {
+        return buildNotesCount;
+    }
+
+    public void setBuildNotesCount(Integer buildNotesCount) {
+        this.buildNotesCount = buildNotesCount;
     }
 
     public List<OverclockingNote> getOverclockingNotes() {
@@ -137,6 +160,14 @@ public class ComputerBuild {
         this.overclockingNotes = overclockingNotes;
     }
 
+    public Integer getOverclockingNotesCount() {
+        return overclockingNotesCount;
+    }
+
+    public void setOverclockingNotesCount(Integer overclockingNotesCount) {
+        this.overclockingNotesCount = overclockingNotesCount;
+    }
+
     public List<ComputerPart> getComputerParts() {
         return computerParts;
     }
@@ -145,12 +176,28 @@ public class ComputerBuild {
         this.computerParts = computerParts;
     }
 
+    public Integer getComputerPartsCount() {
+        return computerPartsCount;
+    }
+
+    public void setComputerPartsCount(Integer computerPartsCount) {
+        this.computerPartsCount = computerPartsCount;
+    }
+
     public List<Purpose> getPurposeList() {
         return purposeList;
     }
 
     public void setPurposeList(List<Purpose> purposeList) {
         this.purposeList = purposeList;
+    }
+
+    public Integer getPurposeCount() {
+        return purposeCount;
+    }
+
+    public void setPurposeCount(Integer purposeCount) {
+        this.purposeCount = purposeCount;
     }
 
     public String getBuildIdentifier() {
