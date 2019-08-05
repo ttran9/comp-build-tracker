@@ -38,6 +38,14 @@ perform CRUD operations on a computer build and its details.
     of insertions of a specific computer detail (the number of directions or computer parts) for each individual computer
     build to ensure that the uniqueIdentifiers generated should be unique.
     
+# TODO:
+    - Refactor the CustomResponseEntityExceptionHandler to not use so many @ExceptionHandler repetitive methods.
+    - Refactor the MapValidationErrorServiceImpl and the controllers that utilize it to throw an exception that
+    will be handled by CustomResponseEntityExceptionHandler.
+    - Modify the appearance of the computer build details to be more "presentable."
+    - Refactor tests and/or possibly add tests.
+    - Refactor (repetitive) code in the back-end/spring boot backend app.
+    - Refactor (repetitive) code in the front-end/react app.  
 
 # Progress (master branch)
     - For the progress once I have crossed off the item that means it has been merged into the master branch.
