@@ -2,9 +2,10 @@ package tran.compbuildbackend.services.computerbuild.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
+import tran.compbuildbackend.domain.computerbuild.*;
 import tran.compbuildbackend.dto.computerbuild.ComputerBuildDto;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,18 +23,25 @@ public class ComputerBuildDtoMapper {
     }
 
     public ComputerBuildDto computerBuildToComputerBuildDto(ComputerBuild computerBuild) {
-        ComputerBuildDto computerBuildDto = modelMapper.map(computerBuild, ComputerBuildDto.class);
-        computerBuildDto.setUsername(computerBuild.getUser().getUsername());
-        return computerBuildDto;
+        return addFieldsToComputerBuildDto(computerBuild);
+
     }
 
     public Iterable<ComputerBuildDto> computerBuildsToComputerBuildDtos(Iterable<ComputerBuild> computerBuilds) {
         List<ComputerBuildDto> computerBuildDtos = new LinkedList<>();
         computerBuilds.forEach(computerBuild -> {
-            ComputerBuildDto computerBuildDto = modelMapper.map(computerBuild, ComputerBuildDto.class);
-            computerBuildDto.setUsername(computerBuild.getUser().getUsername());
+            ComputerBuildDto computerBuildDto = addFieldsToComputerBuildDto(computerBuild);
             computerBuildDtos.add(computerBuildDto);
         });
         return computerBuildDtos;
+    }
+
+    private ComputerBuildDto addFieldsToComputerBuildDto(ComputerBuild computerBuild) {
+        ComputerBuildDto computerBuildDto = modelMapper.map(computerBuild, ComputerBuildDto.class);
+        computerBuildDto.getBuildNotes().sort(Comparator.comparing(BuildNote::getPriority).reversed());
+        computerBuildDto.getOverclockingNotes().sort(Comparator.comparing(OverclockingNote::getPriority).reversed());
+        computerBuildDto.getPurposeList().sort(Comparator.comparing(Purpose::getPriority).reversed());
+        computerBuildDto.setUsername(computerBuild.getUser().getUsername());
+        return computerBuildDto;
     }
 }
