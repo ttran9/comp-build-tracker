@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { Link } from "react-router-dom";
-import * as Constants from "../../Constants";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ComputerBuild from "../ComputerBuild/ComputerBuild";
@@ -13,35 +11,7 @@ class Landing extends Component {
   }
 
   render() {
-    const { validToken, user } = this.props.security;
-
-    const userIsNotAuthenticated = (
-      <Fragment>
-        <hr />
-        <Link
-          className="btn btn-lg btn-primary mr-2"
-          to={`${Constants.REGISTER_URL}`}
-        >
-          Register
-        </Link>
-        <Link
-          className="btn btn-lg btn-secondary mr-2"
-          to={`${Constants.LOGIN_URL}`}
-        >
-          Login
-        </Link>
-      </Fragment>
-    );
-
-    const userIsAuthenticated = <div />;
-
-    let content = true;
-
-    if (validToken && user) {
-      content = userIsAuthenticated;
-    } else {
-      content = userIsNotAuthenticated;
-    }
+    const { validToken } = this.props.security;
 
     const computerBuilds = this.props.computerBuild.computerBuilds;
 
