@@ -30,18 +30,23 @@ once the functionality is working.
     using JUnit because although I have exposure to it, I still need to greatly improve my skill set.
    
 
-# Notes for the specific branch (computer-build-details-backend)
+# Notes for the specific branch (computer-build-details-frontend)
 
-- Currently, the backend is done. It also has tests for the services and the controllers required for the user
-to use the api endpoints.
-    - However, after I complete the front-end portion I will go back and start to refactor more code as I noticed there
-    is some repetitive code that I believe I can compress.
-    - There is also an error checker used in all the controllers and currently marked "TODO" that I will implement once
-    the front-end is complete because I want to account for all the fields that could potentially require error checking.
-- The front end (react application) must now be updated to create some components (to display forms) to be able to
-add computer details(computer parts, directions, overclocking and other notes, and purposes) to be able to be added.
-   - There will also be buttons added that allow a user to delete individual details.
+- Both the frontend and backend are done as of this branch. The basic functionality is done, such as being able to
+perform CRUD operations on a computer build and its details. 
+- There are JUnit tests for the services and the controllers required for the user to use the api endpoints.
+- At this point there are still some issues I would like to address.
+    - I will work on the appearance of the UI.
+    - I would like to refactor code in the back-end and front-end.
+    - I will also refactor/adjust some of the tests as I feel they do not test more "complicated" cases but instead they
+    were testing very basic functionality. A bug my former uniqueIdentifier generation logic had was that I did not test 
+    what would happen if the user were to delete a computer detail (computer part, build note, overclocking note, direction, or purpose, but not the last one) and 
+    then were to add a new computer detail then this would cause a DataIntegrityViolationException because the uniqueIdentifier
+    generated would match the last computer detail. I have resolved this issue by adding in a column to track the number
+    of insertions of a specific computer detail (the number of directions or computer parts) for each individual computer
+    build to ensure that the uniqueIdentifiers generated should be unique.
     
+
 # Progress (master branch)
     - For the progress once I have crossed off the item that means it has been merged into the master branch.
     - <strike>Merged in user login, registration, password change, and account activation features.</strike>
@@ -50,7 +55,9 @@ add computer details(computer parts, directions, overclocking and other notes, a
 - <strike>Add backend functionality to be able to add, delete, and update Directions for a ComputerBuild.</strike> 
 - <strike>Add backend functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild.</strike> 
 - <strike>Add backend functionality to be able to add, delete, and update Other Notes for a ComputerBuild.</strike> 
-- Add frontend functionality to be able to add, delete, and update ComputerParts for a ComputerBuild.
-- Add frontend functionality to be able to add, delete, and update Directions for a ComputerBuild. 
-- Add frontend functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild. 
-- Add frontend functionality to be able to add, delete, and update Other Notes for a ComputerBuild. 
+- <strike>Add frontend functionality to be able to add, delete, and update ComputerParts for a ComputerBuild.</strike>
+- <strike>Add frontend functionality to be able to add, delete, and update Directions for a ComputerBuild.</strike> 
+- <strike>Add frontend functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild.</strike> 
+- <strike>Add frontend functionality to be able to add, delete, and update Other Notes for a ComputerBuild.</strike> 
+- To summarize, this prototype can be considered complete in terms of functionality but there are changes
+I would like to make because the appearance of the application is not likely to be user friendly.
