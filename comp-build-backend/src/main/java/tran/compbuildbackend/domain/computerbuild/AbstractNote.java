@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -28,7 +29,7 @@ public abstract class AbstractNote {
     @Max(3)
     protected int priority;
 
-    @NotNull
+    @NotBlank
     @Lob
     protected String description;
 
