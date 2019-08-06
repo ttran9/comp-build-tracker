@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.Purpose;
 import tran.compbuildbackend.domain.utility.PurposeUtility;
-import tran.compbuildbackend.exceptions.computerbuild.NoteException;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.PurposeRepository;
@@ -143,7 +143,7 @@ public class PurposeServiceImplTest {
     }
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void deletePurposeFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);
@@ -172,7 +172,7 @@ public class PurposeServiceImplTest {
         assertEquals(purpose.getComputerBuild().getBuildIdentifier(), retrievedPurpose.getComputerBuild().getBuildIdentifier());
     }
 
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     @Transactional
     public void getPurposeFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);

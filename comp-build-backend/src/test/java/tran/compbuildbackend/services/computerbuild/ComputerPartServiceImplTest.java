@@ -14,7 +14,7 @@ import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.ComputerPart;
 import tran.compbuildbackend.domain.utility.ComputerPartUtility;
 import tran.compbuildbackend.domain.utility.DateUtility;
-import tran.compbuildbackend.exceptions.computerbuild.NoteException;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.ComputerPartRepository;
@@ -155,7 +155,7 @@ public class ComputerPartServiceImplTest {
     }
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void deleteComputerPartFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);
@@ -194,7 +194,7 @@ public class ComputerPartServiceImplTest {
 
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void getComputerPartFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.BuildNote;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.utility.BuildNoteUtility;
-import tran.compbuildbackend.exceptions.computerbuild.NoteException;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.repositories.computerbuild.BuildNoteRepository;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
@@ -147,7 +147,7 @@ public class BuildNoteServiceImplTest {
     }
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void deleteBuildNoteFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);
@@ -179,7 +179,7 @@ public class BuildNoteServiceImplTest {
     }
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void getBuildNoteFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);

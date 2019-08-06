@@ -73,9 +73,9 @@ public class OverclockingNoteControllerTest {
      */
     @Test
     public void createOverclockingNoteFailure() throws Exception {
-        LinkedHashMap response = generateOverclockingNoteFailure(DEFAULT_PRIORITY, null, false);
+        LinkedHashMap response = generateOverclockingNoteFailure(DEFAULT_PRIORITY, EMPTY_CONTENT, false);
         assertNotNull(response.get(DESCRIPTION_KEY));
-        assertEquals(FIELD_CANNOT_BE_NULL, response.get(DESCRIPTION_KEY));
+        assertEquals(FIELD_CANNOT_BE_BLANK, response.get(DESCRIPTION_KEY));
     }
 
     /*
@@ -107,10 +107,10 @@ public class OverclockingNoteControllerTest {
      */
     @Test
     public void updateOverclockingNoteFailure() throws Exception {
-        LinkedHashMap response = (LinkedHashMap) updateOverclockingNote(false, false, null);
+        LinkedHashMap response = (LinkedHashMap) updateOverclockingNote(false, false, EMPTY_CONTENT);
         assertNotNull(response);
         assertNotNull(response.get(DESCRIPTION_KEY));
-        assertEquals(FIELD_CANNOT_BE_NULL, response.get(DESCRIPTION_KEY));
+        assertEquals(FIELD_CANNOT_BE_BLANK, response.get(DESCRIPTION_KEY));
     }
 
     /*

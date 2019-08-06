@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.security.ChangePasswordToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.security.ChangePasswordTokenException;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.repositories.security.ChangePasswordTokenRepository;
 import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 
@@ -116,7 +116,7 @@ public class ChangePasswordTokenServiceImplTest {
      * yet expired. It is expected that we get exception because we cannot retrieve the token.
      */
     @Transactional
-    @Test(expected = ChangePasswordTokenException.class)
+    @Test(expected = GenericRequestException.class)
     public void validateChangePasswordVerificationTokenFailure() {
         tokenService.validateVerificationToken(invalidToken);
     }

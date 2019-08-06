@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.security.EmailVerificationToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.security.EmailVerificationTokenException;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.repositories.security.EmailVerificationTokenRepository;
 import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 
@@ -117,7 +117,7 @@ public class EmailVerificationTokenServiceImplTest {
      * expected that we get exception because we cannot retrieve the token.
      */
     @Transactional
-    @Test(expected = EmailVerificationTokenException.class)
+    @Test(expected = GenericRequestException.class)
     public void validateEmailVerificationTokenFailure() {
         tokenService.validateVerificationToken(invalidToken);
     }

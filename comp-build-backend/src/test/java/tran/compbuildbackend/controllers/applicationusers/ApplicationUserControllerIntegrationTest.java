@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import tran.compbuildbackend.controllers.utility.WebUtility;
 import tran.compbuildbackend.domain.utility.ApplicationUserUtility;
-import tran.compbuildbackend.exceptions.security.RequestChangePasswordExceptionResponse;
+import tran.compbuildbackend.exceptions.request.GenericRequestExceptionResponse;
 import tran.compbuildbackend.payload.email.JWTLoginSuccessResponse;
 import tran.compbuildbackend.payload.email.RequestSuccessfulResponse;
 
@@ -238,10 +238,10 @@ public class ApplicationUserControllerIntegrationTest {
         String changePasswordURL = BASE_URL + USERS_API + CHANGE_PASSWORD_URL;
 
         URI uri = new URI(changePasswordURL);
-        ResponseEntity<RequestChangePasswordExceptionResponse> result = restTemplate.postForEntity(uri,
-                WebUtility.getEntity(content), RequestChangePasswordExceptionResponse.class);
+        ResponseEntity<GenericRequestExceptionResponse> result = restTemplate.postForEntity(uri,
+                WebUtility.getEntity(content), GenericRequestExceptionResponse.class);
 
-        RequestChangePasswordExceptionResponse contents = result.getBody();
+        GenericRequestExceptionResponse contents = result.getBody();
 
         assertNotNull(contents);
         assertEquals(PASSWORD_CANNOT_BE_CHANGED_FOR_INVALID_USER, contents.getUsername());

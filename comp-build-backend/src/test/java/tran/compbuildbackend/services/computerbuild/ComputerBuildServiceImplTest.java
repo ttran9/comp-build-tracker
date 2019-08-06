@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 import tran.compbuildbackend.controllers.utility.WebUtility;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
-import tran.compbuildbackend.exceptions.computerbuild.ComputerBuildOwnerException;
 import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
@@ -100,7 +99,7 @@ public class ComputerBuildServiceImplTest {
      * build identifier but not as the owner.
      */
     @Transactional
-    @Test(expected = ComputerBuildOwnerException.class)
+    @Test(expected = GenericRequestException.class)
     public void deleteComputerBuildAsNonOwner() {
         ComputerBuild computerBuild = createComputerBuild(SAMPLE_GAMING_COMPUTER_BUILD_NAME, SAMPLE_GAMING_COMPUTER_BUILD_DESCRIPTION);
         LoginRequest loginRequest = new LoginRequest(ANOTHER_USER_NAME_TO_CREATE_NEW_USER, USER_PASSWORD);

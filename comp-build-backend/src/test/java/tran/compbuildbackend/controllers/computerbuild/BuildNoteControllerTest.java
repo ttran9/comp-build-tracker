@@ -70,9 +70,9 @@ public class BuildNoteControllerTest {
      */
     @Test
     public void createBuildNoteFailure() throws Exception {
-        LinkedHashMap response = generateBuildNoteFailure(DEFAULT_PRIORITY, null, false);
+        LinkedHashMap response = generateBuildNoteFailure(DEFAULT_PRIORITY, EMPTY_CONTENT, false);
         assertNotNull(response.get(DESCRIPTION_KEY));
-        assertEquals(FIELD_CANNOT_BE_NULL, response.get(DESCRIPTION_KEY));
+        assertEquals(FIELD_CANNOT_BE_BLANK, response.get(DESCRIPTION_KEY));
     }
 
     /*
@@ -102,10 +102,10 @@ public class BuildNoteControllerTest {
      */
     @Test
     public void updateBuildNoteFailure() throws Exception {
-        LinkedHashMap response = (LinkedHashMap) updateBuildNote(false, false, null);
+        LinkedHashMap response = (LinkedHashMap) updateBuildNote(false, false, EMPTY_CONTENT);
         assertNotNull(response);
         assertNotNull(response.get(DESCRIPTION_KEY));
-        assertEquals(FIELD_CANNOT_BE_NULL, response.get(DESCRIPTION_KEY));
+        assertEquals(FIELD_CANNOT_BE_BLANK, response.get(DESCRIPTION_KEY));
     }
 
     /*

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.OverclockingNote;
 import tran.compbuildbackend.domain.utility.OverclockingNoteUtility;
-import tran.compbuildbackend.exceptions.computerbuild.NoteException;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.OverclockingNoteRepository;
@@ -143,7 +143,7 @@ public class OverclockingNoteServiceImplTest {
     }
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void deleteOverclockingNoteFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);
@@ -173,7 +173,7 @@ public class OverclockingNoteServiceImplTest {
     }
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void getOverclockingNoteFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);

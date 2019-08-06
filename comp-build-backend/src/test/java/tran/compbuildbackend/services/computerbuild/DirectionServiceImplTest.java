@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.Direction;
 import tran.compbuildbackend.domain.utility.DirectionUtility;
-import tran.compbuildbackend.exceptions.computerbuild.NoteException;
+import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.DirectionRepository;
@@ -142,7 +142,7 @@ public class DirectionServiceImplTest {
     }
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void deleteDirectionPartFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);
@@ -173,7 +173,7 @@ public class DirectionServiceImplTest {
     }
 
     @Transactional
-    @Test(expected = NoteException.class)
+    @Test(expected = GenericRequestException.class)
     public void getDirectionFailure() {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);

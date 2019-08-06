@@ -11,18 +11,14 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.request.EmailRequestException;
 import tran.compbuildbackend.exceptions.request.GenericRequestException;
-import tran.compbuildbackend.exceptions.request.UsernameRequestException;
-import tran.compbuildbackend.exceptions.security.ChangePasswordTokenException;
-import tran.compbuildbackend.exceptions.security.RequestChangePasswordException;
 import tran.compbuildbackend.repositories.security.ChangePasswordTokenRepository;
 import tran.compbuildbackend.repositories.security.EmailVerificationTokenRepository;
 import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 
 import static org.junit.Assert.*;
-import static tran.compbuildbackend.constants.exception.ExceptionConstants.EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED;
 import static tran.compbuildbackend.constants.exception.ExceptionConstants.EXCEPTION_EMAIL_NAME_DOES_NOT_EXIST;
+import static tran.compbuildbackend.constants.exception.ExceptionConstants.EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
 
 @Profile({"test"})
@@ -134,7 +130,7 @@ public class ApplicationUserServiceImplIntegrationTest {
     /*
      * The test below checks if a custom exception is thrown if a user name being searched for does not exist.
      */
-    @Test(expected = EmailRequestException.class)
+    @Test(expected = GenericRequestException.class)
     public void getUserByEmailDoesNotExist() {
         applicationUserService.getUserByEmail(USER_EMAIL_FAIL_LOOK_UP, EXCEPTION_EMAIL_NAME_DOES_NOT_EXIST);
     }
@@ -143,7 +139,8 @@ public class ApplicationUserServiceImplIntegrationTest {
      * The test below checks if a custom exception is thrown if a user name is being searched for while trying to
      * request for a password change.
      */
-    @Test(expected = RequestChangePasswordException.class)
+//    @Test(expected = RequestChangePasswordException.class)
+    @Test(expected = GenericRequestException.class)
     public void getUserByEmailCannotChangePassword() {
         applicationUserService.getUserByEmail(USER_EMAIL_FAIL_LOOK_UP, EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED);
     }
@@ -152,7 +149,7 @@ public class ApplicationUserServiceImplIntegrationTest {
      * The test below checks if a custom exception is thrown if a change password is requested but the request consists
      * of a user name that doesn't exist.
      */
-    @Test(expected = EmailRequestException.class)
+    @Test(expected = GenericRequestException.class)
     public void changePasswordWithoutToken() {
         ApplicationUser user = applicationUserService.getUserByEmail(USER_EMAIL_FAIL_LOOK_UP, EXCEPTION_EMAIL_NAME_DOES_NOT_EXIST);
         applicationUserService.changeUserPassword(MODIFIED_PASSWORD, user);

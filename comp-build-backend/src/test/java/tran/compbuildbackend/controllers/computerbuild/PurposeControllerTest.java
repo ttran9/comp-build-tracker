@@ -70,9 +70,9 @@ public class PurposeControllerTest {
      */
     @Test
     public void createPurposeFailure() throws Exception {
-        LinkedHashMap response = generatePurposeFailure(DEFAULT_PRIORITY, null, false);
+        LinkedHashMap response = generatePurposeFailure(DEFAULT_PRIORITY, EMPTY_CONTENT, false);
         assertNotNull(response.get(DESCRIPTION_KEY));
-        assertEquals(FIELD_CANNOT_BE_NULL, response.get(DESCRIPTION_KEY));
+        assertEquals(FIELD_CANNOT_BE_BLANK, response.get(DESCRIPTION_KEY));
     }
 
     /*
@@ -103,10 +103,10 @@ public class PurposeControllerTest {
      */
     @Test
     public void updatePurposeFailure() throws Exception {
-        LinkedHashMap response = (LinkedHashMap) updatePurpose(false, false, null);
+        LinkedHashMap response = (LinkedHashMap) updatePurpose(false, false, EMPTY_CONTENT);
         assertNotNull(response);
         assertNotNull(response.get(DESCRIPTION_KEY));
-        assertEquals(FIELD_CANNOT_BE_NULL, response.get(DESCRIPTION_KEY));
+        assertEquals(FIELD_CANNOT_BE_BLANK, response.get(DESCRIPTION_KEY));
     }
 
     /*
