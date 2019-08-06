@@ -4,13 +4,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.computerbuild.ComputerBuildOwnerException;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 import tran.compbuildbackend.services.security.utility.SecurityUtil;
 
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.COMPUTER_BUILD_CANNOT_BE_MODIFIED;
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.IDENTIFIER_LENGTH;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.throwMessageException;
 
 @Service
 public class ComputerBuildServiceImpl implements ComputerBuildService {
@@ -48,7 +48,7 @@ public class ComputerBuildServiceImpl implements ComputerBuildService {
         ComputerBuild retrievedComputerBuild = ComputerBuildServiceUtility.verifyOwnerOfComputerBuild(
                 computerBuildRepository, buildIdentifier);
         if(retrievedComputerBuild == null) {
-            throw new ComputerBuildOwnerException(COMPUTER_BUILD_CANNOT_BE_MODIFIED);
+            throwMessageException(COMPUTER_BUILD_CANNOT_BE_MODIFIED);
         }
         computerBuildRepository.delete(retrievedComputerBuild);
     }

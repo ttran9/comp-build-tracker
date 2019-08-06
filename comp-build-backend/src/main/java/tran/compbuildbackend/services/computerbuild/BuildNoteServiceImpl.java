@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.BuildNote;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
-import tran.compbuildbackend.exceptions.computerbuild.NoteException;
 import tran.compbuildbackend.repositories.computerbuild.BuildNoteRepository;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.throwMessageException;
 
 @Service
 public class BuildNoteServiceImpl implements BuildNoteService {
@@ -66,7 +66,7 @@ public class BuildNoteServiceImpl implements BuildNoteService {
 
         // make sure you are passing in a valid unique identifier.
         if(buildNote == null) {
-            throw new NoteException(exceptionMessage);
+            throwMessageException(exceptionMessage);
         }
         return buildNote;
     }

@@ -4,7 +4,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.repository.CrudRepository;
 import tran.compbuildbackend.domain.security.VerificationToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.request.UsernameRequestException;
+
+import static tran.compbuildbackend.constants.exception.ExceptionConstants.CANNOT_FIND_USER;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.throwMessageException;
 
 
 public class VerificationTokenUtil {
@@ -19,7 +21,7 @@ public class VerificationTokenUtil {
         try {
             crudRepository.save(verificationToken);
         } catch(DataIntegrityViolationException ex) {
-            throw new UsernameRequestException("cannot find the user");
+            throwMessageException(CANNOT_FIND_USER);
         } catch(Exception ex) {
             return null;
         }

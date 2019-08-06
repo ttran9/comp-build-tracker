@@ -1,20 +1,15 @@
 package tran.compbuildbackend.services.verificationtoken;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import tran.compbuildbackend.domain.security.EmailVerificationToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.request.UsernameRequestException;
-import tran.compbuildbackend.exceptions.security.EmailVerificationTokenException;
 import tran.compbuildbackend.repositories.security.EmailVerificationTokenRepository;
-import tran.compbuildbackend.services.security.utility.SecurityUtil;
 
-import java.util.Calendar;
 import java.util.UUID;
 
-import static tran.compbuildbackend.constants.security.SecurityConstants.CHANGE_PASSWORD_TOKEN_TYPE;
-import static tran.compbuildbackend.constants.security.SecurityConstants.EMAIL_VERIFICATION_TOKEN_TYPE;
+import static tran.compbuildbackend.constants.exception.ExceptionConstants.TOKEN_IS_NOT_PRESENT;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.throwTokenException;
 
 @Service
 public class EmailVerificationTokenServiceImpl implements VerificationTokenService {
@@ -42,7 +37,7 @@ public class EmailVerificationTokenServiceImpl implements VerificationTokenServi
     public ApplicationUser validateVerificationToken(String token) {
         EmailVerificationToken emailVerificationToken = getVerificationToken(token);
         if(emailVerificationToken == null) {
-            throw new EmailVerificationTokenException("token is not present.");
+            throwTokenException(TOKEN_IS_NOT_PRESENT);
         }
         /*
          * for now the email verification token is used to help the user activate their account so don't check if it

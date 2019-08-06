@@ -6,11 +6,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import tran.compbuildbackend.event.utility.EventUtil;
-import tran.compbuildbackend.exceptions.security.ChangePasswordTokenException;
 import tran.compbuildbackend.services.verificationtoken.ChangePasswordTokenServiceImpl;
 
 import static tran.compbuildbackend.constants.email.EmailConstants.PASSWORD_CHANGE_REQUEST;
+import static tran.compbuildbackend.constants.exception.ExceptionConstants.PASSWORD_CANNOT_BE_CHANGED;
 import static tran.compbuildbackend.constants.mapping.MappingConstants.CHANGE_PASSWORD_URL;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.throwPasswordException;
 
 @Component
 public class ChangePasswordListener implements ApplicationListener<OnPasswordResetRequestEvent> {
@@ -35,7 +36,7 @@ public class ChangePasswordListener implements ApplicationListener<OnPasswordRes
                     subject, CHANGE_PASSWORD_URL);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-            throw new ChangePasswordTokenException("Password cannot be changed at this time!");
+            throwPasswordException(PASSWORD_CANNOT_BE_CHANGED);
         }
     }
 }

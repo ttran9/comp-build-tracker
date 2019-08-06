@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.ComputerPart;
-import tran.compbuildbackend.exceptions.computerbuild.NoteException;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.ComputerPartRepository;
 
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.throwMessageException;
 
 @Service
 public class ComputerPartServiceImpl implements ComputerPartService {
@@ -67,7 +67,7 @@ public class ComputerPartServiceImpl implements ComputerPartService {
 
         // make sure you are passing in a valid unique identifier.
         if(computerPart == null) {
-            throw new NoteException(exceptionMessage);
+            throwMessageException(exceptionMessage);
         }
         return computerPart;
     }

@@ -1,26 +1,24 @@
 package tran.compbuildbackend.services.computerbuild;
 
-import tran.compbuildbackend.domain.computerbuild.*;
+import tran.compbuildbackend.domain.computerbuild.AbstractNote;
+import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.user.ApplicationUser;
-import tran.compbuildbackend.exceptions.computerbuild.ComputerBuildOwnerException;
-import tran.compbuildbackend.exceptions.computerbuild.ComputerDetailIdentifierException;
-import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.services.security.utility.SecurityUtil;
 
-import java.util.List;
-
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
+import static tran.compbuildbackend.constants.exception.ExceptionConstants.INVALID_IDENTIFIER_FORMAT;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.throwMessageException;
 
 public class ComputerBuildServiceUtility {
 
     public static ComputerBuild getComputerBuildByBuildId(ComputerBuildRepository computerBuildRepository, String buildIdentifier) {
         ComputerBuild computerBuild = computerBuildRepository.getComputerBuildByBuildIdentifier(buildIdentifier);
         if(computerBuild == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
+            throwMessageException(COMPUTER_BUILD_DOES_NOT_EXIST);
         }
         if(computerBuild.getId() == null || computerBuild.getUser() == null) {
-            throw new GenericRequestException(COMPUTER_BUILD_DOES_NOT_EXIST);
+            throwMessageException(COMPUTER_BUILD_DOES_NOT_EXIST);
         }
         return computerBuild;
     }
@@ -33,7 +31,8 @@ public class ComputerBuildServiceUtility {
         if(oldBuild.getUser().getUsername().equals(user.getUsername())) {
             return oldBuild;
         }
-        throw new ComputerBuildOwnerException(COMPUTER_BUILD_CANNOT_BE_MODIFIED);
+        throwMessageException(COMPUTER_BUILD_CANNOT_BE_MODIFIED);
+        return null; // this won't be hit because an exception will be thrown.
     }
 
     /**
@@ -101,7 +100,7 @@ public class ComputerBuildServiceUtility {
         String[] buildIdentifier = uniqueIdentifier.split("-");
 
         if(buildIdentifier.length != 3) {
-            throw new ComputerDetailIdentifierException("invalid unique identifier format.");
+            throwMessageException(INVALID_IDENTIFIER_FORMAT);
         }
 
         return verifyOwnerOfComputerBuild(computerBuildRepository, buildIdentifier[0]);

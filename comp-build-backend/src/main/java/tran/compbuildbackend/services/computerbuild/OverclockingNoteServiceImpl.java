@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.domain.computerbuild.OverclockingNote;
-import tran.compbuildbackend.exceptions.computerbuild.NoteException;
 import tran.compbuildbackend.repositories.computerbuild.ComputerBuildRepository;
 import tran.compbuildbackend.repositories.computerbuild.OverclockingNoteRepository;
 
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.*;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.throwMessageException;
 
 @Service
 public class OverclockingNoteServiceImpl implements OverclockingNoteService {
@@ -65,7 +65,7 @@ public class OverclockingNoteServiceImpl implements OverclockingNoteService {
 
         // make sure you are passing in a valid unique identifier.
         if(overclockingNote == null) {
-            throw new NoteException(exceptionMessage);
+            throwMessageException(exceptionMessage);
         }
         return overclockingNote;
     }

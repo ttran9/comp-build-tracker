@@ -5,22 +5,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.FieldError;
 import tran.compbuildbackend.domain.security.ChangePasswordToken;
 import tran.compbuildbackend.domain.security.EmailVerificationToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.event.OnPasswordResetRequestEvent;
 import tran.compbuildbackend.event.OnRegistrationSuccessEvent;
-import tran.compbuildbackend.exceptions.request.EmailRequestException;
 import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.exceptions.request.MultipleFieldsException;
-import tran.compbuildbackend.exceptions.security.*;
 import tran.compbuildbackend.repositories.security.ChangePasswordTokenRepository;
 import tran.compbuildbackend.repositories.security.EmailVerificationTokenRepository;
 import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +24,7 @@ import static tran.compbuildbackend.constants.exception.ExceptionConstants.*;
 import static tran.compbuildbackend.constants.fields.FieldConstants.EMAIL_FIELD;
 import static tran.compbuildbackend.constants.fields.FieldConstants.USER_NAME_FIELD;
 import static tran.compbuildbackend.constants.fields.FieldValueConstants.*;
+import static tran.compbuildbackend.exceptions.ExceptionUtility.*;
 
 @Service
 public class ApplicationUserServiceImpl implements ApplicationUserService {
@@ -89,7 +86,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             catch (Exception ex) {
                 System.out.println(ex.getMessage());
                 applicationUserRepository.delete(registeredUser);
-                throw new UsernameCreationErrorException(USER_NAME_ERROR + registeredUser.getUsername() + GENERIC_USER_NAME_CREATION_ERROR);
+                throwMessageException(USER_NAME_ERROR + registeredUser.getUsername() + GENERIC_USER_NAME_CREATION_ERROR);
             }
         } else {
             throw new GenericRequestException(REQUEST_IS_NULL_ERROR);
@@ -114,7 +111,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         // user is enabled so now delete the registration token required to register the user.
         EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository.findByUser(user);
         if(emailVerificationToken == null) {
-            throw new EmailVerificationTokenException("token is not present.");
+            throwTokenException(TOKEN_IS_NOT_PRESENT);
         }
         emailVerificationTokenRepository.deleteByToken(emailVerificationToken.getToken());
     }
@@ -128,9 +125,9 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     public ApplicationUser getUserByEmail(String email, int exceptionType) {
         ApplicationUser user = applicationUserRepository.findByEmail(email);
         if(exceptionType == EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED && user == null) {
-            throw new RequestChangePasswordException(PASSWORD_CANNOT_BE_CHANGED_FOR_INVALID_USER);
+            throwUsernameException(PASSWORD_CANNOT_BE_CHANGED_FOR_INVALID_USER);
         } else if(exceptionType == EXCEPTION_EMAIL_NAME_DOES_NOT_EXIST && user == null) {
-            throw new EmailRequestException("cannot find user with email '" + email + "'.");
+            throwMessageException("cannot find user with email '" + email + "'.");
         }
         return user;
     }
@@ -158,11 +155,11 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             ChangePasswordToken token = changePasswordTokenRepository.findByUser(user);
             if(token == null) {
                 System.out.println("token is null.....");
-                throw new ChangePasswordTokenException("cannot retrieve token");
+                throwTokenException(CANNOT_RETRIEVE_TOKEN);
             }
             changePasswordTokenRepository.deleteByToken(token.getToken());
         } catch (Exception ex) {
-            throw new ChangePasswordTokenException("unable to change password.");
+            throwTokenException(UNABLE_TO_CHANGE_PASSWORD);
         }
     }
 
@@ -179,7 +176,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         }
         catch (Exception ex) {
             System.out.println(ex.getMessage());
-            throw new RequestChangePasswordException("Password for '" + user.getUsername() + "' cannot be changed at this time");
+            throwUsernameException("Password for '" + user.getUsername() + "' cannot be changed at this time");
         }
         ChangePasswordToken token = getChangePasswordTokenFromUser(user);
 
