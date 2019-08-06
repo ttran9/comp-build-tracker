@@ -6,8 +6,23 @@ import { connect } from "react-redux";
 import * as Constants from "../../Constants";
 
 class DirectionsList extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isVisible: true
+    };
+  }
+
+  toggleVisibility = () => {
+    this.setState({
+      isVisible: !this.state.isVisible
+    });
+  };
+
   render() {
     const { directions, buildIdentifier, isOwner } = this.props;
+    const { isVisible } = this.state;
 
     let createButton = <Fragment />;
     let editAndDeleteRows = <Fragment />;
@@ -45,9 +60,22 @@ class DirectionsList extends Component {
 
     return (
       <div className="col-md-12 text-center">
-        <h2>Directions:</h2>
+        <h2>
+          Directions:{" "}
+          <span onClick={this.toggleVisibility}>
+            <button className="btn btn-primary">
+              {isVisible ? <span>Hide</span> : <span>Show</span>}
+            </button>
+          </span>
+        </h2>
         {createButton}
-        <table className="table table-dark table-bordered">
+        <table
+          className={
+            isVisible
+              ? "table table-dark table-bordered"
+              : "table table-dark table-bordered hide-element"
+          }
+        >
           <thead>
             <tr>
               <th scope="col">#</th>

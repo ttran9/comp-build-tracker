@@ -6,10 +6,25 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 class ComputerPartList extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isVisible: true
+    };
+  }
+
+  toggleVisibility = () => {
+    this.setState({
+      isVisible: !this.state.isVisible
+    });
+  };
+
   render() {
     const { computerParts, buildIdentifier, isOwner } = this.props;
     let createButton = <Fragment />;
     let editAndDeleteRows = <Fragment />;
+    const { isVisible } = this.state;
 
     if (isOwner && buildIdentifier !== undefined) {
       createButton = (
@@ -44,9 +59,22 @@ class ComputerPartList extends Component {
 
     return (
       <div className="col-md-12 text-center">
-        <h2>Computer Parts:</h2>
+        <h2>
+          Computer Parts:{" "}
+          <span onClick={this.toggleVisibility}>
+            <button className="btn btn-primary">
+              {isVisible ? <span>Hide</span> : <span>Show</span>}
+            </button>
+          </span>
+        </h2>
         {createButton}
-        <table className="table table-dark table-bordered">
+        <table
+          className={
+            isVisible
+              ? "table table-dark table-bordered"
+              : "table table-dark table-bordered hide-element"
+          }
+        >
           <thead>
             <tr>
               <th scope="col">Part Name</th>
@@ -83,14 +111,7 @@ const mapStateToProps = state => ({
   security: state.security
 });
 
-// export default connect(
-//   mapStateToProps,
-//   { getComputerBuildByBuildIdentifier }
-// )(ComputerPartList);
-
 export default connect(
   mapStateToProps,
   null
 )(ComputerPartList);
-
-// export default ComputerPartList;

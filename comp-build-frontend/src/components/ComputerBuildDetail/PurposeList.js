@@ -6,10 +6,25 @@ import { Link } from "react-router-dom";
 import * as Constants from "../../Constants";
 
 class PurposeList extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isVisible: true
+    };
+  }
+
+  toggleVisibility = () => {
+    this.setState({
+      isVisible: !this.state.isVisible
+    });
+  };
+
   render() {
     const { purposeList, buildIdentifier, isOwner } = this.props;
     let createButton = <Fragment />;
     let editAndDeleteRows = <Fragment />;
+    const { isVisible } = this.state;
 
     if (isOwner && buildIdentifier !== undefined) {
       createButton = (
@@ -44,9 +59,22 @@ class PurposeList extends Component {
 
     return (
       <div className="col-md-12 text-center">
-        <h2>Purpose:</h2>
+        <h2>
+          Purpose:{" "}
+          <span onClick={this.toggleVisibility}>
+            <button className="btn btn-primary">
+              {isVisible ? <span>Hide</span> : <span>Show</span>}
+            </button>
+          </span>
+        </h2>
         {createButton}
-        <table className="table table-dark table-bordered">
+        <table
+          className={
+            isVisible
+              ? "table table-dark table-bordered"
+              : "table table-dark table-bordered hide-element"
+          }
+        >
           <thead>
             <tr>
               <th scope="col">Description</th>
