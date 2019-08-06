@@ -1,10 +1,10 @@
 package tran.compbuildbackend.validator;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import tran.compbuildbackend.exceptions.request.MultipleFieldsException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +22,7 @@ public class MapValidationErrorServiceImpl implements MapValidationErrorService 
                 errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
 
-            return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
-            // TODO: uncomment the below once the MultipleFieldsException can detect more fields.
-//            throw new MultipleFieldsException(errorMap);
+            throw new MultipleFieldsException(errorMap);
         }
         return null; // no errors so return nothing.
     }
