@@ -28,9 +28,11 @@ public class TestUtility {
 
     public static final String FIELD_CANNOT_BE_NULL = "must not be null";
     public static final String FIELD_CANNOT_BE_EMPTY = "must not be empty";
+    public static final String FIELD_CANNOT_BE_BLANK = "must not be blank";
 
     // constants used in multiple tests.
     public static final String INVALID_IDENTIFIER_SUFFIX = "1";
+    public static final String EMPTY_CONTENT = "";
 
     // build note constants for testing.
     public static final String TEST_BUILD_NOTE_LIST_NOTE_ONE = "This is the first build note test.";
