@@ -29,9 +29,7 @@ public class DirectionController {
     @PostMapping(BUILD_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> createDirection(@Valid @RequestBody Direction direction, BindingResult bindingResult,
                                              @PathVariable String buildIdentifier) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         // no errors so create the direction.
         Direction createdDirection = directionService.create(buildIdentifier, direction);
@@ -42,9 +40,7 @@ public class DirectionController {
     @PatchMapping(BUILD_IDENTIFIER_PATH_VARIABLE + URL_SEPARATOR + UNIQUE_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> updateDirection(@Valid @RequestBody Direction newDirection, BindingResult bindingResult,
                                              @PathVariable String uniqueIdentifier) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         // no errors so update the direction.
         Direction updatedDirection = directionService.update(newDirection, uniqueIdentifier);

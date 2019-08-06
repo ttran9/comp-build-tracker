@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import tran.compbuildbackend.domain.computerbuild.Direction;
 import tran.compbuildbackend.domain.computerbuild.OverclockingNote;
 import tran.compbuildbackend.payload.computerbuild.ComputerBuildDetailResponse;
 import tran.compbuildbackend.services.computerbuild.OverclockingNoteService;
@@ -12,10 +11,8 @@ import tran.compbuildbackend.validator.MapValidationErrorService;
 
 import javax.validation.Valid;
 
-import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.DIRECTION_DELETE_MESSAGE;
 import static tran.compbuildbackend.constants.computerbuild.ComputerBuildConstants.OVERCLOCKING_NOTE_DELETE_MESSAGE;
 import static tran.compbuildbackend.constants.mapping.MappingConstants.*;
-import static tran.compbuildbackend.constants.mapping.MappingConstants.UNIQUE_IDENTIFIER_PATH_VARIABLE;
 
 @RestController
 @RequestMapping(OVERCLOCKING_NOTE_API)
@@ -33,9 +30,7 @@ public class OverclockingNoteController {
     @PostMapping(BUILD_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> createOverclockingNote(@Valid @RequestBody OverclockingNote overclockingNote, BindingResult bindingResult,
                                              @PathVariable String buildIdentifier) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         // no errors so create the overclocking note.
         OverclockingNote createdOverclockingNote = overclockingNoteService.create(buildIdentifier, overclockingNote);
@@ -46,9 +41,7 @@ public class OverclockingNoteController {
     @PatchMapping(BUILD_IDENTIFIER_PATH_VARIABLE + URL_SEPARATOR + UNIQUE_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> updateOverclockingNote(@Valid @RequestBody OverclockingNote newOverclockingNote, BindingResult bindingResult,
                                              @PathVariable String uniqueIdentifier) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         // no errors so update the overclocking note.
         OverclockingNote updatedOverclockingNote = overclockingNoteService.update(newOverclockingNote, uniqueIdentifier);

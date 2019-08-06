@@ -37,9 +37,7 @@ public class ComputerPartController {
                                                 @PathVariable String buildIdentifier) {
         priceValidator.validate(computerPart, bindingResult);
 
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         // no errors so create the computer part.
         ComputerPart createdComputerPart = computerPartService.create(buildIdentifier, computerPart);
@@ -52,9 +50,7 @@ public class ComputerPartController {
                                                     @PathVariable String uniqueIdentifier, @PathVariable String buildIdentifier) {
         priceValidator.validate(newComputerPart, bindingResult);
 
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         // no errors so update the computer part.
         ComputerPart updatedComputerPart = computerPartService.update(newComputerPart, uniqueIdentifier);

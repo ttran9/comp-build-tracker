@@ -8,8 +8,8 @@ import tran.compbuildbackend.domain.computerbuild.ComputerBuild;
 import tran.compbuildbackend.dto.computerbuild.ComputerBuildDto;
 import tran.compbuildbackend.mapper.ComputerBuildToComputerBuildResponse;
 import tran.compbuildbackend.payload.computerbuild.ComputerBuildResponse;
-import tran.compbuildbackend.services.computerbuild.mapper.ComputerBuildDtoMapper;
 import tran.compbuildbackend.services.computerbuild.ComputerBuildService;
+import tran.compbuildbackend.services.computerbuild.mapper.ComputerBuildDtoMapper;
 import tran.compbuildbackend.validator.MapValidationErrorService;
 
 import javax.validation.Valid;
@@ -35,8 +35,7 @@ public class ComputerBuildController {
 
     @PostMapping
     public ResponseEntity<?> createComputerBuild(@RequestBody @Valid ComputerBuild computerBuild, BindingResult bindingResult) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         ComputerBuild newComputerBuild = computerBuildService.createNewComputerBuild(computerBuild);
         ComputerBuildResponse response = ComputerBuildToComputerBuildResponse.buildToBuildResponseWithFields

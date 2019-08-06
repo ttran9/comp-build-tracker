@@ -29,9 +29,7 @@ public class BuildNoteController {
     @PostMapping(BUILD_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> createBuildNote(@Valid @RequestBody BuildNote buildNote, BindingResult bindingResult,
                                              @PathVariable String buildIdentifier) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         // no errors so create the build note.
         BuildNote createdBuildNote = buildNoteService.create(buildIdentifier, buildNote);
@@ -42,9 +40,7 @@ public class BuildNoteController {
     @PatchMapping(BUILD_IDENTIFIER_PATH_VARIABLE + URL_SEPARATOR + UNIQUE_IDENTIFIER_PATH_VARIABLE)
     public ResponseEntity<?> updateBuildNote(@Valid @RequestBody BuildNote newBuildNote, BindingResult bindingResult,
                                              @PathVariable String uniqueIdentifier) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         // no errors so update the build note.
         BuildNote updatedBuildNote = buildNoteService.update(newBuildNote, uniqueIdentifier);

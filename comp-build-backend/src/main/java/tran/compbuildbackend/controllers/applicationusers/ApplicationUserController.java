@@ -24,10 +24,7 @@ import tran.compbuildbackend.validator.PasswordChangeRequestValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import static tran.compbuildbackend.constants.mapping.MappingConstants.REGISTER_URL;
-import static tran.compbuildbackend.constants.mapping.MappingConstants.USERS_API;
-import static tran.compbuildbackend.constants.mapping.MappingConstants.LOGIN_URL;
-import static tran.compbuildbackend.constants.mapping.MappingConstants.TOKEN_PARAM;
+import static tran.compbuildbackend.constants.mapping.MappingConstants.*;
 import static tran.compbuildbackend.constants.messages.ResponseMessage.*;
 
 
@@ -72,8 +69,7 @@ public class ApplicationUserController {
 
     @PostMapping(LOGIN_URL)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         return authenticationService.applicationUserAuthentication(loginRequest, authenticationManager, jwtTokenProvider);
     }
@@ -84,16 +80,13 @@ public class ApplicationUserController {
         // validate that passwords match.
         applicationUserValidator.validate(applicationUser, bindingResult);
 
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         ApplicationUser newApplicationUser = applicationUserService.persistUser(applicationUser, request);
 
         RequestSuccessfulResponse userResponse = new RequestSuccessfulResponse(VERIFY_EMAIL_MESSAGE,
                 newApplicationUser.getEmailVerificationToken().getToken(), newApplicationUser.isEnabled());
 
-//        return new ResponseEntity<>(newApplicationUser, HttpStatus.CREATED);
-//        return new ResponseEntity<>(new RequestSuccessfulResponse(VERIFY_EMAIL_MESSAGE), HttpStatus.CREATED);
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
     }
 
@@ -112,8 +105,7 @@ public class ApplicationUserController {
         // validate that passwords match.
         passwordChangeRequestValidator.validate(passwordChangeRequest, bindingResult);
 
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         ApplicationUser user = changePasswordTokenService.validateVerificationToken(token);
 
@@ -125,17 +117,14 @@ public class ApplicationUserController {
     @PostMapping(MappingConstants.CHANGE_PASSWORD_URL)
     public ResponseEntity<?> requestChangeUserPassword(@Valid @RequestBody InitialPasswordChangeRequest passwordChangeRequest,
                                                        BindingResult bindingResult, HttpServletRequest request) {
-
         // requesting to change user password.
-        ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
-        if(errorMap != null) return errorMap;
+        mapValidationErrorService.outputCustomError(bindingResult);
 
         ApplicationUser user = applicationUserService.sendPasswordChangeEmail(passwordChangeRequest.getUsername(), request);
 
         RequestSuccessfulResponse userResponse = new RequestSuccessfulResponse(CHANGE_PASSWORD,
                 user.getChangePasswordToken().getToken());
 
-//        return new ResponseEntity<>(new RequestSuccessfulResponse(CHANGE_PASSWORD), HttpStatus.OK);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 }
