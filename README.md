@@ -39,13 +39,8 @@ perform CRUD operations on a computer build and its details.
     build to ensure that the uniqueIdentifiers generated should be unique.
     
 # TODO:
-    - Refactor the CustomResponseEntityExceptionHandler to not use so many @ExceptionHandler repetitive methods.
-    - Refactor the MapValidationErrorServiceImpl and the controllers that utilize it to throw an exception that
-    will be handled by CustomResponseEntityExceptionHandler.
-    - Modify the appearance of the computer build details to be more "presentable."
-    - Refactor tests and/or possibly add tests.
-    - Refactor (repetitive) code in the back-end/spring boot backend app.
-    - Refactor (repetitive) code in the front-end/react app.  
+- Refactor tests and/or possibly add tests. (on-going)   
+- Refactor (repetitive) code in the front-end/react app.  
 
 # Progress (master branch)
     - For the progress once I have crossed off the item that means it has been merged into the master branch.
@@ -59,5 +54,9 @@ perform CRUD operations on a computer build and its details.
 - <strike>Add frontend functionality to be able to add, delete, and update Directions for a ComputerBuild.</strike> 
 - <strike>Add frontend functionality to be able to add, delete, and update Overclocking Notes for a ComputerBuild.</strike> 
 - <strike>Add frontend functionality to be able to add, delete, and update Other Notes for a ComputerBuild.</strike> 
-- To summarize, this prototype can be considered complete in terms of functionality but there are changes
-I would like to make because the appearance of the application is not likely to be user friendly.
+- <strike>Refactor the CustomResponseEntityExceptionHandler to not use so many @ExceptionHandler repetitive methods.</strike>
+- <strike>Refactor the MapValidationErrorServiceImpl and the controllers that utilize it to throw an exception that
+will be handled by CustomResponseEntityExceptionHandler.</strike>
+- <strike>Modify the appearance of the computer build details to be more "presentable."</strike>
+- <strike>Refactor (repetitive) code in the back-end/spring boot backend app.</strike>
+
