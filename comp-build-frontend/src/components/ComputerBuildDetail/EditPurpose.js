@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import {
-  getPurposeById,
-  updatePurpose
+  getObjectById,
+  updateObject
 } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
+import { GET_PURPOSE } from "../../actions/types";
 
 class EditPurpose extends Component {
   constructor() {
@@ -34,11 +36,12 @@ class EditPurpose extends Component {
       description: this.state.description
     };
 
-    this.props.updatePurpose(
+    this.props.updateObject(
       newPurpose,
       buildIdentifier,
       this.state.uniqueIdentifier,
-      this.props.history
+      this.props.history,
+      Constants.PURPOSE_API
     );
   };
 
@@ -74,7 +77,12 @@ class EditPurpose extends Component {
 
   componentDidMount() {
     const { buildIdentifier, uniqueIdentifier } = this.props.match.params;
-    this.props.getPurposeById(buildIdentifier, uniqueIdentifier);
+    this.props.getObjectById(
+      Constants.PURPOSE_API,
+      buildIdentifier,
+      uniqueIdentifier,
+      GET_PURPOSE
+    );
   }
 
   render() {
@@ -133,8 +141,8 @@ class EditPurpose extends Component {
 EditPurpose.propTypes = {
   errors: PropTypes.object.isRequired,
   purpose: PropTypes.object.isRequired,
-  updatePurpose: PropTypes.func.isRequired,
-  getPurposeById: PropTypes.func.isRequired
+  updateObject: PropTypes.func.isRequired,
+  getObjectById: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -144,5 +152,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { updatePurpose, getPurposeById }
+  { updateObject, getObjectById }
 )(EditPurpose);

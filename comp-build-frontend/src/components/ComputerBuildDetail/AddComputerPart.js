@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
-import { createComputerPart } from "../../actions/computerBuildDetailActions";
+import { createObject } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
 
 class AddComputerPart extends Component {
   constructor() {
@@ -31,9 +32,10 @@ class AddComputerPart extends Component {
 
     const { buildIdentifier } = this.props.match.params;
 
-    this.props.createComputerPart(
+    this.props.createObject(
       newComputerPart,
       this.props.history,
+      Constants.COMPUTER_PART_API,
       buildIdentifier
     );
   };
@@ -166,7 +168,7 @@ class AddComputerPart extends Component {
 AddComputerPart.propTypes = {
   errors: PropTypes.object.isRequired,
   security: PropTypes.object.isRequired,
-  createComputerPart: PropTypes.func.isRequired
+  createObject: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -176,5 +178,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createComputerPart }
+  { createObject }
 )(AddComputerPart);

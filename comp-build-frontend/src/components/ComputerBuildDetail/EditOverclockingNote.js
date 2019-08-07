@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import {
-  getOverclockingNoteById,
-  updateOverclockingNote
+  getObjectById,
+  updateObject
 } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
+import { GET_OVERCLOCKING_NOTE } from "../../actions/types";
 
 class EditOverclockingNote extends Component {
   constructor() {
@@ -34,11 +36,12 @@ class EditOverclockingNote extends Component {
       description: this.state.description
     };
 
-    this.props.updateOverclockingNote(
+    this.props.updateObject(
       overclockingNote,
       buildIdentifier,
       this.state.uniqueIdentifier,
-      this.props.history
+      this.props.history,
+      Constants.OVERCLOCKING_NOTE_API
     );
   };
 
@@ -74,7 +77,12 @@ class EditOverclockingNote extends Component {
 
   componentDidMount() {
     const { buildIdentifier, uniqueIdentifier } = this.props.match.params;
-    this.props.getOverclockingNoteById(buildIdentifier, uniqueIdentifier);
+    this.props.getObjectById(
+      Constants.OVERCLOCKING_NOTE_API,
+      buildIdentifier,
+      uniqueIdentifier,
+      GET_OVERCLOCKING_NOTE
+    );
   }
 
   render() {
@@ -133,8 +141,8 @@ class EditOverclockingNote extends Component {
 EditOverclockingNote.propTypes = {
   errors: PropTypes.object.isRequired,
   overclockingNote: PropTypes.object.isRequired,
-  updateOverclockingNote: PropTypes.func.isRequired,
-  getOverclockingNoteById: PropTypes.func.isRequired
+  updateObject: PropTypes.func.isRequired,
+  getObjectById: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -144,5 +152,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { updateOverclockingNote, getOverclockingNoteById }
+  { updateObject, getObjectById }
 )(EditOverclockingNote);

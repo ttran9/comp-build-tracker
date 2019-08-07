@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import {
-  getBuildNoteById,
-  updateBuildNote
+  getObjectById,
+  updateObject
 } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
+import { GET_BUILD_NOTE } from "../../actions/types";
 
 class EditBuildNote extends Component {
   constructor() {
@@ -34,11 +36,12 @@ class EditBuildNote extends Component {
       description: this.state.description
     };
 
-    this.props.updateBuildNote(
+    this.props.updateObject(
       newBuildNote,
       buildIdentifier,
       this.state.uniqueIdentifier,
-      this.props.history
+      this.props.history,
+      Constants.BUILD_NOTE_API
     );
   };
 
@@ -74,7 +77,12 @@ class EditBuildNote extends Component {
 
   componentDidMount() {
     const { buildIdentifier, uniqueIdentifier } = this.props.match.params;
-    this.props.getBuildNoteById(buildIdentifier, uniqueIdentifier);
+    this.props.getObjectById(
+      Constants.BUILD_NOTE_API,
+      buildIdentifier,
+      uniqueIdentifier,
+      GET_BUILD_NOTE
+    );
   }
 
   render() {
@@ -133,8 +141,8 @@ class EditBuildNote extends Component {
 EditBuildNote.propTypes = {
   errors: PropTypes.object.isRequired,
   buildNote: PropTypes.object.isRequired,
-  updateBuildNote: PropTypes.func.isRequired,
-  getBuildNoteById: PropTypes.func.isRequired
+  updateObject: PropTypes.func.isRequired,
+  getObjectById: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -144,5 +152,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { updateBuildNote, getBuildNoteById }
+  { updateObject, getObjectById }
 )(EditBuildNote);

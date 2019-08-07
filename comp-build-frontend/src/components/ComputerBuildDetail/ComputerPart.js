@@ -2,12 +2,18 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { deleteComputerPartById } from "../../actions/computerBuildDetailActions";
+import { deleteObjectById } from "../../actions/computerBuildDetailActions";
 import * as Constants from "../../Constants";
+import { DELETE_COMPUTERPART } from "../../actions/types";
 
 class ComputerPart extends Component {
   onDeleteClick = (buildIdentifier, computerPartIdentifier) => {
-    this.props.deleteComputerPartById(buildIdentifier, computerPartIdentifier);
+    this.props.deleteObjectById(
+      Constants.COMPUTER_PART_API,
+      buildIdentifier,
+      computerPartIdentifier,
+      DELETE_COMPUTERPART
+    );
   };
 
   render() {
@@ -55,10 +61,10 @@ class ComputerPart extends Component {
 }
 
 ComputerPart.propTypes = {
-  deleteComputerPartById: PropTypes.func.isRequired
+  deleteObjectById: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { deleteComputerPartById }
+  { deleteObjectById }
 )(ComputerPart);

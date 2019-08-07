@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import { createDirection } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
 
 class AddDirection extends Component {
   constructor() {
@@ -26,6 +27,7 @@ class AddDirection extends Component {
     this.props.createDirection(
       newDirection,
       this.props.history,
+      Constants.DIRECTION_API,
       buildIdentifier
     );
   };

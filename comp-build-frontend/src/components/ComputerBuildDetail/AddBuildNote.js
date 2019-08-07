@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
-import { createBuildNote } from "../../actions/computerBuildDetailActions";
+import { createObject } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
 
 class AddBuildNote extends Component {
   constructor() {
@@ -25,9 +26,10 @@ class AddBuildNote extends Component {
 
     const { buildIdentifier } = this.props.match.params;
 
-    this.props.createBuildNote(
+    this.props.createObject(
       newBuildNote,
       this.props.history,
+      Constants.BUILD_NOTE_API,
       buildIdentifier
     );
   };
@@ -102,7 +104,7 @@ class AddBuildNote extends Component {
 AddBuildNote.propTypes = {
   errors: PropTypes.object.isRequired,
   security: PropTypes.object.isRequired,
-  createBuildNote: PropTypes.func.isRequired
+  createObject: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -112,5 +114,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createBuildNote }
+  { createObject }
 )(AddBuildNote);

@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
-import { createPurpose } from "../../actions/computerBuildDetailActions";
+import { createObject } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
 
 class AddPurpose extends Component {
   constructor() {
@@ -25,7 +26,12 @@ class AddPurpose extends Component {
 
     const { buildIdentifier } = this.props.match.params;
 
-    this.props.createPurpose(newPurpose, this.props.history, buildIdentifier);
+    this.props.createObject(
+      newPurpose,
+      this.props.history,
+      Constants.PURPOSE_API,
+      buildIdentifier
+    );
   };
 
   onChange = event => {
@@ -98,7 +104,7 @@ class AddPurpose extends Component {
 AddPurpose.propTypes = {
   errors: PropTypes.object.isRequired,
   security: PropTypes.object.isRequired,
-  createPurpose: PropTypes.func.isRequired
+  createObject: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -108,5 +114,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createPurpose }
+  { createObject }
 )(AddPurpose);

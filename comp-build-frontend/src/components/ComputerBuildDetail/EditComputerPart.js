@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import {
-  getComputerPartById,
-  updateComputerPart
+  getObjectById,
+  updateObject
 } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
+import { GET_COMPUTERPART } from "../../actions/types";
 
 class EditComputerPart extends Component {
   constructor() {
@@ -55,7 +57,12 @@ class EditComputerPart extends Component {
 
   componentDidMount() {
     const { buildIdentifier, uniqueIdentifier } = this.props.match.params;
-    this.props.getComputerPartById(buildIdentifier, uniqueIdentifier);
+    this.props.getObjectById(
+      Constants.COMPUTER_PART_API,
+      buildIdentifier,
+      uniqueIdentifier,
+      GET_COMPUTERPART
+    );
   }
 
   onSubmit = event => {
@@ -74,11 +81,12 @@ class EditComputerPart extends Component {
       otherNote: this.state.otherNote
     };
 
-    this.props.updateComputerPart(
+    this.props.updateObject(
       newComputerPart,
       buildIdentifier,
       this.state.uniqueIdentifier,
-      this.props.history
+      this.props.history,
+      Constants.COMPUTER_PART_API
     );
   };
 
@@ -201,8 +209,8 @@ class EditComputerPart extends Component {
 
 EditComputerPart.propTypes = {
   errors: PropTypes.object.isRequired,
-  getComputerPartById: PropTypes.func.isRequired,
-  updateComputerPart: PropTypes.func.isRequired
+  getObjectById: PropTypes.func.isRequired,
+  updateObject: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -212,5 +220,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getComputerPartById, updateComputerPart }
+  { getObjectById, updateObject }
 )(EditComputerPart);

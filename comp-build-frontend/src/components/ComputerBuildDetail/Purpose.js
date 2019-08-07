@@ -2,12 +2,18 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { deletePurposeById } from "../../actions/computerBuildDetailActions";
+import { deleteObjectById } from "../../actions/computerBuildDetailActions";
 import * as Constants from "../../Constants";
+import { DELETE_PURPOSE } from "../../actions/types";
 
 class Purpose extends Component {
   onDeleteClick = (buildIdentifier, purposeIdentifier) => {
-    this.props.deletePurposeById(buildIdentifier, purposeIdentifier);
+    this.props.deleteObjectById(
+      Constants.PURPOSE_API,
+      buildIdentifier,
+      purposeIdentifier,
+      DELETE_PURPOSE
+    );
   };
 
   render() {
@@ -51,10 +57,10 @@ class Purpose extends Component {
 }
 
 Purpose.propTypes = {
-  deletePurposeById: PropTypes.func.isRequired
+  deleteObjectById: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { deletePurposeById }
+  { deleteObjectById }
 )(Purpose);

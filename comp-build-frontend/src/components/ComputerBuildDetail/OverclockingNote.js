@@ -2,14 +2,17 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { deleteOverclockingNoteById } from "../../actions/computerBuildDetailActions";
+import { deleteObjectById } from "../../actions/computerBuildDetailActions";
 import * as Constants from "../../Constants";
+import { DELETE_OVERCLOCKING_NOTE } from "../../actions/types";
 
 class OverclockingNote extends Component {
   onDeleteClick = (buildIdentifier, overclockingNoteIdentifier) => {
-    this.props.deleteOverclockingNoteById(
+    this.props.deleteObjectById(
+      Constants.OVERCLOCKING_NOTE_API,
       buildIdentifier,
-      overclockingNoteIdentifier
+      overclockingNoteIdentifier,
+      DELETE_OVERCLOCKING_NOTE
     );
   };
 
@@ -54,10 +57,10 @@ class OverclockingNote extends Component {
 }
 
 OverclockingNote.propTypes = {
-  deleteOverclockingNoteById: PropTypes.func.isRequired
+  deleteObjectById: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { deleteOverclockingNoteById }
+  { deleteObjectById }
 )(OverclockingNote);

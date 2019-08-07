@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
-import { createOverclockingNote } from "../../actions/computerBuildDetailActions";
+import { createObject } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
 
 class AddOverclockingNote extends Component {
   constructor() {
@@ -25,9 +26,10 @@ class AddOverclockingNote extends Component {
 
     const { buildIdentifier } = this.props.match.params;
 
-    this.props.createOverclockingNote(
+    this.props.createObject(
       newOverclockingNote,
       this.props.history,
+      Constants.OVERCLOCKING_NOTE_API,
       buildIdentifier
     );
   };
@@ -102,7 +104,7 @@ class AddOverclockingNote extends Component {
 AddOverclockingNote.propTypes = {
   errors: PropTypes.object.isRequired,
   security: PropTypes.object.isRequired,
-  createOverclockingNote: PropTypes.func.isRequired
+  createObject: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -112,5 +114,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createOverclockingNote }
+  { createObject }
 )(AddOverclockingNote);

@@ -2,12 +2,18 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { deleteDirectionById } from "../../actions/computerBuildDetailActions";
+import { deleteObjectById } from "../../actions/computerBuildDetailActions";
 import * as Constants from "../../Constants";
+import { DELETE_DIRECTION } from "../../actions/types";
 
 class Direction extends Component {
   onDeleteClick = (buildIdentifier, directionIdentifier) => {
-    this.props.deleteDirectionById(buildIdentifier, directionIdentifier);
+    this.props.deleteObjectById(
+      Constants.DIRECTION_API,
+      buildIdentifier,
+      directionIdentifier,
+      DELETE_DIRECTION
+    );
   };
 
   render() {
@@ -52,10 +58,10 @@ class Direction extends Component {
 }
 
 Direction.propTypes = {
-  deleteDirectionById: PropTypes.func.isRequired
+  deleteObjectById: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { deleteDirectionById }
+  { deleteObjectById }
 )(Direction);

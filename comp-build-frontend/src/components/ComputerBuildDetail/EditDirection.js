@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import {
-  getDirectionById,
-  updateDirection
+  getObjectById,
+  updateObject
 } from "../../actions/computerBuildDetailActions";
+import * as Constants from "../../Constants";
+import { GET_DIRECTION } from "../../actions/types";
 
 class EditDirection extends Component {
   constructor() {
@@ -32,11 +34,12 @@ class EditDirection extends Component {
       description: this.state.description
     };
 
-    this.props.updateDirection(
+    this.props.updateObject(
       newDirection,
       buildIdentifier,
       this.state.uniqueIdentifier,
-      this.props.history
+      this.props.history,
+      Constants.DIRECTION_API
     );
   };
 
@@ -70,7 +73,12 @@ class EditDirection extends Component {
 
   componentDidMount() {
     const { buildIdentifier, uniqueIdentifier } = this.props.match.params;
-    this.props.getDirectionById(buildIdentifier, uniqueIdentifier);
+    this.props.getObjectById(
+      Constants.DIRECTION_API,
+      buildIdentifier,
+      uniqueIdentifier,
+      GET_DIRECTION
+    );
   }
 
   render() {
@@ -116,8 +124,8 @@ class EditDirection extends Component {
 EditDirection.propTypes = {
   errors: PropTypes.object.isRequired,
   direction: PropTypes.object.isRequired,
-  updateDirection: PropTypes.func.isRequired,
-  getDirectionById: PropTypes.func.isRequired
+  updateObject: PropTypes.func.isRequired,
+  getObjectById: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -127,5 +135,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { updateDirection, getDirectionById }
+  { updateObject, getObjectById }
 )(EditDirection);
