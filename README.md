@@ -1,3 +1,6 @@
+# Live Demo
+- The running demo can be seen [here](https://tt-comp-build.herokuapp.com/).
+
 # Overview
 
 - I am making this web application to sharpen my skills using Java 8, Spring Boot, Spring Security, ReactJS, and JWT Authentication.
