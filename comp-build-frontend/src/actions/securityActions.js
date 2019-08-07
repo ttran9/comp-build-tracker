@@ -24,11 +24,11 @@ export const createNewUser = (newUser, history) => async dispatch => {
          */
         history.push(`${Constants.ACCOUNT_ACTIVATED_URL}`);
       });
-    // clearErrors(dispatch);
-    dispatch({
-      type: GET_ERRORS,
-      payload: {}
-    });
+    clearErrors(dispatch);
+    // dispatch({
+    //   type: GET_ERRORS,
+    //   payload: {}
+    // });
   } catch (error) {
     dispatch({
       type: GET_ERRORS,
@@ -63,6 +63,7 @@ export const login = LoginRequest => async dispatch => {
       type: SET_CURRENT_USER,
       payload: decoded
     });
+    clearErrors(dispatch);
   } catch (error) {
     dispatch({
       type: GET_ERRORS,
@@ -149,11 +150,11 @@ export const changePassword = (
         // redirect to a page that will display that the password has been changed successfully.
         history.push(`${Constants.REQUEST_SUCCESS_URL}`);
       });
-    // clearErrors(dispatch);
-    dispatch({
-      type: GET_ERRORS,
-      payload: {}
-    });
+    clearErrors(dispatch);
+    // dispatch({
+    //   type: GET_ERRORS,
+    //   payload: {}
+    // });
   } catch (error) {
     dispatch({
       type: GET_ERRORS,

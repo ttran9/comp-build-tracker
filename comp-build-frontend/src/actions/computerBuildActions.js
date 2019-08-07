@@ -16,11 +16,7 @@ export const createComputerBuild = (
     await axios.post(`${Constants.COMPUTER_BUILD_API}`, computerBuild);
     // go back home where the new created computer build will be displayed.
     history.push(Constants.HOME_URL);
-    dispatch({
-      type: GET_ERRORS,
-      payload: {}
-    });
-    // clearErrors(dispatch);
+    clearErrors(dispatch);
   } catch (error) {
     dispatch({
       type: GET_ERRORS,
