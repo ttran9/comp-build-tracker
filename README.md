@@ -40,7 +40,6 @@ perform CRUD operations on a computer build and its details.
     
 # TODO:
 - Refactor tests and/or possibly add tests. (on-going)   
-- Refactor (repetitive) code in the front-end/react app.  
 
 # Progress (master branch)
     - For the progress once I have crossed off the item that means it has been merged into the master branch.
@@ -59,4 +58,5 @@ perform CRUD operations on a computer build and its details.
 will be handled by CustomResponseEntityExceptionHandler.</strike>
 - <strike>Modify the appearance of the computer build details to be more "presentable."</strike>
 - <strike>Refactor (repetitive) code in the back-end/spring boot backend app.</strike>
+- <strike>Refactor (repetitive) code in the front-end/react app.</strike>  
 
