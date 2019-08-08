@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { deleteObjectById } from "../../actions/computerBuildDetailActions";
 import * as Constants from "../../Constants";
 import { DELETE_COMPUTERPART } from "../../actions/types";
+import moment from "moment";
 
 class ComputerPart extends Component {
   onDeleteClick = (buildIdentifier, computerPartIdentifier) => {
@@ -20,6 +21,9 @@ class ComputerPart extends Component {
     const { computerPart, buildIdentifier, isOwner } = this.props;
     const { uniqueIdentifier } = computerPart;
     let editAndDeleteRows = <Fragment />;
+    let formattedDate = moment(computerPart.purchaseDate).format(
+      "MMMM Do YYYY"
+    );
 
     if (isOwner) {
       editAndDeleteRows = (
@@ -51,7 +55,7 @@ class ComputerPart extends Component {
       <tr>
         <td>{computerPart.name}</td>
         <td>{computerPart.price}</td>
-        <td>{computerPart.purchaseDate}</td>
+        <td>{formattedDate}</td>
         <td>{computerPart.placePurchasedAt}</td>
         <td>{computerPart.otherNote}</td>
         {editAndDeleteRows}
