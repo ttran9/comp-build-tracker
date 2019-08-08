@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import PropTypes from "prop-types";
-import { createDirection } from "../../actions/computerBuildDetailActions";
+import { createObject } from "../../actions/computerBuildDetailActions";
 import * as Constants from "../../Constants";
 
 class AddDirection extends Component {
@@ -24,7 +24,7 @@ class AddDirection extends Component {
 
     const { buildIdentifier } = this.props.match.params;
 
-    this.props.createDirection(
+    this.props.createObject(
       newDirection,
       this.props.history,
       Constants.DIRECTION_API,
@@ -89,7 +89,7 @@ class AddDirection extends Component {
 AddDirection.propTypes = {
   errors: PropTypes.object.isRequired,
   security: PropTypes.object.isRequired,
-  createDirection: PropTypes.func.isRequired
+  createObject: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -99,5 +99,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createDirection }
+  { createObject }
 )(AddDirection);
