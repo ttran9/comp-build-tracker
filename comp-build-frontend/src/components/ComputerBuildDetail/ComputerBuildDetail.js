@@ -40,7 +40,8 @@ class ComputerBuildDetail extends Component {
       purposeList,
       buildNotes,
       overclockingNotes,
-      computerBuild
+      computerBuild,
+      totalPrice
     } = computerBuildDetails;
     return (
       <div className="container">
@@ -49,6 +50,7 @@ class ComputerBuildDetail extends Component {
           computerParts={computerParts}
           buildIdentifier={buildIdentifier}
           isOwner={isOwner}
+          totalPrice={totalPrice}
         />
         <PurposeList
           purposeList={purposeList}

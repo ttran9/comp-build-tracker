@@ -21,10 +21,12 @@ class ComputerPartList extends Component {
   };
 
   render() {
-    const { computerParts, buildIdentifier, isOwner } = this.props;
+    const { computerParts, buildIdentifier, isOwner, totalPrice } = this.props;
     let createButton = <Fragment />;
     let editAndDeleteRows = <Fragment />;
     const { isVisible } = this.state;
+    let dollarSign = "$";
+    let computerBuildTotalPrice = `${dollarSign}0`;
 
     if (isOwner && buildIdentifier !== undefined) {
       createButton = (
@@ -57,6 +59,10 @@ class ComputerPartList extends Component {
       );
     }
 
+    if (totalPrice !== undefined) {
+      computerBuildTotalPrice = `${dollarSign}${totalPrice}`;
+    }
+
     return (
       <div className="col-md-12 text-center">
         <h2>
@@ -68,36 +74,33 @@ class ComputerPartList extends Component {
           </span>
         </h2>
         {createButton}
-        <table
-          className={
-            isVisible
-              ? "table table-dark table-bordered"
-              : "table table-dark table-bordered hide-element"
-          }
-        >
-          <thead>
-            <tr>
-              <th scope="col">Part Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Purchase Date</th>
-              <th scope="col">Place of Purchase</th>
-              <th scope="col">Other notes</th>
-              {editAndDeleteRows}
-            </tr>
-          </thead>
-          <tbody>
-            {computerParts.map(computerPart => {
-              return (
-                <ComputerPart
-                  key={computerPart.id}
-                  computerPart={computerPart}
-                  buildIdentifier={buildIdentifier}
-                  isOwner={isOwner}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+        <div className={isVisible ? "" : "hide-element"}>
+          <h3>Total: {computerBuildTotalPrice}</h3>
+          <table className={"table table-dark table-bordered"}>
+            <thead>
+              <tr>
+                <th scope="col">Part Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Purchase Date</th>
+                <th scope="col">Place of Purchase</th>
+                <th scope="col">Other notes</th>
+                {editAndDeleteRows}
+              </tr>
+            </thead>
+            <tbody>
+              {computerParts.map(computerPart => {
+                return (
+                  <ComputerPart
+                    key={computerPart.id}
+                    computerPart={computerPart}
+                    buildIdentifier={buildIdentifier}
+                    isOwner={isOwner}
+                  />
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
