@@ -23,7 +23,8 @@ const initialState = {
   purpose: {},
   overclockingNotes: [],
   overclockingNote: {},
-  computerBuild: {}
+  computerBuild: {},
+  totalPrice: 0
 };
 
 export default function(state = initialState, action) {
@@ -37,14 +38,17 @@ export default function(state = initialState, action) {
         directions: computerBuild.directions,
         buildNotes: computerBuild.buildNotes,
         purposeList: computerBuild.purposeList,
-        overclockingNotes: computerBuild.overclockingNotes
+        overclockingNotes: computerBuild.overclockingNotes,
+        totalPrice: computerBuild.totalPrice
       };
     case DELETE_COMPUTERPART:
       return {
         ...state,
         computerParts: state.computerParts.filter(
-          computerPart => computerPart.uniqueIdentifier !== action.payload
-        )
+          computerPart =>
+            computerPart.uniqueIdentifier !== action.payload.uniqueIdentifier
+        ),
+        totalPrice: state.totalPrice - action.payload.deletedItemPrice
       };
     case GET_COMPUTERPART:
       return {
@@ -55,7 +59,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         purposeList: state.purposeList.filter(
-          purpose => purpose.uniqueIdentifier !== action.payload
+          purpose =>
+            purpose.uniqueIdentifier !== action.payload.uniqueIdentifier
         )
       };
     case GET_PURPOSE:
@@ -67,7 +72,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         buildNotes: state.buildNotes.filter(
-          buildNote => buildNote.uniqueIdentifier !== action.payload
+          buildNote =>
+            buildNote.uniqueIdentifier !== action.payload.uniqueIdentifier
         )
       };
     case GET_BUILD_NOTE:
@@ -79,7 +85,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         directions: state.directions.filter(
-          direction => direction.uniqueIdentifier !== action.payload
+          direction =>
+            direction.uniqueIdentifier !== action.payload.uniqueIdentifier
         )
       };
     case GET_DIRECTION:
@@ -92,7 +99,8 @@ export default function(state = initialState, action) {
         ...state,
         overclockingNotes: state.overclockingNotes.filter(
           overclockingNote =>
-            overclockingNote.uniqueIdentifier !== action.payload
+            overclockingNote.uniqueIdentifier !==
+            action.payload.uniqueIdentifier
         )
       };
     case GET_OVERCLOCKING_NOTE:
