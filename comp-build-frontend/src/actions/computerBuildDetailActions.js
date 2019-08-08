@@ -1,19 +1,6 @@
 import axios from "axios";
 import * as Constants from "../Constants";
-import {
-  GET_ERRORS,
-  GET_COMPUTER_BUILD_DETAILS,
-  DELETE_COMPUTERPART,
-  GET_COMPUTERPART,
-  DELETE_DIRECTION,
-  GET_DIRECTION,
-  DELETE_BUILD_NOTE,
-  GET_BUILD_NOTE,
-  DELETE_OVERCLOCKING_NOTE,
-  GET_OVERCLOCKING_NOTE,
-  DELETE_PURPOSE,
-  GET_PURPOSE
-} from "./types";
+import { GET_ERRORS, GET_COMPUTER_BUILD_DETAILS } from "./types";
 import { clearErrors } from "../errorUtils/clearErrors";
 
 // computer build detail actions start
@@ -74,10 +61,12 @@ export const deleteObjectById = (
       `You are deleting the selected object, this action cannot be undone.`
     )
   ) {
-    await axios.delete(`${apiURL}${buildIdentifier}/${uniqueIdentifier}`);
+    const response = await axios.delete(
+      `${apiURL}${buildIdentifier}/${uniqueIdentifier}`
+    );
     dispatch({
       type: dispatchType,
-      payload: uniqueIdentifier
+      payload: response.data
     });
   }
 };
