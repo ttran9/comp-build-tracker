@@ -59,7 +59,7 @@ class ComputerPartList extends Component {
       );
     }
 
-    if (totalPrice !== undefined) {
+    if (totalPrice !== undefined && totalPrice !== null) {
       computerBuildTotalPrice = `${dollarSign}${totalPrice}`;
     }
 
