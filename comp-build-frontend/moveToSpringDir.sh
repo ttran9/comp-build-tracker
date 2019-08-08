@@ -10,4 +10,5 @@ cd ../../../../comp-build-frontend
 npm run build
 cp ./templates/index.html ../comp-build-backend/src/main/resources/static/
 cp ./static/main.js ../comp-build-backend/src/main/resources/static/static/js
+cp ./static/main.js ../../../comp_build_backend_heroku_upload/src/main/resources/static/static/js/
 date
