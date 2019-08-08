@@ -17,29 +17,17 @@ the React content and serves this web application.
 
 
 # Tests
-- I have added tests using JUnit. While doing this I decided only to test the controllers and services because I do not believe
-testing individual domain projects is necessary as these are used by the controller and/or the services.
-- When running the tests, I have designed them to pass with an in-memory h2 database that creates the schema upon start-up
-and then drops the tables after the application is no longer running.
-    - One limitation that I have noticed is that I must be running the application in order to pass the tests. For example,
-    since I am not running Spring MVC I cannot run something similar to a Spring MVC test environment and have the tests
-    inside of the controller pass as these require the back-end API to be running and must be able to hit those endpoints.
+- I realize I still have to improve the tests I have written in terms of code quality and testing more cases for
+the functionality I have in place.
 
-# Notes for the specific branch (computer-build-details-frontend)
+# Notes for the specific branch (computer-build-refactor-1-2)
 
-- Both the frontend and backend are done as of this branch. The basic functionality is done, such as being able to
-perform CRUD operations on a computer build and its details. 
-- There are JUnit tests for the services and the controllers required for the user to use the api endpoints.
-- At this point there are still some issues I would like to address.
-    - I will work on the appearance of the UI.
-    - I would like to refactor code in the back-end and front-end.
-    - I will also refactor/adjust some of the tests as I feel they do not test more "complicated" cases but instead they
-    were testing very basic functionality. A bug my former uniqueIdentifier generation logic had was that I did not test 
-    what would happen if the user were to delete a computer detail (computer part, build note, overclocking note, direction, or purpose, but not the last one) and 
-    then were to add a new computer detail then this would cause a DataIntegrityViolationException because the uniqueIdentifier
-    generated would match the last computer detail. I have resolved this issue by adding in a column to track the number
-    of insertions of a specific computer detail (the number of directions or computer parts) for each individual computer
-    build to ensure that the uniqueIdentifiers generated should be unique.
+- For this branch I was focused on displaying the price for the computer build (sum of all the computer parts). While
+working on this I also had to add the totalPrice to the state in order to update it without requiring a page refresh
+when deleting a computer part.
+    - I also updated the tests in the computer part controller and service classes.
+- I realize I still have to improve the tests I have written in terms of code quality and testing more cases for
+the functionality I have in place.
     
 # TODO:
 - Refactor tests and/or possibly add tests. (on-going)   
@@ -61,5 +49,6 @@ perform CRUD operations on a computer build and its details.
 will be handled by CustomResponseEntityExceptionHandler.</strike>
 - <strike>Modify the appearance of the computer build details to be more "presentable."</strike>
 - <strike>Refactor (repetitive) code in the back-end/spring boot backend app.</strike>
-- <strike>Refactor (repetitive) code in the front-end/react app.</strike>  
+- <strike>Refactor (repetitive) code in the front-end/react app.</strike> 
+- <strike>Displaying total price of a computer and writing automated tests for back-end functionality.</strike> 
 
