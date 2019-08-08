@@ -126,7 +126,7 @@ public class ComputerPartServiceImplTest {
         LoginRequest loginRequest = new LoginRequest(USER_NAME_TO_TEST_OWNERSHIP_ENDPOINTS, USER_PASSWORD);
         logUserIn(authenticationService, authenticationManager, jwtTokenProvider, loginRequest);
         updateComputerPart(TEST_COMPUTER_PART_NAME, TEST_COMPUTER_PART_NAME, DateUtility.convertStringToDate(TEST_COMPUTER_PART_PURCHASE_DATE),
-                TEST_COMPUTER_PART_PLACE_PURCHASED_AT, null,
+                TEST_COMPUTER_PART_PLACE_PURCHASED_AT, "",
                 TEST_COMPUTER_PART_PRICE, TEST_COMPUTER_PART_OTHER_NOTES, TEST_COMPUTER_PART_PRICE);
         logUserOut();
     }
