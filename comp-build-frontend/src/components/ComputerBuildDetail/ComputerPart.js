@@ -22,7 +22,7 @@ class ComputerPart extends Component {
     const { uniqueIdentifier } = computerPart;
     let editAndDeleteRows = <Fragment />;
     let formattedDate = moment(computerPart.purchaseDate).format(
-      "MMMM Do YYYY"
+      "MMMM Do, YYYY"
     );
 
     if (isOwner) {
