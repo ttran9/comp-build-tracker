@@ -40,12 +40,8 @@ class ComputerBuildHeader extends Component {
 
     return (
       <div className="col-md-12 text-center">
-        <p>
-          <h1>{computerBuild.name}</h1>
-        </p>
-        <p>
-          <h3>{computerBuild.buildDescription}</h3>
-        </p>
+        <h1>{computerBuild.name}</h1>
+        <h3>{computerBuild.buildDescription}</h3>
         {deleteBuildForm}
         <p />
       </div>
