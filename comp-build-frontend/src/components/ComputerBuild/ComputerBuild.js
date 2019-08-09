@@ -34,6 +34,7 @@ class ComputerBuild extends Component {
           <div className="row">
             <div className="col-sm-8">
               <h3>{computerBuild.name}</h3>
+              <h4>By {computerBuild.username}</h4>
               <p>{computerBuild.buildDescription}</p>
             </div>
             <div className="col-sm-4">
