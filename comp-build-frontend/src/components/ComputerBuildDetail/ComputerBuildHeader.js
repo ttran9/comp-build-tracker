@@ -41,7 +41,7 @@ class ComputerBuildHeader extends Component {
     return (
       <div className="col-md-12 text-center">
         <h1>{computerBuild.name}</h1>
-        <h4>By {computerBuild.username}</h4>
+        <h4>Created by {computerBuild.username}</h4>
         <h4>{computerBuild.buildDescription}</h4>
         {deleteBuildForm}
         <p />
