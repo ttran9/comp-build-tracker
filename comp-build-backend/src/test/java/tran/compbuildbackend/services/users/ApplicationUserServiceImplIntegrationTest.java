@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
+import tran.compbuildbackend.constants.tests.TestUtility;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.exceptions.request.GenericRequestException;
 import tran.compbuildbackend.repositories.security.ChangePasswordTokenRepository;
@@ -21,7 +22,7 @@ import static tran.compbuildbackend.constants.exception.ExceptionConstants.EXCEP
 import static tran.compbuildbackend.constants.exception.ExceptionConstants.EXCEPTION_REQUEST_PASSWORD_CHANGE_FAILED;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
 
-@Profile({"test"})
+@Profile(TestUtility.TEST_PROFILE)
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ApplicationUserServiceImplIntegrationTest {

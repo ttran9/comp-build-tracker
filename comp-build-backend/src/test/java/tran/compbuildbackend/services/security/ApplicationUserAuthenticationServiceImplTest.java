@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.junit4.SpringRunner;
+import tran.compbuildbackend.constants.tests.TestUtility;
 import tran.compbuildbackend.payload.email.JWTLoginSuccessResponse;
 import tran.compbuildbackend.payload.email.LoginRequest;
 import tran.compbuildbackend.security.JwtTokenProvider;
@@ -20,7 +21,7 @@ import static tran.compbuildbackend.constants.tests.TestUtility.INVALID_IDENTIFI
 import static tran.compbuildbackend.constants.users.UserConstants.USER_NAME_ONE;
 import static tran.compbuildbackend.constants.users.UserConstants.USER_PASSWORD;
 
-@Profile("test")
+@Profile(TestUtility.TEST_PROFILE)
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ApplicationUserAuthenticationServiceImplTest {

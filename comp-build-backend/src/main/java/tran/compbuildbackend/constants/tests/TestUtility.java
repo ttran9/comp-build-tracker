@@ -62,4 +62,6 @@ public class TestUtility {
     // purpose constants for testing.
     public static final String TEST_PURPOSE_LIST_NOTE_ONE = "This is the first purpose note test.";
     public static final String TEST_PURPOSE_LIST_NOTE_TWO = "This is the first purpose note test new.";
+
+    public static final String TEST_PROFILE = "test";
 }

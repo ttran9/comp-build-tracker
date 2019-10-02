@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import tran.compbuildbackend.constants.tests.TestUtility;
 import tran.compbuildbackend.controllers.utility.WebUtility;
 import tran.compbuildbackend.domain.utility.ComputerBuildUtility;
 import tran.compbuildbackend.dto.computerbuild.ComputerBuildDto;
@@ -32,7 +33,7 @@ import static tran.compbuildbackend.constants.tests.TestUtility.*;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
 import static tran.compbuildbackend.controllers.utility.WebUtility.loginHelper;
 
-@Profile({"test"})
+@Profile(TestUtility.TEST_PROFILE)
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ComputerBuildControllerIntegrationTest {

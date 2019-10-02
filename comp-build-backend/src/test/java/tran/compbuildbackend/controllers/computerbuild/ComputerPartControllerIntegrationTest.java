@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
+import tran.compbuildbackend.constants.tests.TestUtility;
 import tran.compbuildbackend.controllers.utility.WebUtility;
 import tran.compbuildbackend.domain.computerbuild.ComputerPart;
 import tran.compbuildbackend.domain.utility.ComputerPartUtility;
@@ -34,7 +35,7 @@ import static tran.compbuildbackend.controllers.utility.WebUtility.loginHelper;
 import static tran.compbuildbackend.domain.utility.ComputerBuildDetailUtility.*;
 import static tran.compbuildbackend.domain.utility.DateUtility.convertDateToString;
 
-@Profile("test")
+@Profile(TestUtility.TEST_PROFILE)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class ComputerPartControllerIntegrationTest {

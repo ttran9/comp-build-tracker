@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import tran.compbuildbackend.constants.tests.TestUtility;
 import tran.compbuildbackend.domain.security.ChangePasswordToken;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.exceptions.request.GenericRequestException;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertNull;
 import static tran.compbuildbackend.constants.tests.TestUtility.INVALID_IDENTIFIER_SUFFIX;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
 
-@Profile({"test"})
+@Profile(TestUtility.TEST_PROFILE)
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ChangePasswordTokenServiceImplTest {

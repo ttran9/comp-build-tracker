@@ -9,13 +9,14 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
+import tran.compbuildbackend.constants.tests.TestUtility;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.repositories.users.ApplicationUserRepository;
 
 import static org.junit.Assert.*;
 import static tran.compbuildbackend.constants.users.UserConstants.*;
 
-@Profile("test")
+@Profile(TestUtility.TEST_PROFILE)
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CustomUserDetailsServiceImplTest {

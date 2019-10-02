@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Component;
+import tran.compbuildbackend.constants.tests.TestUtility;
 import tran.compbuildbackend.domain.computerbuild.*;
 import tran.compbuildbackend.domain.user.ApplicationUser;
 import tran.compbuildbackend.domain.utility.DateUtility;
@@ -25,7 +26,7 @@ import static tran.compbuildbackend.controllers.utility.WebUtility.logUserIn;
 import static tran.compbuildbackend.controllers.utility.WebUtility.logUserOut;
 
 @Component
-@Profile({"test"})
+@Profile(TestUtility.TEST_PROFILE)
 public class BootstrapData implements ApplicationListener<ContextRefreshedEvent> {
     private ApplicationUserService applicationUserService;
     private ComputerBuildService computerBuildService;
